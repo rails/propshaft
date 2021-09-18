@@ -24,7 +24,7 @@ class Propshaft::Server
 
     def remove_digest(path)
       if digest = extract_digest(path)
-        path = path.sub("-#{digest}", "")
+        path.sub("-#{digest}", "")
       else
         path
       end
