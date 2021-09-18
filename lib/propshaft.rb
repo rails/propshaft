@@ -4,6 +4,3 @@ require "propshaft/processor"
 require "propshaft/helper"
 
 require "propshaft/railtie"
-
-module Propshaft
-end
