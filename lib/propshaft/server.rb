@@ -7,7 +7,7 @@ class Propshaft::Server
 
   def call(env)
     if asset = @load_path.find(requested_path(env))
-      [ 200, headers(asset, env), [ asset.content ] ]
+      [ 200, headers(asset), [ asset.content ] ]
     else
       [ 404, { "Content-Type" => "text/plain", "Content-Length" => "9" }, [ "Not found" ] ]
     end
@@ -18,7 +18,7 @@ class Propshaft::Server
       Rack::Utils.unescape(env["PATH_INFO"].to_s.sub(/^\//, ""))
     end
 
-    def headers(asset, env)
+    def headers(asset)
       {
         "Content-Length" => asset.length.to_s,
         "Content-Type"   => asset.content_type,
