@@ -8,7 +8,6 @@ module Propshaft
     config.assets.paths    = []
     config.assets.precompile = [] # Compatibility shim
     config.assets.prefix   = "/assets"
-    config.assets.manifest = nil
 
     config.after_initialize do |app|
       app.assets = Propshaft::LoadPath.new(app.config.assets.paths)
