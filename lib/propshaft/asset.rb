@@ -4,8 +4,7 @@ class Propshaft::Asset
   attr_reader :path, :logical_path
 
   def initialize(path, logical_path:)
-    @path = path
-    @logical_path = logical_path
+    @path, @logical_path = path, logical_path
   end
 
   def content
