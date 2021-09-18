@@ -18,7 +18,7 @@ class Propshaft::LoadPath
   def manifest
     Hash.new.tap do |manifest|
       assets.each do |asset|
-        manifest[asset.logical_path] = asset.digested_path
+        manifest[asset.logical_path.to_s] = asset.digested_path.to_s
       end
     end
   end
