@@ -1,5 +1,9 @@
+require "propshaft/load_path"
+require "propshaft/server"
+require "propshaft/processor"
+require "propshaft/helper"
+
 require "propshaft/railtie"
 
 module Propshaft
-  extend ActiveSupport::Autoload
 end

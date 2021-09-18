@@ -2,11 +2,6 @@ require "rails"
 require "rails/railtie"
 require "active_support/ordered_options"
 
-require "propshaft/load_path"
-require "propshaft/server"
-require "propshaft/processor"
-require "propshaft/helper"
-
 module Propshaft
   class Railtie < ::Rails::Railtie
     config.assets = ActiveSupport::OrderedOptions.new
