@@ -23,4 +23,8 @@ class Propshaft::Asset
   def digest
     Digest::SHA1.hexdigest(content)
   end
+
+  def digested_path
+    logical_path.sub(/\.(\w+)$/) { |ext| "-#{digest}#{ext}" }
+  end
 end

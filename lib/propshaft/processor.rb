@@ -9,7 +9,7 @@ class Propshaft::Processor
     FileUtils.mkdir_p output_path
 
     load_path.assets.values.each do |asset|
-      FileUtils.cp asset.path, File.join(output_path, asset.logical_path)
+      FileUtils.cp asset.path, File.join(output_path, asset.digested_path)
     end
   end
 end
