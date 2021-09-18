@@ -5,6 +5,7 @@ require "active_support/ordered_options"
 require "propshaft/load_path"
 require "propshaft/server"
 require "propshaft/processor"
+require "propshaft/helper"
 
 module Propshaft
   class Railtie < ::Rails::Railtie
@@ -18,6 +19,10 @@ module Propshaft
       app.assets = Propshaft::LoadPath.new(app.config.assets.paths)
       app.routes.prepend do
         mount Propshaft::Server.new(app.assets) => app.config.assets.prefix
+      end
+
+      ActiveSupport.on_load(:action_view) do
+        include Propshaft::Helper
       end
     end
 
