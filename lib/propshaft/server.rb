@@ -19,7 +19,7 @@ class Propshaft::Server
     end
 
     def requested_path(env)
-      Rack::Utils.unescape(env['PATH_INFO'].to_s.sub(/^\//, ""))
+      Rack::Utils.unescape(env["PATH_INFO"].to_s.sub(/^\//, ""))
     end
 
     def remove_digest(path)
