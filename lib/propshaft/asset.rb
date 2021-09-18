@@ -12,6 +12,10 @@ class Propshaft::Asset
     File.binread(path)
   end
 
+  def content_type
+    "text/plain"
+  end
+
   def length
     content.size
   end
