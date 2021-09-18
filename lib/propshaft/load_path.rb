@@ -25,7 +25,7 @@ class Propshaft::LoadPath
 
   private
     def mapped_assets
-      @mapped_assets ||= Hash.new.tap do |mapped|
+      Hash.new.tap do |mapped|
         paths.each do |path|
           all_files_from_tree(path).each do |file|
             logical_path = file.relative_path_from(path)
