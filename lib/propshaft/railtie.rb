@@ -11,6 +11,7 @@ module Propshaft
 
     config.after_initialize do |app|
       app.assets = Propshaft::LoadPath.new(app.config.assets.paths)
+
       app.routes.prepend do
         mount Propshaft::Server.new(app.assets) => app.config.assets.prefix
       end
