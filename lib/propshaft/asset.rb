@@ -1,7 +1,7 @@
 require "digest/sha1"
 
 class Propshaft::Asset
-  attr_reader :path
+  attr_reader :path, :logical_path
 
   def initialize(path, logical_path:)
     @path = path
