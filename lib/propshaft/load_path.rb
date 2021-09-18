@@ -3,8 +3,8 @@ require "propshaft/asset"
 class Propshaft::LoadPath
   attr_reader :paths
 
-  def initialize
-    @paths = []
+  def initialize(paths = [])
+    @paths = paths
   end
 
   def append(path)
