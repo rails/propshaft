@@ -3,10 +3,10 @@ require "propshaft/load_path"
 
 class LoadPathTest < ActiveSupport::TestCase
   setup do
-    @load_path = Propshaft::LoadPath.new.tap do |load_path|
-      load_path.append Pathname.new("#{__dir__}/assets/first_path")
-      load_path.append Pathname.new("#{__dir__}/assets/second_path")
-    end
+    @load_path = Propshaft::LoadPath.new [
+      Pathname.new("#{__dir__}/assets/first_path"),
+      Pathname.new("#{__dir__}/assets/second_path")
+    ]
   end
 
   test "find asset that only appears once in the paths" do

@@ -7,14 +7,6 @@ class Propshaft::LoadPath
     @paths = paths
   end
 
-  def append(path)
-    @paths.append path
-  end
-
-  def prepend(path)
-    @paths.prepend path
-  end
-
   def find(asset_name)
     mapped_assets[asset_name]
   end
