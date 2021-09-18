@@ -19,17 +19,6 @@ class Propshaft::LoadPath
     mapped_assets[asset_name]
   end
 
-  def mapped_assets
-    @assets ||= Hash.new.tap do |mapped|
-      paths.each do |path|
-        all_files_from_tree(path).each do |file|
-          logical_path = file.relative_path_from(path)
-          mapped[logical_path.to_s] ||= Propshaft::Asset.new(file, logical_path: logical_path)
-        end
-      end
-    end
-  end
-
   def assets
     mapped_assets.values
   end
@@ -43,6 +32,17 @@ class Propshaft::LoadPath
   end
 
   private
+    def mapped_assets
+      @mapped_assets ||= Hash.new.tap do |mapped|
+        paths.each do |path|
+          all_files_from_tree(path).each do |file|
+            logical_path = file.relative_path_from(path)
+            mapped[logical_path.to_s] ||= Propshaft::Asset.new(file, logical_path: logical_path)
+          end
+        end
+      end
+    end
+
     def all_files_from_tree(path)
       path.children.flat_map { |child| child.directory? ? all_files_from_tree(child) : child }
     end
