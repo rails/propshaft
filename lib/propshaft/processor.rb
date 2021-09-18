@@ -9,6 +9,7 @@ class Propshaft::Processor
     ensure_output_path_exists
     write_manifest
     copy_assets
+    compress_assets
   end
 
   private
@@ -26,5 +27,20 @@ class Propshaft::Processor
       load_path.assets.each do |asset|
         FileUtils.cp asset.path, File.join(output_path, asset.digested_path)
       end
+    end
+
+    def compress_assets
+      # FIXME: Only try to compress text assets with brotli
+      load_path.assets.each do |asset|
+        compress_asset File.join(output_path, asset.digested_path)
+      end if compressor_available?
+    end
+
+    def compress_asset(path)
+      `brotli #{path} -o #{path}.br`
+    end
+
+    def compressor_available?
+      `which brotli`.present?
     end
 end
