@@ -12,6 +12,7 @@ class Propshaft::Asset
   end
 
   def content_type
+    # FIXME: Lookup mimetype from the file extension
     "text/plain"
   end
 
