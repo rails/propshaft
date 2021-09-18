@@ -20,4 +20,11 @@ class LoadPathTest < ActiveSupport::TestCase
   test "find nested asset" do
     assert_equal "Three from first path", @load_path.find("nested/three.txt").content
   end
+
+  test "manifest" do
+    @load_path.manifest.tap do |manifest|
+      assert_equal "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt", manifest["one.txt"]
+      assert_equal "nested/three-6c2b86a0206381310375abdd9980863c2ea7b2c3.txt", manifest["nested/three.txt"]
+    end
+  end
 end
