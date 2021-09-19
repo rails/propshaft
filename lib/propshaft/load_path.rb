@@ -8,11 +8,11 @@ class Propshaft::LoadPath
   end
 
   def find(asset_name)
-    mapped_assets[asset_name]
+    assets_by_path[asset_name]
   end
 
   def assets
-    mapped_assets.values
+    assets_by_path.values
   end
 
   def manifest
@@ -24,7 +24,7 @@ class Propshaft::LoadPath
   end
 
   private
-    def mapped_assets
+    def assets_by_path
       Hash.new.tap do |mapped|
         paths.each do |path|
           all_files_from_tree(path).each do |file|
