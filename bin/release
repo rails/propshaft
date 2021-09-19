@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+VERSION=$1
+
+printf "module Propshaft\n  VERSION = \"$VERSION\"\nend\n" > ./lib/propshaft/version.rb
+bundle
+git add Gemfile.lock lib/propshaft/version.rb
+git commit -m "Bump version for $VERSION"
+git push
+git tag v$VERSION
+git push --tags
+gem build propshaft.gemspec
+gem push "propshaft-$VERSION.gem" --host https://rubygems.org
+rm "propshaft-$VERSION.gem"
