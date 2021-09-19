@@ -25,7 +25,8 @@ class Propshaft::Processor
 
     def copy_assets
       load_path.assets.each do |asset|
-        FileUtils.cp asset.path, File.join(output_path, asset.digested_path)
+        FileUtils.mkdir_p File.join(output_path, asset.digested_path.parent)
+        FileUtils.copy asset.path, File.join(output_path, asset.digested_path)
       end
     end
 
