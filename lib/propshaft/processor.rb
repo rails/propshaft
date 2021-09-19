@@ -1,8 +1,9 @@
 class Propshaft::Processor
-  attr_reader :load_path, :output_path
+  attr_reader :load_path, :output_path, :manifest_filename
 
-  def initialize(load_path:, output_path:)
+  def initialize(load_path:, output_path:, manifest_filename: ".manifest.json")
     @load_path, @output_path = load_path, output_path
+    @manifest_filename = manifest_filename
   end
 
   def process
@@ -18,7 +19,7 @@ class Propshaft::Processor
     end
 
     def write_manifest
-      File.open(File.join(output_path, ".manifest.json"), "wb+") do |manifest|
+      File.open(output_path.join(manifest_filename), "wb+") do |manifest|
         manifest.write load_path.manifest.to_json
       end
     end
