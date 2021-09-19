@@ -5,15 +5,23 @@ require "active_support/ordered_options"
 module Propshaft
   class Railtie < ::Rails::Railtie
     config.assets = ActiveSupport::OrderedOptions.new
-    config.assets.paths    = []
-    config.assets.precompile = [] # Compatibility shim
-    config.assets.prefix   = "/assets"
+    config.assets.paths   = []
+    config.assets.prefix  = "/assets"
+
+    # Compatibility shiming
+    config.assets.precompile = []
 
     config.after_initialize do |app|
-      app.assets = Propshaft::LoadPath.new(app.config.assets.paths)
+      config.assets.manifest_path =
+        Rails.root.join("public/assets/.manifest.json")
+
+      config.assets.output_path   =
+        File.join(app.config.paths["public"].first, app.config.assets.prefix)
+
+      app.assets = Propshaft::Assembly.new(app.config.assets)
 
       app.routes.prepend do
-        mount Propshaft::Server.new(app.assets) => app.config.assets.prefix
+        mount app.assets.server => app.assets.config.prefix
       end
 
       ActiveSupport.on_load(:action_view) do
@@ -25,10 +33,7 @@ module Propshaft
       namespace :assets do
         desc "Compile all the assets named in config.assets.precompile"
         task precompile: :environment do
-          Propshaft::Processor.new(
-            load_path: app.assets,
-            output_path: File.join(app.config.paths["public"].first, app.config.assets.prefix)
-          ).process
+          Rails.application.assets.processor.process
         end
       end
     end
