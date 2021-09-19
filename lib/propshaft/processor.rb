@@ -51,8 +51,13 @@ class Propshaft::Processor
 
     def compile_asset(asset)
       File.open(output_path.join(asset.digested_path), "w+") do |file|
-        file.write compilers.compile(asset)
-      end
+        begin
+          file.write compilers.compile(asset)
+        rescue Encoding::UndefinedConversionError
+          # FIXME: Not sure if there's a better way here?
+          file.write compilers.compile(asset).force_encoding("UTF-8")
+        end
+      end if compilers.compilable?(asset)
     end
 
 
