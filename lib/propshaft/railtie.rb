@@ -28,7 +28,7 @@ module Propshaft
 
     rake_tasks do |app|
       namespace :assets do
-        desc "Compile all the assets named in config.assets.precompile"
+        desc "Compile all the assets from config.assets.paths"
         task precompile: :environment do
           Rails.application.assets.processor.process
         end
