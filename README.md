@@ -15,10 +15,20 @@ So that's what Propshaft doesn't do. Here's what it actually does provide:
 ...
 
 
+## Usage
+
+...
+
+
 ## Migrating from Sprockets
 
-Propshaft does a lot less than Sprockets, by design, so it might well be a fair bit of work to migrate, if it's even desirable. This is particularly true if you rely on Sprockets to provide any form of transpiling, like CoffeeScript or Sass, or if you rely on any gems that does. You'll need to either stop transpiling or use a Node-based transpiler, like those in `jsbundling-rails` and `cssbundling-rails`.
+Propshaft does a lot less than Sprockets, by design, so it might well be a fair bit of work to migrate, if it's even desirable. This is particularly true if you rely on Sprockets to provide any form of transpiling, like CoffeeScript or Sass, or if you rely on any gems that do. You'll need to either stop transpiling or use a Node-based transpiler, like those in `jsbundling-rails` and `cssbundling-rails`.
 
 On the other hand, if you're already bundling JavaScript and CSS through a Node-based setup, then Propshaft is going to slot in easily. Since you don't need another tool to bundle or transpile. Just to digest and serve.
 
 But for greenfield apps using the default import-map approach, Propshaft can also work well, if you're able to deal with vanilla CSS.
+
+
+## License
+
+Propshaft is released under the [MIT License](https://opensource.org/licenses/MIT).
