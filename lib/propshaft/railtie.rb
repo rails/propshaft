@@ -13,7 +13,7 @@ module Propshaft
 
     config.after_initialize do |app|
       config.assets.output_path =
-        File.join(app.config.paths["public"].first, app.config.assets.prefix)
+        Pathname.new(app.config.paths["public"].first).join(app.config.assets.prefix)
 
       app.assets = Propshaft::Assembly.new(app.config.assets)
 

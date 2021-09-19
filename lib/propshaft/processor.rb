@@ -27,15 +27,15 @@ class Propshaft::Processor
 
     def copy_assets
       load_path.assets.each do |asset|
-        FileUtils.mkdir_p File.join(output_path, asset.digested_path.parent)
-        FileUtils.copy asset.path, File.join(output_path, asset.digested_path)
+        FileUtils.mkdir_p output_path.join(asset.digested_path.parent)
+        FileUtils.copy asset.path, output_path.join(asset.digested_path)
       end
     end
 
     def compress_assets
       # FIXME: Only try to compress text assets with brotli
       load_path.assets.each do |asset|
-        compress_asset File.join(output_path, asset.digested_path)
+        compress_asset output_path.join(asset.digested_path)
       end if compressor_available?
     end
 
