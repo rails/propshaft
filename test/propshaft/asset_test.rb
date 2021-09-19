@@ -25,7 +25,7 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
 
   private
     def find_asset(logical_path)
-      path = Pathname.new("#{__dir__}/../assets/first_path/#{logical_path}")
+      path = Pathname.new("#{__dir__}/../fixtures/assets/first_path/#{logical_path}")
       Propshaft::Asset.new(path, logical_path: logical_path)
     end
 end

@@ -4,8 +4,8 @@ require "propshaft/load_path"
 class Propshaft::LoadPathTest < ActiveSupport::TestCase
   setup do
     @load_path = Propshaft::LoadPath.new [
-      Pathname.new("#{__dir__}/../assets/first_path"),
-      Pathname.new("#{__dir__}/../assets/second_path")
+      Pathname.new("#{__dir__}/../fixtures/assets/first_path"),
+      Pathname.new("#{__dir__}/../fixtures/assets/second_path")
     ]
   end
 
@@ -23,7 +23,7 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
 
   test "assets" do
     asset = Propshaft::Asset.new(
-      Pathname.new("#{__dir__}/../assets/first_path/one.text"),
+      Pathname.new("#{__dir__}/../fixtures/assets/first_path/one.text"),
       logical_path: Pathname.new("one.txt")
     )
 
