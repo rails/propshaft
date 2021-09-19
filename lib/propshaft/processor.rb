@@ -1,16 +1,17 @@
 class Propshaft::Processor
   MANIFEST_FILENAME = ".manifest.json"
 
-  attr_reader :load_path, :output_path
+  attr_reader :load_path, :output_path, :compilers
 
-  def initialize(load_path:, output_path:)
+  def initialize(load_path:, output_path:, compilers:)
     @load_path, @output_path = load_path, output_path
+    @compilers = compilers
   end
 
   def process
     ensure_output_path_exists
     write_manifest
-    copy_assets
+    output_assets
     compress_assets
   end
 
@@ -19,20 +20,41 @@ class Propshaft::Processor
       FileUtils.mkdir_p output_path
     end
 
+
     def write_manifest
       File.open(output_path.join(MANIFEST_FILENAME), "wb+") do |manifest|
         manifest.write load_path.manifest.to_json
       end
     end
 
-    def copy_assets
+
+    def output_assets
       load_path.assets.each do |asset|
         unless output_path.join(asset.digested_path).exist?
           FileUtils.mkdir_p output_path.join(asset.digested_path.parent)
-          FileUtils.copy asset.path, output_path.join(asset.digested_path)
+          output_asset(asset)
         end
       end
     end
+
+    def output_asset(asset)
+      if compilers.any?
+        compile_asset(asset)
+      else
+        copy_asset(asset)
+      end
+    end
+
+    def copy_asset(asset)
+      FileUtils.copy asset.path, output_path.join(asset.digested_path)
+    end
+
+    def compile_asset(asset)
+      File.open(output_path.join(asset.digested_path), "w+") do |file|
+        file.write compilers.compile(asset)
+      end
+    end
+
 
     def compress_assets
       # FIXME: Only try to compress text assets with brotli

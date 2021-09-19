@@ -5,8 +5,9 @@ require "active_support/ordered_options"
 module Propshaft
   class Railtie < ::Rails::Railtie
     config.assets = ActiveSupport::OrderedOptions.new
-    config.assets.paths   = []
-    config.assets.prefix  = "/assets"
+    config.assets.paths     = []
+    config.assets.prefix    = "/assets"
+    config.assets.compilers = [ [ "text/css", Propshaft::Compilers::CssAssetUrls ] ]
 
     # Compatibility shiming (need to provide log warnings when used)
     config.assets.precompile     = []

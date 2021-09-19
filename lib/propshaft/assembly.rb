@@ -3,6 +3,8 @@ require "propshaft/resolver/dynamic"
 require "propshaft/resolver/static"
 require "propshaft/server"
 require "propshaft/processor"
+require "propshaft/compilers"
+require "propshaft/compilers/css_asset_urls"
 
 class Propshaft::Assembly
   attr_reader :config
@@ -24,11 +26,21 @@ class Propshaft::Assembly
   end
 
   def server
-    Propshaft::Server.new(load_path)
+    Propshaft::Server.new(self)
   end
 
   def processor
-    Propshaft::Processor.new load_path: load_path, output_path: config.output_path
+    Propshaft::Processor.new \
+      load_path: load_path, output_path: config.output_path, compilers: compilers
+  end
+
+  def compilers
+    @compilers ||=
+      Propshaft::Compilers.new(self).tap do |compilers|
+        Array(config.compilers).each do |(mime_type, klass)|
+          compilers.register mime_type, klass
+        end
+      end
   end
 
   private

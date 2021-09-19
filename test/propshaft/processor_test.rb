@@ -4,10 +4,14 @@ require "propshaft/processor"
 
 class Propshaft::ProcessorTest < ActiveSupport::TestCase
   setup do
-    @load_path = Propshaft::LoadPath.new [
-      Pathname.new("#{__dir__}/../fixtures/assets/first_path"),
-      Pathname.new("#{__dir__}/../fixtures/assets/second_path")
-    ]
+    @assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config| 
+      config.output_path = Pathname.new("#{__dir__}/../fixtures/output")
+      config.prefix = "/assets"
+      config.paths = [
+        Pathname.new("#{__dir__}/../fixtures/assets/first_path"),
+        Pathname.new("#{__dir__}/../fixtures/assets/second_path")
+      ]
+    })
   end
 
   test "manifest is written" do
@@ -40,7 +44,8 @@ class Propshaft::ProcessorTest < ActiveSupport::TestCase
     def processed
       Dir.mktmpdir do |output_path|
         processor = Propshaft::Processor.new(
-          load_path: @load_path, output_path: Pathname.new(output_path)
+          load_path: @assembly.load_path, output_path: Pathname.new(output_path),
+          compilers: @assembly.compilers
         )
 
         processor.process
