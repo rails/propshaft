@@ -12,7 +12,7 @@ So that's what Propshaft doesn't do. Here's what it actually does provide:
 
 ## Installation
 
-With Rails 7+, you can start a new application with propshaft using `rails new myapp -a propshaft`.
+With Rails 7+, you can start a new application with propshaft using `rails new myapp -a propshaft` (pending the merge of [rails/rails#43261](https://github.com/rails/rails/pull/43261)).
 
 
 ## Usage
