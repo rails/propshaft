@@ -38,11 +38,7 @@ class Propshaft::Processor
     end
 
     def output_asset(asset)
-      if compilers.any?
-        compile_asset(asset)
-      else
-        copy_asset(asset)
-      end
+      compile_asset(asset) || copy_asset(asset)
     end
 
     def copy_asset(asset)
