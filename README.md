@@ -29,6 +29,11 @@ On the other hand, if you're already bundling JavaScript and CSS through a Node-
 But for greenfield apps using the default import-map approach, Propshaft can also work well, if you're able to deal with vanilla CSS.
 
 
+## Will Propshaft replace Sprockets as the Rails default?
+
+Most likely, but Sprockets need to be supported as well for a long time to come. Plenty of apps and gems were built on Sprocket features, and they won't be migrating soon. Still working out the compatibility story. This is very much alpha software at the moment.
+
+
 ## License
 
 Propshaft is released under the [MIT License](https://opensource.org/licenses/MIT).
