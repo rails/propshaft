@@ -4,7 +4,7 @@ require "propshaft/resolver/static"
 class Propshaft::Resolver::StaticTest < ActiveSupport::TestCase
   setup do
     @resolver = Propshaft::Resolver::Static.new(
-      manifest_path: Pathname.new("#{__dir__}/../../fixtures/output/manifest.json"),
+      manifest_path: Pathname.new("#{__dir__}/../../fixtures/output/.manifest.json"),
       prefix: "/assets"
     )
   end

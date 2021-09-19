@@ -12,8 +12,6 @@ module Propshaft
     config.assets.precompile = []
 
     config.after_initialize do |app|
-      config.assets.manifest_filename = ".manifest.json"
-
       config.assets.output_path =
         File.join(app.config.paths["public"].first, app.config.assets.prefix)
 
