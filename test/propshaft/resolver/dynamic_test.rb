@@ -3,12 +3,8 @@ require "propshaft/resolver/dynamic"
 
 class Propshaft::Resolver::DynamicTest < ActiveSupport::TestCase
   setup do
-    @load_path = Propshaft::LoadPath.new [
-      Pathname.new("#{__dir__}/../../assets/first_path"),
-      Pathname.new("#{__dir__}/../../assets/second_path")
-    ]
-
-    @resolver = Propshaft::Resolver::Dynamic.new(load_path: @load_path, prefix: "/assets")
+    @load_path = Propshaft::LoadPath.new Pathname.new("#{__dir__}/../../assets/first_path")
+    @resolver  = Propshaft::Resolver::Dynamic.new(load_path: @load_path, prefix: "/assets")
   end
 
   test "resolving present asset returns uri path" do
