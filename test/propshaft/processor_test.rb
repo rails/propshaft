@@ -1,0 +1,51 @@
+require "test_helper"
+require "propshaft/load_path"
+require "propshaft/processor"
+
+class Propshaft::ProcessorTest < ActiveSupport::TestCase
+  setup do
+    @load_path = Propshaft::LoadPath.new [
+      Pathname.new("#{__dir__}/../fixtures/assets/first_path"),
+      Pathname.new("#{__dir__}/../fixtures/assets/second_path")
+    ]
+  end
+
+  test "manifest is written" do
+    processed do |processor|
+      assert_equal "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt",
+         JSON.parse(processor.output_path.join(".manifest.json").read)["one.txt"]
+    end
+  end
+
+  test "assets are copied" do
+    processed do |processor|
+      digested_asset_name = "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt"
+      assert processor.output_path.join(digested_asset_name).exist?
+
+      nested_digested_asset_name = "nested/three-6c2b86a0206381310375abdd9980863c2ea7b2c3.txt"
+      assert processor.output_path.join(nested_digested_asset_name).exist?
+    end
+  end
+
+  test "assets are compressed if brotli is available" do
+    skip unless `which brotli`.present?
+    
+    processed do |processor|
+      digested_asset_name = "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt.br"
+      assert processor.output_path.join(digested_asset_name).exist?
+    end
+  end
+
+  private
+    def processed
+      Dir.mktmpdir do |output_path|
+        processor = Propshaft::Processor.new(
+          load_path: @load_path, output_path: Pathname.new(output_path)
+        )
+
+        processor.process
+
+        yield processor
+      end
+    end
+end
