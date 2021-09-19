@@ -4,7 +4,7 @@ class Propshaft::LoadPath
   attr_reader :paths
 
   def initialize(paths = [])
-    @paths = paths
+    @paths = Array(paths)
   end
 
   def find(asset_name)
