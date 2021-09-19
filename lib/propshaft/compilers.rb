@@ -15,6 +15,10 @@ class Propshaft::Compilers
     registrations.any?
   end
 
+  def compilable?(asset)
+    registrations[asset.content_type.to_s].present?
+  end
+
   def compile(asset)
     if relevant_registrations = registrations[asset.content_type.to_s]
       asset.content.dup.tap do |input|
