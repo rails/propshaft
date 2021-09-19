@@ -16,8 +16,8 @@ class Propshaft::Assembly
   end
 
   def resolver
-    if config.manifest_path.exist?
-      Propshaft::Resolver::Static.new(manifest_path: config.manifest_path, prefix: config.prefix)
+    if (manifest_path = config.output_path.join(config.manifest_filename)).exist?
+      Propshaft::Resolver::Static.new manifest_path: manifest_path, prefix: config.prefix
     else
       Propshaft::Resolver::Dynamic.new(load_path: load_path, prefix: config.prefix)
     end
@@ -28,6 +28,8 @@ class Propshaft::Assembly
   end
 
   def processor
-    Propshaft::Processor.new(load_path: load_path, output_path: config.output_path)
+    Propshaft::Processor.new \
+      load_path: load_path, output_path: config.output_path,
+      manifest_file_name: config.manifest_filename
   end
 end

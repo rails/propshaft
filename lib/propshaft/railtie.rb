@@ -12,10 +12,9 @@ module Propshaft
     config.assets.precompile = []
 
     config.after_initialize do |app|
-      config.assets.manifest_path =
-        Rails.root.join("public/assets/.manifest.json")
+      config.assets.manifest_filename = ".manifest.json"
 
-      config.assets.output_path   =
+      config.assets.output_path =
         File.join(app.config.paths["public"].first, app.config.assets.prefix)
 
       app.assets = Propshaft::Assembly.new(app.config.assets)
