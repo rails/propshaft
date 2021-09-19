@@ -27,4 +27,8 @@ class Propshaft::Asset
   def digested_path
     logical_path.sub(/\.(\w+)$/) { |ext| "-#{digest}#{ext}" }
   end
+
+  def ==(other_asset)
+    logical_path.hash == other_asset.logical_path.hash
+  end
 end
