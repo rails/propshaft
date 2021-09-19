@@ -1,10 +1,11 @@
 require "digest/sha1"
+require "action_dispatch/http/mime_type"
 
 class Propshaft::Asset
   attr_reader :path, :logical_path
 
   def initialize(path, logical_path:)
-    @path, @logical_path = path, logical_path
+    @path, @logical_path = path, Pathname.new(logical_path)
   end
 
   def content
@@ -12,8 +13,7 @@ class Propshaft::Asset
   end
 
   def content_type
-    # FIXME: Lookup mimetype from the file extension
-    "text/plain"
+    Mime::Type.lookup_by_extension(logical_path.extname.from(1))
   end
 
   def length
