@@ -8,8 +8,14 @@ module Propshaft
     config.assets.paths   = []
     config.assets.prefix  = "/assets"
 
-    # Compatibility shiming
-    config.assets.precompile = []
+    # Compatibility shiming (need to provide log warnings when used)
+    config.assets.precompile     = []
+    config.assets.debug          = nil
+    config.assets.quiet          = nil
+    config.assets.compile        = nil
+    config.assets.version        = nil
+    config.assets.css_compressor = nil
+    config.assets.js_compressor  = nil
 
     config.after_initialize do |app|
       config.assets.output_path ||=
