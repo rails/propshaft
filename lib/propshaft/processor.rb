@@ -27,8 +27,10 @@ class Propshaft::Processor
 
     def copy_assets
       load_path.assets.each do |asset|
-        FileUtils.mkdir_p output_path.join(asset.digested_path.parent)
-        FileUtils.copy asset.path, output_path.join(asset.digested_path)
+        unless output_path.join(asset.digested_path).exist?
+          FileUtils.mkdir_p output_path.join(asset.digested_path.parent)
+          FileUtils.copy asset.path, output_path.join(asset.digested_path)
+        end
       end
     end
 
@@ -40,7 +42,7 @@ class Propshaft::Processor
     end
 
     def compress_asset(path)
-      `brotli #{path} -o #{path}.br`
+      `brotli #{path} -o #{path}.br` unless Pathname.new(path.to_s + ".br").exist?
     end
 
     def compressor_available?
