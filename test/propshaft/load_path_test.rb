@@ -1,4 +1,4 @@
-require_relative "../test_helper"
+require "test_helper"
 require "propshaft/load_path"
 
 class Propshaft::LoadPathTest < ActiveSupport::TestCase

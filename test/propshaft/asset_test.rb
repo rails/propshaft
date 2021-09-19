@@ -1,4 +1,4 @@
-require_relative "../test_helper"
+require "test_helper"
 require "propshaft/asset"
 
 class Propshaft::AssetTest < ActiveSupport::TestCase
