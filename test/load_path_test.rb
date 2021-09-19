@@ -21,6 +21,15 @@ class LoadPathTest < ActiveSupport::TestCase
     assert_equal "Three from first path", @load_path.find("nested/three.txt").content
   end
 
+  test "assets" do
+    asset = Propshaft::Asset.new(
+      Pathname.new("#{__dir__}/assets/first_path/one.text"),
+      logical_path: Pathname.new("one.txt")
+    )
+
+    assert_includes @load_path.assets, asset
+  end
+
   test "manifest" do
     @load_path.manifest.tap do |manifest|
       assert_equal "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt", manifest["one.txt"]
