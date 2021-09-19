@@ -19,6 +19,10 @@ module Propshaft
     config.assets.js_compressor  = nil
 
     config.after_initialize do |app|
+      config.assets.paths += Pathname.glob(Rails.root.join("app/assets").join("*"))
+      config.assets.paths += Pathname.glob(Rails.root.join("lib/assets").join("*"))
+      config.assets.paths += Pathname.glob(Rails.root.join("vendor/assets").join("*"))
+
       config.assets.output_path ||=
         Pathname.new(File.join(app.config.paths["public"].first, app.config.assets.prefix))
 
