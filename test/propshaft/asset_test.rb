@@ -1,7 +1,7 @@
-require_relative "./test_helper"
+require_relative "../test_helper"
 require "propshaft/asset"
 
-class AssetTest < ActiveSupport::TestCase
+class Propshaft::AssetTest < ActiveSupport::TestCase
   test "content" do
     assert_equal "One from first path", find_asset("one.txt").content
   end
@@ -25,7 +25,7 @@ class AssetTest < ActiveSupport::TestCase
 
   private
     def find_asset(logical_path)
-      path = Pathname.new("#{__dir__}/assets/first_path/#{logical_path}")
+      path = Pathname.new("#{__dir__}/../assets/first_path/#{logical_path}")
       Propshaft::Asset.new(path, logical_path: logical_path)
     end
 end
