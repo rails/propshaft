@@ -2,6 +2,15 @@ require "rails"
 require "rails/railtie"
 require "active_support/ordered_options"
 
+# FIXME: There's gotta be a better way than this hack?
+class Rails::Engine < Rails::Railtie
+  initializer :append_assets_path, group: :all do |app|
+    app.config.assets.paths.unshift(*paths["vendor/assets"].existent_directories)
+    app.config.assets.paths.unshift(*paths["lib/assets"].existent_directories)
+    app.config.assets.paths.unshift(*paths["app/assets"].existent_directories)
+  end
+end
+
 module Propshaft
   class Railtie < ::Rails::Railtie
     config.assets = ActiveSupport::OrderedOptions.new
@@ -19,10 +28,6 @@ module Propshaft
     config.assets.js_compressor  = nil
 
     config.after_initialize do |app|
-      config.assets.paths += Pathname.glob(Rails.root.join("app/assets").join("*"))
-      config.assets.paths += Pathname.glob(Rails.root.join("lib/assets").join("*"))
-      config.assets.paths += Pathname.glob(Rails.root.join("vendor/assets").join("*"))
-
       config.assets.output_path ||=
         Pathname.new(File.join(app.config.paths["public"].first, app.config.assets.prefix))
 
