@@ -1,6 +1,8 @@
+require "propshaft/digest_utils"
 require "propshaft/asset"
 
 class Propshaft::LoadPath
+  include Propshaft::DigestUtils
   attr_reader :paths
 
   def initialize(paths = [])
@@ -8,7 +10,7 @@ class Propshaft::LoadPath
   end
 
   def find(asset_name)
-    assets_by_path[asset_name]
+    assets_by_path[without_digest(asset_name)]
   end
 
   def assets

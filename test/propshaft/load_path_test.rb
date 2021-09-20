@@ -21,6 +21,10 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
     assert_equal "Three from first path", @load_path.find("nested/three.txt").content
   end
 
+  test "find asset from digested filename" do
+    assert_equal "One from first path", @load_path.find("one-f2e1ec14d6856e1958083094170ca6119c529a73.txt").content
+  end
+
   test "assets" do
     asset = Propshaft::Asset.new(
       Pathname.new("#{__dir__}/../fixtures/assets/first_path/one.text"),
