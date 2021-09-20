@@ -8,7 +8,8 @@ class Propshaft::Resolver::DynamicTest < ActiveSupport::TestCase
   end
 
   test "resolving present asset returns uri path" do
-    assert_equal "/assets/one.txt", @resolver.resolve("one.txt")
+    assert_equal "/assets/one-f2e1ec14d6856e1958083094170ca6119c529a73.txt",
+      @resolver.resolve("one.txt")
   end
 
   test "resolving missing asset returns nil" do

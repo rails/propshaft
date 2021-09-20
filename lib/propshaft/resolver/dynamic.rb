@@ -8,7 +8,7 @@ module Propshaft::Resolver
 
     def resolve(logical_path)
       if asset = load_path.find(logical_path)
-        File.join prefix, asset.logical_path
+        File.join prefix, asset.digested_path
       end
     end
   end
