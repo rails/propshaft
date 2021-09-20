@@ -18,15 +18,6 @@ module Propshaft
     config.assets.prefix    = "/assets"
     config.assets.compilers = [ [ "text/css", Propshaft::Compilers::CssAssetUrls ] ]
 
-    # Compatibility shiming (need to provide log warnings when used)
-    config.assets.precompile     = []
-    config.assets.debug          = nil
-    config.assets.quiet          = nil
-    config.assets.compile        = nil
-    config.assets.version        = nil
-    config.assets.css_compressor = nil
-    config.assets.js_compressor  = nil
-
     config.after_initialize do |app|
       config.assets.output_path ||=
         Pathname.new(File.join(app.config.paths["public"].first, app.config.assets.prefix))
@@ -50,5 +41,14 @@ module Propshaft
         end
       end
     end
+
+    # Compatibility shiming (need to provide log warnings when used)
+    config.assets.precompile     = []
+    config.assets.debug          = nil
+    config.assets.quiet          = nil
+    config.assets.compile        = nil
+    config.assets.version        = nil
+    config.assets.css_compressor = nil
+    config.assets.js_compressor  = nil
   end
 end
