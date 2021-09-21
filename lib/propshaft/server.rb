@@ -17,7 +17,7 @@ class Propshaft::Server
           "Content-Length" => compiled_content.length.to_s,
           "Content-Type"   => asset.content_type,
           "ETag"           => asset.digest,
-          "Cache-Control"  => "public, must-revalidate"
+          "Cache-Control"  => "public, max-age=31536000, immutable"
         },
         [ compiled_content ]
       ]
