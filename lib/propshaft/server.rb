@@ -6,7 +6,9 @@ class Propshaft::Server
   end
 
   def call(env)
-    if asset = @assembly.load_path.find(requested_path(env))
+    path, digest = extract_path_and_digest(env)
+
+    if (asset = @assembly.load_path.find(path)) && asset.digest == digest
       compiled_content = @assembly.compilers.compile(asset)
 
       [ 
@@ -25,7 +27,11 @@ class Propshaft::Server
   end
 
   private
-    def requested_path(env)
-      Rack::Utils.unescape(env["PATH_INFO"].to_s.sub(/^\//, ""))
+    def extract_path_and_digest(env)
+      full_path = Rack::Utils.unescape(env["PATH_INFO"].to_s.sub(/^\//, ""))
+      digest    = full_path[/-([0-9a-f]{7,128})\.[^.]+\z/, 1]
+      path      = digest ? full_path.sub("-#{digest}", "") : full_path
+      
+      [ path, digest ]
     end
 end
