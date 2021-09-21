@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    propshaft (0.1.0)
+    propshaft (0.1.1)
       rails (>= 7.0.0.alpha2)
 
 GEM
@@ -84,7 +84,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
-    marcel (1.0.1)
+    marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.1)
     minitest (5.14.4)
