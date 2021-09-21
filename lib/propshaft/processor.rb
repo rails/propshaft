@@ -1,5 +1,6 @@
 class Propshaft::Processor
   MANIFEST_FILENAME = ".manifest.json"
+  COMPRESSABLE_CONTENT_TYPES = [ Mime[:js], Mime[:css], Mime[:text], Mime[:svg] ]
 
   attr_reader :load_path, :output_path, :compilers
 
@@ -41,10 +42,6 @@ class Propshaft::Processor
       compile_asset(asset) || copy_asset(asset)
     end
 
-    def copy_asset(asset)
-      FileUtils.copy asset.path, output_path.join(asset.digested_path)
-    end
-
     def compile_asset(asset)
       File.open(output_path.join(asset.digested_path), "w+") do |file|
         begin
@@ -56,10 +53,13 @@ class Propshaft::Processor
       end if compilers.compilable?(asset)
     end
 
+    def copy_asset(asset)
+      FileUtils.copy asset.path, output_path.join(asset.digested_path)
+    end
+
 
     def compress_assets
-      # FIXME: Only try to compress text assets with brotli
-      load_path.assets.each do |asset|
+      load_path.assets(content_types: COMPRESSABLE_CONTENT_TYPES).each do |asset|
         compress_asset output_path.join(asset.digested_path)
       end if compressor_available?
     end

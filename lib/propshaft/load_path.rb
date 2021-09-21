@@ -11,8 +11,12 @@ class Propshaft::LoadPath
     assets_by_path[asset_name]
   end
 
-  def assets
-    assets_by_path.values
+  def assets(content_types: nil)
+    if content_types
+      assets_by_path.values.select { |asset| asset.content_type.in?(content_types) }
+    else
+      assets_by_path.values
+    end
   end
 
   def manifest

@@ -22,12 +22,14 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
   end
 
   test "assets" do
-    asset = Propshaft::Asset.new(
-      Pathname.new("#{__dir__}/../fixtures/assets/first_path/one.text"),
-      logical_path: Pathname.new("one.txt")
-    )
+    assert_includes @load_path.assets, find_asset("one.txt")
+  end
 
-    assert_includes @load_path.assets, asset
+  test "assets by given content types" do
+    assert_not_includes @load_path.assets(content_types: [ Mime[:js] ]), find_asset("one.txt")
+    assert_includes @load_path.assets(content_types: [ Mime[:js] ]), find_asset("again.js")
+    assert_includes @load_path.assets(content_types: [ Mime[:js], Mime[:css] ]), find_asset("again.js")
+    assert_includes @load_path.assets(content_types: [ Mime[:js], Mime[:css] ]), find_asset("another.css")
   end
 
   test "manifest" do
@@ -36,4 +38,12 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
       assert_equal "nested/three-6c2b86a0206381310375abdd9980863c2ea7b2c3.txt", manifest["nested/three.txt"]
     end
   end
+
+  private
+    def find_asset(logical_path)
+      asset = Propshaft::Asset.new(
+        Pathname.new("#{__dir__}/../fixtures/assets/first_path/#{logical_path}"),
+        logical_path: Pathname.new(logical_path)
+      )
+    end
 end
