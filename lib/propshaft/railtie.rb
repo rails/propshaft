@@ -4,7 +4,7 @@ require "active_support/ordered_options"
 
 # FIXME: There's gotta be a better way than this hack?
 class Rails::Engine < Rails::Railtie
-  initializer :append_assets_path, group: :all do |app|
+  initializer "propshaft.append_assets_path", group: :all do |app|
     app.config.assets.paths.unshift(*paths["vendor/assets"].existent_directories)
     app.config.assets.paths.unshift(*paths["lib/assets"].existent_directories)
     app.config.assets.paths.unshift(*paths["app/assets"].existent_directories)
