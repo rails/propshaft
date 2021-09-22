@@ -30,4 +30,4 @@ jobs:
           bundler-cache: true
 
       - name: Run tests
-        run: bundle exec rake
+        run: bin/test
