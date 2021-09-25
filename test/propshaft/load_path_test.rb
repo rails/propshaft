@@ -38,12 +38,4 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
       assert_equal "nested/three-6c2b86a0206381310375abdd9980863c2ea7b2c3.txt", manifest["nested/three.txt"]
     end
   end
-
-  private
-    def find_asset(logical_path)
-      asset = Propshaft::Asset.new(
-        Pathname.new("#{__dir__}/../fixtures/assets/first_path/#{logical_path}"),
-        logical_path: Pathname.new(logical_path)
-      )
-    end
 end

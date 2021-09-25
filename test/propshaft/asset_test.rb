@@ -28,12 +28,4 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
   test "value object equality" do
     assert_equal find_asset("one.txt"), find_asset("one.txt")
   end
-
-  private
-    def find_asset(logical_path)
-      root_path = Pathname.new("#{__dir__}/../fixtures/assets/first_path")
-      path = root_path.join(logical_path)
-      load_path = Propshaft::LoadPath.new(root_path)
-      Propshaft::Asset.new(path, logical_path: logical_path)
-    end
 end
