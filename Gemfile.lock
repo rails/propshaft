@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    propshaft (0.1.4)
+    propshaft (0.1.5)
       rails (>= 7.0.0.alpha2)
 
 GEM
@@ -89,9 +89,11 @@ GEM
     mini_mime (1.1.1)
     minitest (5.14.4)
     nio4r (2.5.8)
-    nokogiri (1.12.4-arm64-darwin)
+    nokogiri (1.12.5-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.12.4-x86_64-linux)
+    nokogiri (1.12.5-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
     racc (1.5.2)
     rack (2.2.3)
@@ -140,10 +142,11 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.5.0.beta4)
+    zeitwerk (2.5.0.beta5)
 
 PLATFORMS
   arm64-darwin-20
+  x86_64-darwin-20
   x86_64-linux
 
 DEPENDENCIES
@@ -152,4 +155,4 @@ DEPENDENCIES
   rake
 
 BUNDLED WITH
-   2.2.25
+   2.2.28
