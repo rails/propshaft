@@ -39,6 +39,10 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
     end
   end
 
+  test "missing load path directory" do
+    assert_nil Propshaft::LoadPath.new(Pathname.new("#{__dir__}/../fixtures/assets/nowhere")).find("missing")
+  end
+
   private
     def find_asset(logical_path)
       asset = Propshaft::Asset.new(
