@@ -14,7 +14,7 @@ class Propshaft::Assembly
   end
 
   def load_path
-    Propshaft::LoadPath.new(config.paths)
+    @load_path ||= Propshaft::LoadPath.new(config.paths)
   end
 
   def resolver

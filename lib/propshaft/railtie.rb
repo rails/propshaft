@@ -14,9 +14,10 @@ end
 module Propshaft
   class Railtie < ::Rails::Railtie
     config.assets = ActiveSupport::OrderedOptions.new
-    config.assets.paths     = []
-    config.assets.prefix    = "/assets"
-    config.assets.compilers = [ [ "text/css", Propshaft::Compilers::CssAssetUrls ] ]
+    config.assets.paths       = []
+    config.assets.prefix      = "/assets"
+    config.assets.compilers   = [ [ "text/css", Propshaft::Compilers::CssAssetUrls ] ]
+    config.assets.sweep_cache = Rails.env.development? || Rails.env.test?
 
     config.after_initialize do |app|
       config.assets.output_path ||=
@@ -30,6 +31,12 @@ module Propshaft
 
       ActiveSupport.on_load(:action_view) do
         include Propshaft::Helper
+      end
+
+      if config.assets.sweep_cache
+        ActiveSupport.on_load(:action_controller_base) do
+          before_action { Rails.application.assets.load_path.cache_sweeper.execute_if_updated }
+        end
       end
     end
 

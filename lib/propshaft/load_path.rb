@@ -27,9 +27,21 @@ class Propshaft::LoadPath
     end
   end
 
+  # Returns an instance ActiveSupport::EventedFileUpdateChecker configured to clear the cache of the load_path
+  # when the directories passed during its initialization have changes. This is used in development
+  # and test to ensure the map caches are reset when javascript files are changed.
+  def cache_sweeper
+    @cache_sweeper ||= begin
+      extensions_to_watch = Mime::EXTENSION_LOOKUP.map { |x| x.first }
+      Rails.application.config.file_watcher.new([], Array(paths).collect { |dir| [dir.to_s, extensions_to_watch] }.to_h) do
+        clear_cache
+      end
+    end
+  end
+
   private
     def assets_by_path
-      Hash.new.tap do |mapped|
+      @cached_assets_by_path ||= Hash.new.tap do |mapped|
         paths.each do |path|
           all_files_from_tree(path).each do |file|
             logical_path = file.relative_path_from(path)
@@ -41,5 +53,9 @@ class Propshaft::LoadPath
 
     def all_files_from_tree(path)
       path.children.flat_map { |child| child.directory? ? all_files_from_tree(child) : child }
+    end
+
+    def clear_cache
+      @cached_assets_by_path = nil
     end
 end
