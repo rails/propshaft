@@ -27,13 +27,15 @@ class Propshaft::LoadPath
     end
   end
 
-  # Returns an instance ActiveSupport::EventedFileUpdateChecker configured to clear the cache of the load_path
+  # Returns a ActiveSupport::FileUpdateChecker object configured to clear the cache of the load_path
   # when the directories passed during its initialization have changes. This is used in development
   # and test to ensure the map caches are reset when javascript files are changed.
   def cache_sweeper
     @cache_sweeper ||= begin
-      extensions_to_watch = Mime::EXTENSION_LOOKUP.map { |x| x.first }
-      Rails.application.config.file_watcher.new([], Array(paths).collect { |dir| [dir.to_s, extensions_to_watch] }.to_h) do
+      exts_to_watch  = Mime::EXTENSION_LOOKUP.map(&:first)
+      files_to_watch = Array(paths).collect { |dir| [ dir.to_s, exts_to_watch ] }.to_h
+
+      Rails.application.config.file_watcher.new([], files_to_watch) do
         clear_cache
       end
     end
