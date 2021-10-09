@@ -43,6 +43,14 @@ class Propshaft::ProcessorTest < ActiveSupport::TestCase
     end
   end
 
+  test "assets are cleaned" do
+    processed do |processor|
+      processor.clean
+      assert_not File.exists?(processor.output_path)
+      FileUtils.mkdir_p processor.output_path
+    end
+  end
+
   private
     def processed
       Dir.mktmpdir do |output_path|
