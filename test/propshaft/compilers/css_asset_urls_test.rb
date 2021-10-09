@@ -75,11 +75,6 @@ class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
     assert_match /{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg"\) url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg"\); }/, compiled
   end
 
-  test "with svg mask" do
-    compiled = compile_asset_with_content(%({ mask-image: url("file.svg#mask1"); }))
-    assert_match /{ mask-image: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg#mask1"\); }/, compiled
-  end
-
   test "url" do
     compiled = compile_asset_with_content(%({ background: url('https://rubyonrails.org/images/rails-logo.svg'); }))
     assert_match "{ background: url('https://rubyonrails.org/images/rails-logo.svg'); }", compiled
