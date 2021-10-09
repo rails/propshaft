@@ -23,7 +23,7 @@ class Propshaft::Compilers
     if relevant_registrations = registrations[asset.content_type.to_s]
       asset.content.dup.tap do |input|
         relevant_registrations.each do |compiler|
-          input.replace compiler.new(assembly).compile(input)
+          input.replace compiler.new(assembly).compile(asset.logical_path, input)
         end
       end
     else
