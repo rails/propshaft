@@ -24,6 +24,11 @@ These assets can be referenced through their logical path using the normal helpe
 Additionally, Propshaft ships with a CSS function called `asset-path("image.svg")` that'll be compiled into `url("/assets/image-f2e1ec14d6856e1958083094170ca6119c529a73.svg")` when doing `assets:precompile`. This function is applied to all `.css` files.
 
 
+## Bypassing the digest step
+
+If you need to put multiple files that refer to each other through Propshaft, like a JavaScript file and its source map, you have to digest these files in advance to retain stable file names. Propshaft looks for the specific pattern of `-[digest].digested.js` as the postfix to any asset file as an indication that the file has already been digested.
+
+
 ## Migrating from Sprockets
 
 Propshaft does a lot less than Sprockets, by design, so it might well be a fair bit of work to migrate if it's even desirable. This is particularly true if you rely on Sprockets to provide any form of transpiling, like CoffeeScript or Sass, or if you rely on any gems that do. You'll need to either stop transpiling or use a Node-based transpiler, like those in `jsbundling-rails` and `cssbundling-rails`.
