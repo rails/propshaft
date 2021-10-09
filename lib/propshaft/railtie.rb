@@ -46,6 +46,11 @@ module Propshaft
         task precompile: :environment do
           Rails.application.assets.processor.process
         end
+
+        desc "Remove config.assets.output_path"
+        task clean: :environment do
+          Rails.application.assets.processor.clean
+        end
       end
     end
 

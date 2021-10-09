@@ -16,6 +16,10 @@ class Propshaft::Processor
     compress_assets
   end
 
+  def clean
+    FileUtils.rm_r(output_path) if File.exist?(output_path)
+  end
+
   private
     def ensure_output_path_exists
       FileUtils.mkdir_p output_path
