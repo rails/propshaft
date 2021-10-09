@@ -21,6 +21,13 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
     assert_equal "f2e1ec14d6856e1958083094170ca6119c529a73", find_asset("one.txt").digest
   end
 
+  test "fresh" do
+    assert find_asset("one.txt").fresh?("f2e1ec14d6856e1958083094170ca6119c529a73")
+    assert_not find_asset("one.txt").fresh?("e206c34fe404c8e2f25d60dd8303f61c02b8d381")
+
+    assert find_asset("file-already-abcdef0123456789.digested.css").fresh?(nil)
+  end
+
   test "digested path" do
     assert_equal "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt",
       find_asset("one.txt").digested_path.to_s

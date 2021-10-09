@@ -32,6 +32,10 @@ class Propshaft::Asset
     end
   end
 
+  def fresh?(digest)
+    self.digest == digest || already_digested?
+  end
+
   def ==(other_asset)
     logical_path.hash == other_asset.logical_path.hash
   end
