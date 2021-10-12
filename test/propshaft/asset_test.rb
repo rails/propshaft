@@ -35,6 +35,9 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
     assert_equal "file-already-abcdef0123456789.digested.css",
       find_asset("file-already-abcdef0123456789.digested.css").digested_path.to_s
 
+    assert_equal "file-already-abcdef0123456789.digested.debug.css",
+      find_asset("file-already-abcdef0123456789.digested.debug.css").digested_path.to_s
+
     assert_equal "file-not.digested-e206c34fe404c8e2f25d60dd8303f61c02b8d381.css",
       find_asset("file-not.digested.css").digested_path.to_s
   end
