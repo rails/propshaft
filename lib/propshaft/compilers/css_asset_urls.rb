@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "propshaft/errors"
 
 class Propshaft::Compilers::CssAssetUrls
   attr_reader :assembly
@@ -25,6 +26,11 @@ class Propshaft::Compilers::CssAssetUrls
     end
 
     def asset_url(resolved_path)
-      %[url("#{assembly.config.prefix}/#{assembly.load_path.find(resolved_path).digested_path}")]
+      if asset = assembly.load_path.find(resolved_path)
+        %[url("#{assembly.config.prefix}/#{asset.digested_path}")]
+      else
+        raise Propshaft::MissingAssetError, "The asset '#{resolved_path}' is not in the pipeline." \
+        "If you are migrating from Sprockets and replacing asset-url with url, try adding a '/' at the start of the asset path."
+      end
     end
 end

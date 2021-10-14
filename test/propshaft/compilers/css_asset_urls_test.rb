@@ -90,6 +90,12 @@ class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
     assert_match "{ background: url(#IDofSVGpath); }", compiled
   end
 
+  test "missing asset" do
+    assert_raise Propshaft::MissingAssetError do
+      compile_asset_with_content(%({ background: url(missing.jpg); }))
+    end
+  end
+
   private
     def compile_asset_with_content(content)
       root_path    = Pathname.new("#{__dir__}/../../fixtures/assets/vendor")
