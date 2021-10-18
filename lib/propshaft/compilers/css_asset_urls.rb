@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "propshaft/errors"
 
 class Propshaft::Compilers::CssAssetUrls
   attr_reader :assembly
@@ -25,6 +26,10 @@ class Propshaft::Compilers::CssAssetUrls
     end
 
     def asset_url(resolved_path)
-      %[url("#{assembly.config.prefix}/#{assembly.load_path.find(resolved_path).digested_path}")]
+      if asset = assembly.load_path.find(resolved_path)
+        %[url("#{assembly.config.prefix}/#{asset.digested_path}")]
+      else
+        raise Propshaft::MissingAssetError, "The asset '#{resolved_path}' was not found in the load path."
+      end
     end
 end
