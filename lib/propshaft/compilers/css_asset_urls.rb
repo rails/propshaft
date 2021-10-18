@@ -29,8 +29,7 @@ class Propshaft::Compilers::CssAssetUrls
       if asset = assembly.load_path.find(resolved_path)
         %[url("#{assembly.config.prefix}/#{asset.digested_path}")]
       else
-        raise Propshaft::MissingAssetError, "The asset '#{resolved_path}' is not in the pipeline." \
-        "If you are migrating from Sprockets and replacing asset-url with url, try adding a '/' at the start of the asset path."
+        raise Propshaft::MissingAssetError, "The asset '#{resolved_path}' was not found in the load path."
       end
     end
 end
