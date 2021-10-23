@@ -40,6 +40,10 @@ module Propshaft
       end
     end
 
+    initializer "propshaft.logger" do
+      Propshaft.logger = config.assets.logger || Rails.logger
+    end
+
     rake_tasks do |app|
       namespace :assets do
         desc "Compile all the assets from config.assets.paths"
