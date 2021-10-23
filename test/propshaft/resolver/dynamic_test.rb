@@ -12,7 +12,9 @@ class Propshaft::Resolver::DynamicTest < ActiveSupport::TestCase
       @resolver.resolve("one.txt")
   end
 
-  test "resolving missing asset returns nil" do
-    assert_nil @resolver.resolve("nowhere.txt")
+  test "resolving missing asset raises a custom error" do
+    assert_raise Propshaft::MissingAssetError do
+      assert_nil @resolver.resolve("nowhere.txt")
+    end
   end
 end
