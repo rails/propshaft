@@ -37,7 +37,6 @@ class Propshaft::Processor
       load_path.assets.each do |asset|
         unless output_path.join(asset.digested_path).exist?
           Propshaft.logger.info "Writing #{asset.digested_path}"
-
           FileUtils.mkdir_p output_path.join(asset.digested_path.parent)
           output_asset(asset)
         end
