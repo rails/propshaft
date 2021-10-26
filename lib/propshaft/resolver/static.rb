@@ -9,6 +9,8 @@ module Propshaft::Resolver
     def resolve(logical_path)
       if asset_path = parsed_manifest[logical_path]
         File.join prefix, asset_path
+      else
+        raise Propshaft::MissingAssetError.new(logical_path)
       end
     end
 

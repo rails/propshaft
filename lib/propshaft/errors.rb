@@ -5,5 +5,14 @@ module Propshaft
   class Error < StandardError; end
 
   # Raised when LoadPath cannot find the requested asset
-  class MissingAssetError < Error; end
+  class MissingAssetError < Error
+    def initialize(path)
+      super
+      @path = path
+    end
+
+    def message
+      "The asset '#{@path}' was not found in the load path."
+    end
+  end
 end

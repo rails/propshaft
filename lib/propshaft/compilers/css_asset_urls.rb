@@ -29,7 +29,7 @@ class Propshaft::Compilers::CssAssetUrls
       if asset = assembly.load_path.find(resolved_path)
         %[url("#{assembly.config.prefix}/#{asset.digested_path}")]
       else
-        raise Propshaft::MissingAssetError, "The asset '#{resolved_path}' was not found in the load path."
+        raise Propshaft::MissingAssetError.new(resolved_path)
       end
     end
 end
