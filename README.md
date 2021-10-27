@@ -10,9 +10,17 @@ So that's what Propshaft doesn't do. Here's what it does provide:
 1. **Basic compilers**: Propshaft was explicitly not designed to provide full transpiler capabilities. You can get that better elsewhere. But it does offer a simple input->output compiler setup that by default is used to translate `asset-path` function calls in CSS to `url(digested-asset)` instead.
 
 
+# Requirements
+
+- Rails 7+
+
+
 ## Installation
 
-With Rails 7+, you can start a new application with propshaft using `rails new myapp -a propshaft` (pending the merge of [rails/rails#43261](https://github.com/rails/rails/pull/43261)).
+- For new applications: `rails new myapp -a propshaft`
+- For existing applications:
+  - Remove sprockets from your `Gemfile` if present
+  - Add `gem "propshaft"` to your Gemfile
 
 
 ## Usage
