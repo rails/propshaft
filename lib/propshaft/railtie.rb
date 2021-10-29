@@ -55,6 +55,11 @@ module Propshaft
         task clean: :environment do
           Rails.application.assets.processor.clean
         end
+
+        desc "Print all the assets available in config.assets.paths"
+        task reveal: :environment do
+          Rails.application.assets.reveal
+        end
       end
     end
 
