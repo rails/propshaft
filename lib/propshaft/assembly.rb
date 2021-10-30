@@ -43,6 +43,12 @@ class Propshaft::Assembly
       end
   end
 
+  def reveal
+    load_path.assets.each do |asset|
+      Propshaft.logger.info asset.logical_path
+    end
+  end
+
   private
     def manifest_path
       config.output_path.join(Propshaft::Processor::MANIFEST_FILENAME)
