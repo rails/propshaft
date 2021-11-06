@@ -20,6 +20,11 @@ class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
     assert_match /{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled
   end
 
+  test "url() inside comment" do
+    compiled = compile_asset_with_content(%( /* { background: url(not_exist.jpg); } */ ))
+    assert_equal ' /* { background: url(not_exist.jpg); } */ ', compiled
+  end
+
   test "blank spaces around name" do
     compiled = compile_asset_with_content(%({ background: url( file.jpg ); }))
     assert_match /{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled
