@@ -46,6 +46,11 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
     assert_equal find_asset("one.txt"), find_asset("one.txt")
   end
 
+  test "costly methods are memoized" do
+    asset = find_asset("one.txt")
+    assert_equal asset.digest.object_id, asset.digest.object_id
+  end
+
   private
     def find_asset(logical_path)
       root_path = Pathname.new("#{__dir__}/../fixtures/assets/first_path")

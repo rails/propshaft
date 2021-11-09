@@ -18,7 +18,7 @@ class Propshaft::Assembly
   end
 
   def resolver
-    if manifest_path.exist?
+    @resolver ||= if manifest_path.exist?
       Propshaft::Resolver::Static.new manifest_path: manifest_path, prefix: config.prefix
     else
       Propshaft::Resolver::Dynamic.new load_path: load_path, prefix: config.prefix
