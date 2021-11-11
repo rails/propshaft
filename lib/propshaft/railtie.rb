@@ -17,7 +17,7 @@ module Propshaft
     config.assets.paths       = []
     config.assets.prefix      = "/assets"
     config.assets.compilers   = [ [ "text/css", Propshaft::Compilers::CssAssetUrls ] ]
-    config.assets.sweep_cache = Rails.env.development? || Rails.env.test?
+    config.assets.sweep_cache = Rails.env.development?
 
     config.after_initialize do |app|
       config.assets.output_path ||=
