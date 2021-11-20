@@ -5,6 +5,7 @@ require "propshaft/server"
 require "propshaft/processor"
 require "propshaft/compilers"
 require "propshaft/compilers/css_asset_urls"
+require "propshaft/compilers/css_source_map"
 
 class Propshaft::Assembly
   attr_reader :config

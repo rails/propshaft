@@ -16,7 +16,10 @@ module Propshaft
     config.assets = ActiveSupport::OrderedOptions.new
     config.assets.paths       = []
     config.assets.prefix      = "/assets"
-    config.assets.compilers   = [ [ "text/css", Propshaft::Compilers::CssAssetUrls ] ]
+    config.assets.compilers   = [
+      [ "text/css", Propshaft::Compilers::CssAssetUrls ],
+      [ "text/css", Propshaft::Compilers::CssSourceMap ]
+    ]
     config.assets.sweep_cache = Rails.env.development?
 
     config.after_initialize do |app|

@@ -23,7 +23,10 @@ file = URI.parse("https://github.com/StartBootstrap/startbootstrap-new-age/archi
 assets = ActiveSupport::OrderedOptions.new
 assets.paths     = [ dir + "/startbootstrap-new-age-master/dist" ]
 assets.prefix    = "/assets"
-assets.compilers = [ [ "text/css", Propshaft::Compilers::CssAssetUrls ] ]
+assets.compilers = [
+  [ "text/css", Propshaft::Compilers::CssAssetUrls ],
+  [ "text/css", Propshaft::Compilers::CssSourceMap ]
+]
 
 assembly = Propshaft::Assembly.new(assets)
 asset    = assembly.load_path.find("css/styles.css")
