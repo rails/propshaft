@@ -52,7 +52,7 @@ module Propshaft
         end
 
         desc "Remove config.assets.output_path"
-        task clean: :environment do
+        task clobber: :environment do
           Rails.application.assets.processor.clean
         end
 
