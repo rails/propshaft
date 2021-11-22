@@ -1,6 +1,5 @@
 class Propshaft::Processor
   MANIFEST_FILENAME = ".manifest.json"
-  COMPRESSABLE_CONTENT_TYPES = %i[ js css text json xml html svg otf ttf ].collect { |t| Mime[t] }
 
   attr_reader :load_path, :output_path, :compilers
 
