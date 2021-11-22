@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    propshaft (0.3.0)
+    propshaft (0.3.1)
       rails (>= 7.0.0.alpha2)
 
 GEM
