@@ -1,6 +1,5 @@
 class Propshaft::Processor
   MANIFEST_FILENAME = ".manifest.json"
-  COMPRESSABLE_CONTENT_TYPES = %i[ js css text json xml html svg otf ttf ].collect { |t| Mime[t] }
 
   attr_reader :load_path, :output_path, :compilers
 
@@ -13,7 +12,6 @@ class Propshaft::Processor
     ensure_output_path_exists
     write_manifest
     output_assets
-    compress_assets
   end
 
   def clobber
@@ -60,20 +58,5 @@ class Propshaft::Processor
 
     def copy_asset(asset)
       FileUtils.copy asset.path, output_path.join(asset.digested_path)
-    end
-
-
-    def compress_assets
-      load_path.assets(content_types: COMPRESSABLE_CONTENT_TYPES).each do |asset|
-        compress_asset output_path.join(asset.digested_path)
-      end if compressor_available?
-    end
-
-    def compress_asset(path)
-      `brotli #{path} -o #{path}.br` unless Pathname.new(path.to_s + ".br").exist?
-    end
-
-    def compressor_available?
-      `which brotli`.present?
     end
 end

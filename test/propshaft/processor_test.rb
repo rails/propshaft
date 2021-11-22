@@ -31,18 +31,6 @@ class Propshaft::ProcessorTest < ActiveSupport::TestCase
     end
   end
 
-  test "compressable assets are compressed if brotli is available" do
-    skip unless `which brotli`.present?
-    
-    processed do |processor|
-      digested_asset_name = "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt.br"
-      assert processor.output_path.join(digested_asset_name).exist?
-
-      digested_asset_name = "dhh-9b15b6531b0b62cf6bb29be52e2660419b7b3a7f.jpg.br"
-      assert_not processor.output_path.join(digested_asset_name).exist?
-    end
-  end
-
   test "assets are clobbered" do
     processed do |processor|
       processor.clobber
