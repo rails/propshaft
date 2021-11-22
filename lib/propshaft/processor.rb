@@ -16,7 +16,7 @@ class Propshaft::Processor
     compress_assets
   end
 
-  def clean
+  def clobber
     FileUtils.rm_r(output_path) if File.exist?(output_path)
   end
 
