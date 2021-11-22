@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+# Benchmark file for the Dynamic resolver
+
+require "active_support/ordered_options"
+require "benchmark/ips"
+require "open-uri"
+
+require_relative "./trackrod"
+require_relative "../lib/propshaft"
+
+trackrod = Trackrod.new(Dir.mktmpdir)
+trackrod.build
+
+assets = ActiveSupport::OrderedOptions.new
+assets.paths         = [ trackrod.root ]
+assets.prefix        = "/assets"
+assets.compilers     = [ [ "text/css", Propshaft::Compilers::CssAssetUrls ] ]
+assets.output_path ||= Pathname.new(Dir.mktmpdir)
+
+assembly = Propshaft::Assembly.new(assets)
+
+Benchmark.ips do |x|
+  x.config(time: 5, warmup: 2)
+  x.report("compile") { trackrod.assets.images.each { assembly.resolver.resolve _1 } }
+end
