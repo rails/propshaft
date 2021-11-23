@@ -18,7 +18,7 @@ class Propshaft::Compilers::SourceMappingUrlsTest < ActiveSupport::TestCase
 
   test "matching source map" do
     assert_match /\/\/# sourceMappingURL=\/assets\/source.js-[a-z0-9]{40}\.map/, @assembly.compilers.compile(find_asset("source.js", fixture_path: "mapped"))
-    assert_match /\/*# sourceMappingURL=\/assets\/source.css-[a-z0-9]{40}\.map/, @assembly.compilers.compile(find_asset("source.css", fixture_path: "mapped"))
+    assert_match /\/\*# sourceMappingURL=\/assets\/source.css-[a-z0-9]{40}\.map/, @assembly.compilers.compile(find_asset("source.css", fixture_path: "mapped"))
   end
 
   test "matching nested source map" do
