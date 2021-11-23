@@ -3,7 +3,7 @@
 class Propshaft::Compilers::SourceMappingUrls
   attr_reader :assembly
 
-  SOURCE_MAPPING_PATTERN = %r{(//|/\*)# sourceMappingURL=(.*\.map)}
+  SOURCE_MAPPING_PATTERN = %r{^(//|/\*)# sourceMappingURL=(.*\.map)}
 
   def initialize(assembly)
     @assembly = assembly

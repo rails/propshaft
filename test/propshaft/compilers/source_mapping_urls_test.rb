@@ -39,4 +39,9 @@ class Propshaft::Compilers::SourceMappingUrlsTest < ActiveSupport::TestCase
     assert_match %r{sourceMappingURL=sourceMappingURL-outside-comment.css.map},
                  @assembly.compilers.compile(find_asset("sourceMappingURL-outside-comment.css", fixture_path: "mapped"))
   end
+
+  test "sourceMappingURL not at the beginning of the line should be left alone" do
+    assert_match %r{sourceMappingURL=sourceMappingURL-not-at-start.css.map},
+                 @assembly.compilers.compile(find_asset("sourceMappingURL-not-at-start.css", fixture_path: "mapped"))
+  end
 end
