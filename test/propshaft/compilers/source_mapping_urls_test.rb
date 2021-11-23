@@ -29,4 +29,8 @@ class Propshaft::Compilers::SourceMappingUrlsTest < ActiveSupport::TestCase
     assert_no_match /sourceMappingURL/, @assembly.compilers.compile(find_asset("sourceless.js", fixture_path: "mapped"))
     assert_no_match /sourceMappingURL/, @assembly.compilers.compile(find_asset("sourceless.css", fixture_path: "mapped"))
   end
+
+  test "sourceMappingURL outside of a comment should be left alone" do
+    assert_match /sourceMappingURL=sourceMappingURL-outside-comment.css.map/, @assembly.compilers.compile(find_asset("sourceMappingURL-outside-comment.css", fixture_path: "mapped"))
+  end
 end
