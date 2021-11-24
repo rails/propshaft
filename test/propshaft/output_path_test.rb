@@ -29,14 +29,14 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
   end
 
   test "clean keeps versions of assets that no longer exist" do
-    removed = output_asset("no-longer-exist.txt", "current")
+    removed = output_asset("no-longer-in-manifest.txt", "current")
     @output_path.clean(1, 0)
     assert File.exists?(removed)
   end
 
   test "clean keeps the correct number of versions" do
-    old     = output_asset("by_count.txt", "old")
-    current = output_asset("by_count.txt", "current")
+    old     = output_asset("by_count.txt", "old", created_at: Time.now - 300)
+    current = output_asset("by_count.txt", "current", created_at: Time.now - 180)
 
     @output_path.clean(1, 0)
 
@@ -61,11 +61,11 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
   end
 
   private
-    def output_asset(filename, content)
+    def output_asset(filename, content, created_at: Time.zone.now)
       asset = Propshaft::Asset.new(nil, logical_path: filename)
       asset.stub :content, content do
         output_path = @output_path.path.join(asset.digested_path)
-        File.write output_path, asset.content
+        `touch -mt #{created_at.strftime('%y%m%d%H%M')} #{output_path}`
         output_path
       end
     end
