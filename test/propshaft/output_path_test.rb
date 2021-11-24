@@ -29,14 +29,14 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
   end
 
   test "clean keeps versions of assets that no longer exist" do
-    removed = output_asset("file.txt", "current")
+    removed = output_asset("no-longer-exist.txt", "current")
     @output_path.clean(1, 0)
     assert File.exists?(removed)
   end
 
   test "clean keeps the correct number of versions" do
-    old     = output_asset("file.txt", "old")
-    current = output_asset("file.txt", "current")
+    old     = output_asset("by_count.txt", "old")
+    current = output_asset("by_count.txt", "current")
 
     @output_path.clean(1, 0)
 
@@ -48,8 +48,8 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
   end
 
   test "clean keeps all versions under a certain age" do
-    old     = output_asset("file.txt", "old")
-    current = output_asset("file.txt", "current")
+    old     = output_asset("by_age.txt", "old")
+    current = output_asset("by_age.txt", "current")
 
     @output_path.clean(0, 3600)
 
