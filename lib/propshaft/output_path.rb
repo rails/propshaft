@@ -17,7 +17,7 @@ class Propshaft::OutputPath
         .sort_by { |_, attrs| attrs[:mtime] }
         .reverse
         .each_with_index
-        .drop_while { |(_, attrs), index| fresh_version_within_limit(attrs[:mtime], age, index) }
+        .drop_while { |(_, attrs), index| fresh_version_within_limit(attrs[:mtime], count, expires_at: age, limit: index) }
         .each { |(path, _), _| remove(path) }
     end
   end
@@ -38,9 +38,9 @@ class Propshaft::OutputPath
   end
 
   private
-    def fresh_version_within_limit(mtime, age, index)
-      modified_at = [0, Time.now - mtime].max
-      modified_at < age || index < count
+    def fresh_version_within_limit(mtime, count, expires_at:, limit:)
+      modified_at = [ 0, Time.now - mtime ].max
+      modified_at < expires_at || limit < count
     end
   
     def remove(path)
