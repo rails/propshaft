@@ -31,7 +31,7 @@ class Propshaft::OutputPath
         files[digested_path.to_s] = {
           logical_path: logical_path.to_s,
           digest: digest,
-          mtime: File.mtime(path)
+          mtime: File.mtime(file)
         }
       end
     end
