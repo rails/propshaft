@@ -32,6 +32,8 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
     removed = output_asset("no-longer-in-manifest.txt", "current")
     @output_path.clean(1, 0)
     assert File.exists?(removed)
+  ensure
+    FileUtils.rm(removed) if File.exists?(removed)
   end
 
   test "clean keeps the correct number of versions" do
@@ -61,7 +63,7 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
   end
 
   private
-    def output_asset(filename, content, created_at: Time.zone.now)
+    def output_asset(filename, content, created_at: Time.now)
       asset = Propshaft::Asset.new(nil, logical_path: filename)
       asset.stub :content, content do
         output_path = @output_path.path.join(asset.digested_path)
