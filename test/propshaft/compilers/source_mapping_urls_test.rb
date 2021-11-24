@@ -17,16 +17,31 @@ class Propshaft::Compilers::SourceMappingUrlsTest < ActiveSupport::TestCase
   end
 
   test "matching source map" do
-    assert_match /\/\/# sourceMappingURL=\/assets\/source.js-[a-z0-9]{40}\.map/, @assembly.compilers.compile(find_asset("source.js", fixture_path: "mapped"))
-    assert_match /\/*# sourceMappingURL=\/assets\/source.css-[a-z0-9]{40}\.map/, @assembly.compilers.compile(find_asset("source.css", fixture_path: "mapped"))
+    assert_match %r{//# sourceMappingURL=/assets/source.js-[a-z0-9]{40}\.map},
+                 @assembly.compilers.compile(find_asset("source.js", fixture_path: "mapped"))
+    assert_match %r{/\*# sourceMappingURL=/assets/source.css-[a-z0-9]{40}\.map},
+                 @assembly.compilers.compile(find_asset("source.css", fixture_path: "mapped"))
   end
 
   test "matching nested source map" do
-    assert_match /\/\/# sourceMappingURL=\/assets\/nested\/another-source.js-[a-z0-9]{40}\.map/, @assembly.compilers.compile(find_asset("nested/another-source.js", fixture_path: "mapped"))
+    assert_match %r{//# sourceMappingURL=/assets/nested/another-source.js-[a-z0-9]{40}\.map},
+                 @assembly.compilers.compile(find_asset("nested/another-source.js", fixture_path: "mapped"))
   end
 
   test "missing source map" do
-    assert_no_match /sourceMappingURL/, @assembly.compilers.compile(find_asset("sourceless.js", fixture_path: "mapped"))
-    assert_no_match /sourceMappingURL/, @assembly.compilers.compile(find_asset("sourceless.css", fixture_path: "mapped"))
+    assert_no_match %r{sourceMappingURL},
+                    @assembly.compilers.compile(find_asset("sourceless.js", fixture_path: "mapped"))
+    assert_no_match %r{sourceMappingURL},
+                    @assembly.compilers.compile(find_asset("sourceless.css", fixture_path: "mapped"))
+  end
+
+  test "sourceMappingURL outside of a comment should be left alone" do
+    assert_match %r{sourceMappingURL=sourceMappingURL-outside-comment.css.map},
+                 @assembly.compilers.compile(find_asset("sourceMappingURL-outside-comment.css", fixture_path: "mapped"))
+  end
+
+  test "sourceMappingURL not at the beginning of the line should be left alone" do
+    assert_match %r{sourceMappingURL=sourceMappingURL-not-at-start.css.map},
+                 @assembly.compilers.compile(find_asset("sourceMappingURL-not-at-start.css", fixture_path: "mapped"))
   end
 end

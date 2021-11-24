@@ -1,0 +1,3 @@
+.class::before {
+  content: "# sourceMappingURL=sourceMappingURL-outside-comment.css.map";
+}
