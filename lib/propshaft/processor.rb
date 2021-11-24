@@ -1,3 +1,5 @@
+require "propshaft/output_path"
+
 class Propshaft::Processor
   MANIFEST_FILENAME = ".manifest.json"
 
@@ -16,6 +18,10 @@ class Propshaft::Processor
 
   def clobber
     FileUtils.rm_r(output_path) if File.exist?(output_path)
+  end
+
+  def clean
+    OutputPath.new(output_path, load_path.manifest).clean(2, 1.hour)
   end
 
   private

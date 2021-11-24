@@ -57,6 +57,11 @@ module Propshaft
 
         desc "Remove config.assets.output_path"
         task clobber: :environment do
+          Rails.application.assets.processor.clobber
+        end
+
+        desc "Removes old files in config.assets.output_path"
+        task clean: :environment do
           Rails.application.assets.processor.clean
         end
 
