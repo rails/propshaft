@@ -29,7 +29,7 @@ class Propshaft::Compilers::CssAssetUrls
       if asset = assembly.load_path.find(resolved_path)
         %[url("#{assembly.config.prefix}/#{asset.digested_path}")]
       else
-        Propshaft.logger.warn "Removed '#{pattern}' for missing asset '#{resolved_path}' in #{logical_path}"
+        Propshaft.logger.warn "Unable to resolve '#{pattern}' for missing asset '#{resolved_path}' in #{logical_path}"
         %[url("#{pattern}")]
       end
     end
