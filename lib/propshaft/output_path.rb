@@ -12,18 +12,13 @@ class Propshaft::OutputPath
     asset_versions.each do |logical_path, versions|
       current = manifest[logical_path]
 
-      versions.reject { |path, _|
-        current && path == current
-      }.sort_by { |_, attrs|
-        attrs[:mtime]
-      }.reverse.each_with_index.drop_while { |(_, attrs), index|
-        _age = [0, Time.now - attrs[:mtime]].max
-        # Keep if under age or within the count limit
-        _age < age || index < count
-      }.each { |(path, _), _|
-        # Remove old assets
-        remove(path)
-      }
+      versions
+        .reject { |path, _| current && path == current }
+        .sort_by { |_, attrs| attrs[:mtime] }
+        .reverse
+        .each_with_index
+        .drop_while { |(_, attrs), index| fresh_version_within_limit(attrs[:mtime], age, index) }
+        .each { |(path, _), _| remove(path) }
     end
   end
 
@@ -43,6 +38,11 @@ class Propshaft::OutputPath
   end
 
   private
+    def fresh_version_within_limit(mtime, age, index)
+      modified_at = [0, Time.now - mtime].max
+      modified_at < age || index < count
+    end
+  
     def remove(path)
       FileUtils.rm(@path.join(path))
       Propshaft.logger.info "Removed #{path}"
