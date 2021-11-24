@@ -4,7 +4,7 @@ require "propshaft/asset"
 require "propshaft/load_path"
 require "propshaft/output_path"
 
-class Propshaft::LoadPathTest < ActiveSupport::TestCase
+class Propshaft::OutputPathTest < ActiveSupport::TestCase
   setup do
     @manifest    = {
       ".manifest.json": ".manifest.json",
