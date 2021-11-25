@@ -11,7 +11,7 @@ class Propshaft::Compilers::CssAssetUrls
   end
 
   def compile(logical_path, input)
-    input.gsub(ASSET_URL_PATTERN) { asset_url resolve_path(logical_path.dirname, $1) }
+    input.gsub(ASSET_URL_PATTERN) { asset_url resolve_path(logical_path.dirname, $1), logical_path, $1 }
   end
 
   private
@@ -25,11 +25,12 @@ class Propshaft::Compilers::CssAssetUrls
       end
     end
 
-    def asset_url(resolved_path)
+    def asset_url(resolved_path, logical_path, pattern)
       if asset = assembly.load_path.find(resolved_path)
         %[url("#{assembly.config.prefix}/#{asset.digested_path}")]
       else
-        raise Propshaft::MissingAssetError.new(resolved_path)
+        Propshaft.logger.warn "Unable to resolve '#{pattern}' for missing asset '#{resolved_path}' in #{logical_path}"
+        %[url("#{pattern}")]
       end
     end
 end

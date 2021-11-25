@@ -91,9 +91,8 @@ class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
   end
 
   test "missing asset" do
-    assert_raise Propshaft::MissingAssetError do
-      compile_asset_with_content(%({ background: url(missing.jpg); }))
-    end
+    compiled = compile_asset_with_content(%({ background: url("file-not-found.jpg"); }))
+    assert_match /{ background: url\("file-not-found.jpg"\); }/, compiled
   end
 
   private
