@@ -21,7 +21,7 @@ class Propshaft::Processor
   end
 
   def clean
-    OutputPath.new(output_path, load_path.manifest).clean(2, 1.hour)
+    Propshaft::OutputPath.new(output_path, load_path.manifest).clean(2, 1.hour)
   end
 
   private
