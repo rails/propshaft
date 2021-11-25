@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    propshaft (0.3.1)
+    propshaft (0.4.0)
       rails (>= 7.0.0.alpha2)
 
 GEM
@@ -72,7 +72,7 @@ GEM
       irb
       reline (>= 0.2.7)
     erubi (1.10.0)
-    globalid (0.5.2)
+    globalid (0.6.0)
       activesupport (>= 5.0)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
@@ -136,7 +136,7 @@ GEM
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
-    sprockets-rails (3.4.0)
+    sprockets-rails (3.4.1)
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
