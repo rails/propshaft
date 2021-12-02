@@ -27,6 +27,10 @@ class Propshaft::Server
     end
   end
 
+  def inspect
+    self.class.inspect
+  end
+
   private
     def extract_path_and_digest(env)
       full_path = Rack::Utils.unescape(env["PATH_INFO"].to_s.sub(/^\//, ""))
