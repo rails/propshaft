@@ -53,10 +53,6 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
     assert_equal 404, last_response.status
   end
 
-  test "inspect" do
-    assert_equal "Propshaft::Server", @server.inspect
-  end
-
   private
     def default_app
       builder = Rack::Builder.new
