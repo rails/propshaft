@@ -5,6 +5,8 @@ require "debug"
 
 require "propshaft"
 
+Propshaft.logger = Logger.new("/dev/null")
+
 class ActiveSupport::TestCase
   private
     def find_asset(logical_path, fixture_path:)
