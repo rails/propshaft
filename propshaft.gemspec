@@ -9,6 +9,10 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/rails/propshaft"
   s.license  = "MIT"
 
+  s.metadata = {
+    "rubygems_mfa_required" => "true"
+  }
+
   s.required_ruby_version = ">= 2.7.0"
   s.add_dependency "activesupport", ">= 7.0.0.alpha2"
   s.add_dependency "railties", ">= 7.0.0.alpha2"
