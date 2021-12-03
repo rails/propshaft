@@ -2,13 +2,17 @@
 
 VERSION=$1
 
+if [ -z "$VERSION" ]; then
+  echo "Usage: $0 <version>"
+  exit 1
+fi
+
 printf "module Propshaft\n  VERSION = \"$VERSION\"\nend\n" > ./lib/propshaft/version.rb
 bundle
 git add Gemfile.lock lib/propshaft/version.rb
 git commit -m "Bump version for $VERSION"
 git push
-git tag v$VERSION
+git tag -s v$VERSION
+bundle exec rake release
 git push --tags
-gem build propshaft.gemspec
-gem push "propshaft-$VERSION.gem" --host https://rubygems.org
-rm "propshaft-$VERSION.gem"
+rm -Rf pkg
