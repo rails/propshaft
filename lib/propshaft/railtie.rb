@@ -2,15 +2,6 @@ require "rails"
 require "rails/railtie"
 require "active_support/ordered_options"
 
-# FIXME: There's gotta be a better way than this hack?
-class Rails::Engine < Rails::Railtie
-  initializer "propshaft.append_assets_path", group: :all do |app|
-    app.config.assets.paths.unshift(*paths["vendor/assets"].existent_directories)
-    app.config.assets.paths.unshift(*paths["lib/assets"].existent_directories)
-    app.config.assets.paths.unshift(*paths["app/assets"].existent_directories)
-  end
-end
-
 module Propshaft
   class Railtie < ::Rails::Railtie
     config.assets = ActiveSupport::OrderedOptions.new
@@ -42,6 +33,12 @@ module Propshaft
           before_action { Rails.application.assets.load_path.cache_sweeper.execute_if_updated }
         end
       end
+    end
+
+    initializer "propshaft.append_assets_path" do |app|
+      app.config.assets.paths.unshift(*paths["vendor/assets"].existent_directories)
+      app.config.assets.paths.unshift(*paths["lib/assets"].existent_directories)
+      app.config.assets.paths.unshift(*paths["app/assets"].existent_directories)
     end
 
     initializer "propshaft.logger" do
