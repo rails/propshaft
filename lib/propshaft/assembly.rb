@@ -44,14 +44,18 @@ class Propshaft::Assembly
       end
   end
 
-  def reveal
+  def reveal(type = :logical)
     load_path.assets.each do |asset|
-      Propshaft.logger.info asset.logical_path
+      Propshaft.logger.info path_to_reveal(asset, type)
     end
   end
 
   private
     def manifest_path
       config.output_path.join(Propshaft::Processor::MANIFEST_FILENAME)
+    end
+
+    def path_to_reveal(asset, type)
+      type == :full ? asset.path : asset.logical_path
     end
 end

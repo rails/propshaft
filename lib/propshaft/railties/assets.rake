@@ -18,4 +18,11 @@ namespace :assets do
   task reveal: :environment do
     Rails.application.assets.reveal
   end
+
+  namespace :reveal do
+    desc "Print the full path of assets available in config.assets.paths"
+    task full: :environment do
+      Rails.application.assets.reveal(:full)
+    end
+  end
 end
