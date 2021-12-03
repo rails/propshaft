@@ -10,7 +10,9 @@ Gem::Specification.new do |s|
   s.license  = "MIT"
 
   s.required_ruby_version = ">= 2.7.0"
-  s.add_dependency "rails", ">= 7.0.0.alpha2"
+  s.add_dependency "activesupport", ">= 7.0.0.alpha2"
+  s.add_dependency "railties", ">= 7.0.0.alpha2"
+  s.add_dependency "rack"
 
   s.files = Dir["lib/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 end
