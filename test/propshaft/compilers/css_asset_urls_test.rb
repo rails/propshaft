@@ -6,7 +6,7 @@ require "propshaft/compilers"
 
 class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
   setup do
-    @assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config| 
+    @assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config|
       config.paths = [ Pathname.new("#{__dir__}/../../fixtures/assets/vendor") ]
       config.output_path = Pathname.new("#{__dir__}/../../fixtures/output")
       config.prefix = "/assets"
@@ -17,62 +17,62 @@ class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
 
   test "basic" do
     compiled = compile_asset_with_content(%({ background: url(file.jpg); }))
-    assert_match /{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled
+    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
   end
 
   test "blank spaces around name" do
     compiled = compile_asset_with_content(%({ background: url( file.jpg ); }))
-    assert_match /{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled
+    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
   end
 
   test "quotes around name" do
     compiled = compile_asset_with_content(%({ background: url("file.jpg"); }))
-    assert_match /{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled
+    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
   end
 
   test "single quotes around name" do
     compiled = compile_asset_with_content(%({ background: url('file.jpg'); }))
-    assert_match /{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled
+    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
   end
 
   test "root directory" do
     compiled = compile_asset_with_content(%({ background: url('/file.jpg'); }))
-    assert_match /{ background: url\("\/assets\/file-[a-z0-9]{40}.jpg"\); }/, compiled
+    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
   end
 
   test "same directory" do
     compiled = compile_asset_with_content(%({ background: url('./file.jpg'); }))
-    assert_match /{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled
+    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
   end
 
   test "subdirectory" do
     compiled = compile_asset_with_content(%({ background: url('./images/file.jpg'); }))
-    assert_match /{ background: url\("\/assets\/foobar\/source\/images\/file-[a-z0-9]{40}.jpg"\); }/, compiled
+    assert_match(/{ background: url\("\/assets\/foobar\/source\/images\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
   end
 
   test "parent directory" do
     compiled = compile_asset_with_content(%({ background: url('../file.jpg'); }))
-    assert_match /{ background: url\("\/assets\/foobar\/file-[a-z0-9]{40}.jpg"\); }/, compiled
+    assert_match(/{ background: url\("\/assets\/foobar\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
   end
 
   test "grandparent directory" do
     compiled = compile_asset_with_content(%({ background: url('../../file.jpg'); }))
-    assert_match /{ background: url\("\/assets\/file-[a-z0-9]{40}.jpg"\); }/, compiled
+    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
   end
 
   test "sibling directory" do
     compiled = compile_asset_with_content(%({ background: url('../sibling/file.jpg'); }))
-    assert_match /{ background: url\("\/assets\/foobar\/sibling\/file-[a-z0-9]{40}.jpg"\); }/, compiled
+    assert_match(/{ background: url\("\/assets\/foobar\/sibling\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
   end
 
   test "mixed" do
     compiled = compile_asset_with_content(%({ mask-image: image(url(file.jpg), skyblue, linear-gradient(rgba(0, 0, 0, 1.0), transparent)); }))
-    assert_match /{ mask-image: image\(url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\), skyblue, linear-gradient\(rgba\(0, 0, 0, 1.0\), transparent\)\); }/, compiled
+    assert_match(/{ mask-image: image\(url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\), skyblue, linear-gradient\(rgba\(0, 0, 0, 1.0\), transparent\)\); }/, compiled)
   end
 
   test "multiple" do
     compiled = compile_asset_with_content(%({ content: url(file.svg) url(file.svg); }))
-    assert_match /{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg"\) url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg"\); }/, compiled
+    assert_match(/{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg"\) url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg"\); }/, compiled)
   end
 
   test "url" do
@@ -92,7 +92,7 @@ class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
 
   test "missing asset" do
     compiled = compile_asset_with_content(%({ background: url("file-not-found.jpg"); }))
-    assert_match /{ background: url\("file-not-found.jpg"\); }/, compiled
+    assert_match(/{ background: url\("file-not-found.jpg"\); }/, compiled)
   end
 
   private

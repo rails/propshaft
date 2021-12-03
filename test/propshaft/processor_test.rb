@@ -4,7 +4,7 @@ require "propshaft/processor"
 
 class Propshaft::ProcessorTest < ActiveSupport::TestCase
   setup do
-    @assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config| 
+    @assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config|
       config.output_path = Pathname.new("#{__dir__}/../fixtures/output")
       config.prefix = "/assets"
       config.paths = [
@@ -34,7 +34,7 @@ class Propshaft::ProcessorTest < ActiveSupport::TestCase
   test "assets are clobbered" do
     processed do |processor|
       processor.clobber
-      assert_not File.exists?(processor.output_path)
+      assert_not File.exist?(processor.output_path)
       FileUtils.mkdir_p processor.output_path
     end
   end

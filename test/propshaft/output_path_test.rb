@@ -31,9 +31,9 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
   test "clean keeps versions of assets that no longer exist" do
     removed = output_asset("no-longer-in-manifest.txt", "current")
     @output_path.clean(1, 0)
-    assert File.exists?(removed)
+    assert File.exist?(removed)
   ensure
-    FileUtils.rm(removed) if File.exists?(removed)
+    FileUtils.rm(removed) if File.exist?(removed)
   end
 
   test "clean keeps the correct number of versions" do
@@ -42,11 +42,11 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
 
     @output_path.clean(1, 0)
 
-    assert File.exists?(current)
-    assert_not File.exists?(old)
+    assert File.exist?(current)
+    assert_not File.exist?(old)
   ensure
-    FileUtils.rm(old) if File.exists?(old)
-    FileUtils.rm(current) if File.exists?(current)
+    FileUtils.rm(old) if File.exist?(old)
+    FileUtils.rm(current) if File.exist?(current)
   end
 
   test "clean keeps all versions under a certain age" do
@@ -55,11 +55,11 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
 
     @output_path.clean(0, 3600)
 
-    assert File.exists?(current)
-    assert File.exists?(old)
+    assert File.exist?(current)
+    assert File.exist?(old)
   ensure
-    FileUtils.rm(old) if File.exists?(old)
-    FileUtils.rm(current) if File.exists?(current)
+    FileUtils.rm(old) if File.exist?(old)
+    FileUtils.rm(current) if File.exist?(current)
   end
 
   private
