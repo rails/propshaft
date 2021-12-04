@@ -1,15 +1,5 @@
 require "rails"
-require "rails/railtie"
 require "active_support/ordered_options"
-
-# FIXME: There's gotta be a better way than this hack?
-class Rails::Engine < Rails::Railtie
-  initializer "propshaft.append_assets_path", group: :all do |app|
-    app.config.assets.paths.unshift(*paths["vendor/assets"].existent_directories)
-    app.config.assets.paths.unshift(*paths["lib/assets"].existent_directories)
-    app.config.assets.paths.unshift(*paths["app/assets"].existent_directories)
-  end
-end
 
 module Propshaft
   class Railtie < ::Rails::Railtie
@@ -22,6 +12,15 @@ module Propshaft
       [ "text/javascript", Propshaft::Compilers::SourceMappingUrls ]
     ]
     config.assets.sweep_cache = Rails.env.development?
+
+    # Register propshaft initializer to copy the assets path in all the Rails Engines.
+    # This makes possible for us to keep all `assets` config in this Railtie, but still
+    # allow engines to automatically register their own paths.
+    Rails::Engine.initializer "propshaft.append_assets_path", group: :all do |app|
+      app.config.assets.paths.unshift(*paths["vendor/assets"].existent_directories)
+      app.config.assets.paths.unshift(*paths["lib/assets"].existent_directories)
+      app.config.assets.paths.unshift(*paths["app/assets"].existent_directories)
+    end
 
     config.after_initialize do |app|
       config.assets.output_path ||=
