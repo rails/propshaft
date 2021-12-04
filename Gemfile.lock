@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     propshaft (0.4.2)
+      actionpack (>= 7.0.0.alpha2)
       activesupport (>= 7.0.0.alpha2)
       rack
       railties (>= 7.0.0.alpha2)
