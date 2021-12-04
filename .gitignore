@@ -1,0 +1,6 @@
+# Ignore all logfiles and tempfiles.
+/test/dummy/log/*
+/test/dummy/tmp/*
+
+# Ignore compiled assets
+/test/dummy/public/assets
