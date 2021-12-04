@@ -12,7 +12,7 @@ bundle
 git add Gemfile.lock lib/propshaft/version.rb
 git commit -m "Bump version for $VERSION"
 git push
-git tag -s v$VERSION
+git tag v$VERSION
 bundle exec rake release
 git push --tags
 rm -Rf pkg
