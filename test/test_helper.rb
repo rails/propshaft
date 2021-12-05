@@ -1,11 +1,11 @@
-require "minitest/autorun"
-require "rails"
+# Configure Rails Environment
+ENV["RAILS_ENV"] = "test"
+
+require_relative "../test/dummy/config/environment"
 require "rails/test_help"
-require "debug"
 
-require "propshaft"
-
-Propshaft.logger = Logger.new("/dev/null")
+require "rails/test_unit/reporter"
+Rails::TestUnitReporter.executable = "bin/test"
 
 class ActiveSupport::TestCase
   private
