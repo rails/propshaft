@@ -44,18 +44,16 @@ class Propshaft::Assembly
       end
   end
 
-  def reveal(type = :logical)
+  def reveal(path_type = :logical_path)
+    path_type = path_type.presence_in(%i[ logical_path path ]) || raise(ArgumentError, "Unknown path_type: #{path_type}")
+    
     load_path.assets.each do |asset|
-      Propshaft.logger.info path_to_reveal(asset, type)
+      Propshaft.logger.info asset.send(path_type)
     end
   end
 
   private
     def manifest_path
       config.output_path.join(Propshaft::Processor::MANIFEST_FILENAME)
-    end
-
-    def path_to_reveal(asset, type)
-      type == :full ? asset.path : asset.logical_path
     end
 end
