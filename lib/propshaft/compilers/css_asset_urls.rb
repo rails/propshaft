@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require "propshaft/errors"
 
 class Propshaft::Compilers::CssAssetUrls
   attr_reader :assembly
