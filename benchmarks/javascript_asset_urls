@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+# Benchmark file for the JavascriptAssetUrls compiler
+
+require "active_support/ordered_options"
+require "benchmark/ips"
+require "open-uri"
+
+require_relative "./trackrod"
+require_relative "../lib/propshaft"
+require_relative "../lib/propshaft/compilers"
+require_relative "../lib/propshaft/compilers/javascript_asset_urls"
+
+trackrod = Trackrod.new(Dir.mktmpdir)
+trackrod.build
+
+assets = ActiveSupport::OrderedOptions.new
+assets.paths     = [ trackrod.root ]
+assets.prefix    = "/assets"
+assets.compilers = [ [ "text/javascript", Propshaft::Compilers::JavascriptAssetUrls ] ]
+
+assembly = Propshaft::Assembly.new(assets)
+asset    = assembly.load_path.find(trackrod.assets.javascript)
+compiler = Propshaft::Compilers::JavascriptAssetUrls.new(assembly)
+
+Benchmark.ips do |x|
+  x.config(time: 5, warmup: 2)
+  x.report("compile") { compiler.compile(asset.logical_path, asset.content) }
+end

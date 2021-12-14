@@ -27,7 +27,7 @@ class Trackrod
   def assets
     @assets ||= ActiveSupport::InheritableOptions.new(
       css: "stylesheets/application.css",
-      js: "javascript/application.js",
+      javascript: "javascript/application.js",
       images: (small_images + large_images).map { "images/#{_1}" }
     )
   end
@@ -41,6 +41,12 @@ class Trackrod
     end
 
     def create_javascript
+      File.open("#{javascript}/application.js", "a") do |file|
+        10.times do |idx|
+          FileUtils.touch "#{javascript}/chunk-#{idx}.js"
+          file.write(chunk(idx))
+        end
+      end
     end
 
     def create_images
@@ -60,6 +66,10 @@ class Trackrod
 
     def background(img, idx)
       ".background_#{idx} {\n  background: url('../images/#{img}') \n}\n\n"
+    end
+
+    def chunk(idx)
+      "import { __toModule, require_chunk_#{idx} } from './chunk-#{idx}.js'\n\n"
     end
 
     def create_dir(path)

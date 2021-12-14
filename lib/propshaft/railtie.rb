@@ -9,6 +9,7 @@ module Propshaft
     config.assets.compilers   = [
       [ "text/css", Propshaft::Compilers::CssAssetUrls ],
       [ "text/css", Propshaft::Compilers::SourceMappingUrls ],
+      [ "text/javascript", Propshaft::Compilers::JavascriptAssetUrls ],
       [ "text/javascript", Propshaft::Compilers::SourceMappingUrls ]
     ]
     config.assets.sweep_cache = Rails.env.development?
