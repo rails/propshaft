@@ -42,6 +42,6 @@ class Propshaft::Asset
 
   private
     def already_digested?
-      logical_path.to_s =~ /-([0-9a-f]{7,128})\.digested/
+      logical_path.to_s =~ /-([0-9a-zA-Z]{7,128})\.digested/
     end
 end
