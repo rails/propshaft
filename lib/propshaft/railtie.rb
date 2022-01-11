@@ -28,10 +28,8 @@ module Propshaft
 
       app.assets = Propshaft::Assembly.new(app.config.assets)
 
-      if app.config.public_file_server.enabled
-        app.routes.prepend do
-          mount app.assets.server => app.assets.config.prefix
-        end
+      app.routes.prepend do
+        mount app.assets.server => app.assets.config.prefix
       end
 
       ActiveSupport.on_load(:action_view) do
