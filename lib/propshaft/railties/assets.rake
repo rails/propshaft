@@ -16,13 +16,13 @@ namespace :assets do
 
   desc "Print all the assets available in config.assets.paths"
   task reveal: :environment do
-    Rails.application.assets.reveal(:logical_path)
+    puts Rails.application.assets.reveal(:logical_path).join("\n")
   end
 
   namespace :reveal do
     desc "Print the full path of assets available in config.assets.paths"
     task full: :environment do
-      Rails.application.assets.reveal(:path)
+      puts Rails.application.assets.reveal(:path).join("\n")
     end
   end
 end

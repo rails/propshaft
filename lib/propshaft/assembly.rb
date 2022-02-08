@@ -47,8 +47,8 @@ class Propshaft::Assembly
   def reveal(path_type = :logical_path)
     path_type = path_type.presence_in(%i[ logical_path path ]) || raise(ArgumentError, "Unknown path_type: #{path_type}")
     
-    load_path.assets.each do |asset|
-      Propshaft.logger.info asset.send(path_type)
+    load_path.assets.collect do |asset|
+      asset.send(path_type)
     end
   end
 
