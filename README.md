@@ -22,8 +22,6 @@ You can however exempt directories that have been added through the `config.asse
 
 These assets can be referenced through their logical path using the normal helpers like `asset_path`, `image_tag`, `javascript_include_tag`, and all the other asset helper tags. These logical references are automatically converted into digest-aware paths in production when `assets:precompile` has been run (through a JSON mapping file found in `public/assets/.manifest.json`).
 
-Additionally, Propshaft ships with a CSS function called `asset-path("image.svg")` that'll be compiled into `url("/assets/image-f2e1ec14d6856e1958083094170ca6119c529a73.svg")` when doing `assets:precompile`. This function is applied to all `.css` files.
-
 
 ## Bypassing the digest step
 
