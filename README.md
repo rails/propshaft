@@ -7,7 +7,7 @@ So that's what Propshaft doesn't do. Here's what it does provide:
 1. **Configurable load path**: You can register directories from multiple places in your app and gems, and reference assets from all of these paths as though they were one.
 1. **Digest stamping**: All assets in the load path will be copied (or compiled) in a precompilation step for production that also stamps all of them with a digest hash, so you can use long-expiry cache headers for better performance. The digested assets can be referred to through their logical path because the processing leaves a manifest file that provides a way to translate.
 1. **Development server**: There's no need to precompile the assets in development. You can refer to them via the same asset_path helpers and they'll be served by a development server.
-1. **Basic compilers**: Propshaft was explicitly not designed to provide full transpiler capabilities. You can get that better elsewhere. But it does offer a simple input->output compiler setup that by default is used to translate `asset-path` function calls in CSS to `url(digested-asset)` instead.
+1. **Basic compilers**: Propshaft was explicitly not designed to provide full transpiler capabilities. You can get that better elsewhere. But it does offer a simple input->output compiler setup that by default is used to translate `url(asset)` function calls in CSS to `url(digested-asset)` instead and source mapping comments likewise.
 
 
 ## Installation
