@@ -45,7 +45,7 @@ class Propshaft::LoadPath
     def assets_by_path
       @cached_assets_by_path ||= Hash.new.tap do |mapped|
         paths.each do |path|
-          all_files_from_tree(path).each do |file|
+          without_dotfiles(all_files_from_tree(path)).each do |file|
             logical_path = file.relative_path_from(path)
             mapped[logical_path.to_s] ||= Propshaft::Asset.new(file, logical_path: logical_path)
           end if path.exist?
@@ -55,6 +55,10 @@ class Propshaft::LoadPath
 
     def all_files_from_tree(path)
       path.children.flat_map { |child| child.directory? ? all_files_from_tree(child) : child }
+    end
+
+    def without_dotfiles(files)
+      files.reject { |file| file.basename.to_s.starts_with?(".") }
     end
 
     def clear_cache

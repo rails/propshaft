@@ -25,6 +25,10 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
     assert_includes @load_path.assets, find_asset("one.txt")
   end
 
+  test "assets dont include dot files" do
+    assert_not_includes @load_path.assets, find_asset(".stuff")
+  end
+
   test "assets by given content types" do
     assert_not_includes @load_path.assets(content_types: [ Mime[:js] ]), find_asset("one.txt")
     assert_includes @load_path.assets(content_types: [ Mime[:js] ]), find_asset("again.js")
