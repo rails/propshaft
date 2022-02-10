@@ -43,6 +43,14 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
     end
   end
 
+  test "manifest with version" do
+    @load_path = Propshaft::LoadPath.new(@load_path.paths, version: "1")
+    @load_path.manifest.tap do |manifest|
+      assert_equal "one-c9373b685d5a63e4a1de7c6836a73239df552e2b.txt", manifest["one.txt"]
+      assert_equal "nested/three-a41a5d38da5afe428eca74b243f50405f28a6b54.txt", manifest["nested/three.txt"]
+    end
+  end
+
   test "missing load path directory" do
     assert_nil Propshaft::LoadPath.new(Pathname.new("#{__dir__}/../fixtures/assets/nowhere")).find("missing")
   end

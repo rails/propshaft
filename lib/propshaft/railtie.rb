@@ -6,6 +6,7 @@ module Propshaft
     config.assets = ActiveSupport::OrderedOptions.new
     config.assets.paths          = []
     config.assets.excluded_paths = []
+    config.assets.version        = "1"
     config.assets.prefix         = "/assets"
     config.assets.compilers      = [
       [ "text/css", Propshaft::Compilers::CssAssetUrls ],
