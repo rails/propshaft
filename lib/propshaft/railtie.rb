@@ -4,9 +4,10 @@ require "active_support/ordered_options"
 module Propshaft
   class Railtie < ::Rails::Railtie
     config.assets = ActiveSupport::OrderedOptions.new
-    config.assets.paths       = []
-    config.assets.prefix      = "/assets"
-    config.assets.compilers   = [
+    config.assets.paths          = []
+    config.assets.excluded_paths = []
+    config.assets.prefix         = "/assets"
+    config.assets.compilers      = [
       [ "text/css", Propshaft::Compilers::CssAssetUrls ],
       [ "text/css", Propshaft::Compilers::SourceMappingUrls ],
       [ "text/javascript", Propshaft::Compilers::SourceMappingUrls ]
@@ -21,6 +22,8 @@ module Propshaft
       app.config.assets.paths.unshift(*paths["vendor/assets"].existent_directories)
       app.config.assets.paths.unshift(*paths["lib/assets"].existent_directories)
       app.config.assets.paths.unshift(*paths["app/assets"].existent_directories)
+
+      app.config.assets.paths = app.config.assets.paths.without(Array(app.config.assets.excluded_paths).collect(&:to_s))
     end
 
     config.after_initialize do |app|
