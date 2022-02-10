@@ -11,5 +11,11 @@ module Propshaft::Resolver
         File.join prefix, asset.digested_path
       end
     end
+
+    def read(logical_path)
+      if asset = load_path.find(logical_path)
+        asset.content
+      end
+    end
   end
 end

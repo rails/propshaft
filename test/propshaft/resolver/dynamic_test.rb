@@ -12,6 +12,10 @@ class Propshaft::Resolver::DynamicTest < ActiveSupport::TestCase
       @resolver.resolve("one.txt")
   end
 
+  test "reading static asset" do
+    assert_equal "One from first path", @resolver.read("one.txt")
+  end
+
   test "resolving missing asset returns nil" do
     assert_nil @resolver.resolve("nowhere.txt")
   end

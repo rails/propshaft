@@ -12,6 +12,12 @@ module Propshaft::Resolver
       end
     end
 
+    def read(logical_path)
+      if asset_path = parsed_manifest[logical_path]
+        manifest_path.dirname.join(asset_path).read
+      end
+    end
+
     private
       def parsed_manifest
         @parsed_manifest ||= JSON.parse(manifest_path.read)
