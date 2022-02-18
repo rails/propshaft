@@ -178,3 +178,7 @@ It's a common pattern in apps to inline small SVG files and low resolution versi
 ```ruby
 Rails.application.assets.load_path.find('logo.svg').content
 ```
+
+**Precompilation in development**
+
+Propshaft is using dynamic assets resolver in development mode. However, when you run `assets:precompile` locally - it's then switching to static assets resolver. Your changes to assets will not be anymore observed and you'd have to precompile assets each time. This is different to Sprockets.
