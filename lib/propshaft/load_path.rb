@@ -4,7 +4,7 @@ class Propshaft::LoadPath
   attr_reader :paths, :version
 
   def initialize(paths = [], version: nil)
-    @paths   = Array(paths).collect { |path| Pathname.new(path) }
+    @paths = dedup(paths)
     @version = version
   end
 
@@ -64,5 +64,13 @@ class Propshaft::LoadPath
 
     def clear_cache
       @cached_assets_by_path = nil
+    end
+
+    def dedup(paths)
+      [].tap do |deduped|
+        Array(paths).sort.each do |path|
+          deduped << Pathname.new(path) if deduped.blank? || !path.to_s.start_with?(deduped.last.to_s)
+        end
+      end
     end
 end

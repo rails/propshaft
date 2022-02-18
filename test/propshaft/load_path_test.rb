@@ -55,6 +55,21 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
     assert_nil Propshaft::LoadPath.new(Pathname.new("#{__dir__}/../fixtures/assets/nowhere")).find("missing")
   end
 
+  test "deduplicate paths" do
+    load_path = Propshaft::LoadPath.new [
+      "app/assets/stylesheets",
+      "app/assets/images",
+      "app/assets",
+      "app/javascript",
+      "app/javascript/packs"
+    ]
+
+    paths = load_path.paths
+    assert_equal 2, paths.count
+    assert_equal Pathname.new("app/assets"), paths.first
+    assert_equal Pathname.new("app/javascript"), paths.last
+  end
+
   private
     def find_asset(logical_path)
       Propshaft::Asset.new(
