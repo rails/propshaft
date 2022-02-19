@@ -14,9 +14,9 @@ class Propshaft::LoadPath
 
   def assets(content_types: nil)
     if content_types
-      assets_by_path.values.select { |asset| asset.content_type.in?(content_types) }
+      assets_by_path.values.uniq.select { |asset| asset.content_type.in?(content_types) }
     else
-      assets_by_path.values
+      assets_by_path.values.uniq
     end
   end
 
@@ -24,6 +24,7 @@ class Propshaft::LoadPath
     Hash.new.tap do |manifest|
       assets.each do |asset|
         manifest[asset.logical_path.to_s] = asset.digested_path.to_s
+        manifest[asset.undigested_path.to_s] ||= asset.digested_path.to_s
       end
     end
   end
@@ -48,7 +49,10 @@ class Propshaft::LoadPath
         paths.each do |path|
           without_dotfiles(all_files_from_tree(path)).each do |file|
             logical_path = file.relative_path_from(path)
-            mapped[logical_path.to_s] ||= Propshaft::Asset.new(file, logical_path: logical_path, version: version)
+            asset = Propshaft::Asset.new(file, logical_path: logical_path, version: version)
+
+            mapped[logical_path.to_s] ||= asset
+            mapped[asset.undigested_path.to_s] ||= asset
           end if path.exist?
         end
       end

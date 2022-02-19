@@ -40,6 +40,8 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
     @load_path.manifest.tap do |manifest|
       assert_equal "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt", manifest["one.txt"]
       assert_equal "nested/three-6c2b86a0206381310375abdd9980863c2ea7b2c3.txt", manifest["nested/three.txt"]
+      assert_equal "file-already-abcdefVWXYZ0123456789.digested.css", manifest["file-already-abcdefVWXYZ0123456789.digested.css"]
+      assert_equal "file-already-abcdefVWXYZ0123456789.digested.css", manifest["file-already.css"]
     end
   end
 
@@ -48,6 +50,8 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
     @load_path.manifest.tap do |manifest|
       assert_equal "one-c9373b685d5a63e4a1de7c6836a73239df552e2b.txt", manifest["one.txt"]
       assert_equal "nested/three-a41a5d38da5afe428eca74b243f50405f28a6b54.txt", manifest["nested/three.txt"]
+      assert_equal "file-already-abcdefVWXYZ0123456789.digested.css", manifest["file-already-abcdefVWXYZ0123456789.digested.css"]
+      assert_equal "file-already-abcdefVWXYZ0123456789.digested.css", manifest["file-already.css"]
     end
   end
 

@@ -4,6 +4,8 @@ require "action_dispatch/http/mime_type"
 class Propshaft::Asset
   attr_reader :path, :logical_path, :version
 
+  DIGESTED_NAME_PATTERN = /-([0-9a-zA-Z]{7,128})\.digested/
+
   def initialize(path, logical_path:, version: nil)
     @path, @logical_path, @version = path, Pathname.new(logical_path), version
   end
@@ -32,6 +34,10 @@ class Propshaft::Asset
     end
   end
 
+  def undigested_path
+    logical_path.sub(DIGESTED_NAME_PATTERN, "")
+  end
+
   def fresh?(digest)
     self.digest == digest || already_digested?
   end
@@ -42,6 +48,6 @@ class Propshaft::Asset
 
   private
     def already_digested?
-      logical_path.to_s =~ /-([0-9a-zA-Z]{7,128})\.digested/
+      logical_path.to_s =~ DIGESTED_NAME_PATTERN
     end
 end

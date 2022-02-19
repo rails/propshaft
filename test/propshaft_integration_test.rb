@@ -14,4 +14,11 @@ class PropshaftIntegrationTest < ActionDispatch::IntegrationTest
     end
     assert_equal "The asset 'nonexistent.css' was not found in the load path.", exception.message
   end
+
+  test "should be able to resolve already digested assets" do
+    get sample_load_already_digested_assets_url
+    assert_response :success
+    assert_select 'link[href="/assets/already_digested-7d38ef727d2fe5e6cce3ca288b5668f38eedaee9.digested.css"]'
+    assert_select 'script[src="/assets/already_digested-50f7d266afaecd96b52d41cbfaa49d03444bd845.digested.js"]'
+  end
 end
