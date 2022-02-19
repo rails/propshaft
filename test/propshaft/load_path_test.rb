@@ -5,7 +5,7 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
   setup do
     @load_path = Propshaft::LoadPath.new [
       Pathname.new("#{__dir__}/../fixtures/assets/first_path"),
-      Pathname.new("#{__dir__}/../fixtures/assets/second_path")
+      Pathname.new("#{__dir__}/../fixtures/assets/second_path").to_s
     ]
   end
 
