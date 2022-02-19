@@ -68,7 +68,7 @@ class Propshaft::LoadPath
 
     def dedup(paths)
       [].tap do |deduped|
-        Array(paths).sort.each do |path|
+        Array(paths.map(&:to_s)).sort.each do |path|
           deduped << Pathname.new(path) if deduped.blank? || !path.to_s.start_with?(deduped.last.to_s)
         end
       end
