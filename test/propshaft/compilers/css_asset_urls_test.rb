@@ -90,6 +90,16 @@ class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
     assert_match "{ background: url(#IDofSVGpath); }", compiled
   end
 
+  test "fingerprint" do
+    compiled = compile_asset_with_content(%({ background: url('/file.jpg?30af91bf14e37666a085fb8a161ff36d'); }))
+    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+  end
+
+  test "hash symbol" do
+    compiled = compile_asset_with_content(%({ background: url('/file.jpg#fontawesome'); }))
+    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+  end
+
   test "missing asset" do
     compiled = compile_asset_with_content(%({ background: url("file-not-found.jpg"); }))
     assert_match(/{ background: url\("file-not-found.jpg"\); }/, compiled)
