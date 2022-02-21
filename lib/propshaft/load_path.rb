@@ -4,7 +4,7 @@ class Propshaft::LoadPath
   attr_reader :paths, :version
 
   def initialize(paths = [], version: nil)
-    @paths = dedup(paths)
+    @paths   = dedup(paths)
     @version = version
   end
 
@@ -67,10 +67,11 @@ class Propshaft::LoadPath
     end
 
     def dedup(paths)
-      [].tap do |deduped|
-        Array(paths).map(&:to_s).sort.each do |path|
-          deduped << Pathname.new(path) if deduped.blank? || !path.start_with?(deduped.last.to_s)
-        end
+      paths   = Array(paths).map { |path| Pathname.new(path) }
+      deduped = [].tap do |deduped|
+        paths.sort.each { |path| deduped << path if deduped.blank? || !path.to_s.start_with?(deduped.last.to_s) }
       end
+
+      paths & deduped
     end
 end
