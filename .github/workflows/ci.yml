@@ -10,10 +10,6 @@ jobs:
           - "3.1"
         continue-on-error: [false]
 
-        include:
-          - ruby-version: head
-            continue-on-error: true
-
     name: ${{ format('Tests (Ruby {0})', matrix.ruby-version) }}
     runs-on: ubuntu-latest
     continue-on-error: ${{ matrix.continue-on-error }}
