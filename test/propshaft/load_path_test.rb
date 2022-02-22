@@ -57,17 +57,17 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
 
   test "deduplicate paths" do
     load_path = Propshaft::LoadPath.new [
+      "app/javascript",
+      "app/javascript/packs",
       "app/assets/stylesheets",
       "app/assets/images",
-      "app/assets",
-      "app/javascript",
-      "app/javascript/packs"
+      "app/assets"
     ]
 
     paths = load_path.paths
     assert_equal 2, paths.count
-    assert_equal Pathname.new("app/assets"), paths.first
-    assert_equal Pathname.new("app/javascript"), paths.last
+    assert_equal Pathname.new("app/javascript"), paths.first
+    assert_equal Pathname.new("app/assets"), paths.last
   end
 
   private
