@@ -23,7 +23,10 @@ class Propshaft::LoadPath
   def manifest
     Hash.new.tap do |manifest|
       assets.each do |asset|
-        manifest[asset.logical_path.to_s] = asset.digested_path.to_s
+        manifest[asset.logical_path.to_s] = {
+          "digested_path" => asset.digested_path.to_s,
+          "integrity" => asset.integrity
+        }
       end
     end
   end

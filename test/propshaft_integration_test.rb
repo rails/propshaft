@@ -14,4 +14,10 @@ class PropshaftIntegrationTest < ActionDispatch::IntegrationTest
     end
     assert_equal "The asset 'nonexistent.css' was not found in the load path.", exception.message
   end
+
+  test "should be able to resolve javascript assets with integrity" do
+    get sample_load_assets_with_integrity_url
+    assert_response :success
+    assert_select 'script[src="/assets/hello_world-00956908343eaa8d47963b94a7e47ae2919a79cd.js"][integrity="sha384-BIr0kyMRq2sfytK/T0XlGjfav9ZZrWkSBC2yHVunCchnkpP83H28/UtHw+m9iNHO"]'
+  end
 end

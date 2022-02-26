@@ -7,9 +7,9 @@ require "propshaft/output_path"
 class Propshaft::OutputPathTest < ActiveSupport::TestCase
   setup do
     @manifest    = {
-      ".manifest.json": ".manifest.json",
-      "one.txt": "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt"
-    }.stringify_keys
+      ".manifest.json" => ".manifest.json",
+      "one.txt" => "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt"
+    }
     @output_path = Propshaft::OutputPath.new(Pathname.new("#{__dir__}/../fixtures/output"), @manifest)
   end
 

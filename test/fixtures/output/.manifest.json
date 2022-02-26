@@ -1,1 +1,4 @@
-{ "one.txt": "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt" }
+{ "one.txt": {
+  "digested_path": "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt",
+  "integrity": "sha384-LdS8l2QTAF8bD8WPb8QSQv0skTWHhmcnS2XU5LBkVQneGzqIqnDRskQtJvi7ADMe"
+} }

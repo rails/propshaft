@@ -19,4 +19,15 @@ class Propshaft::Resolver::DynamicTest < ActiveSupport::TestCase
   test "resolving missing asset returns nil" do
     assert_nil @resolver.resolve("nowhere.txt")
   end
+
+  test "integrity of an existing asset returns value" do
+    assert_equal "sha384-LdS8l2QTAF8bD8WPb8QSQv0skTWHhmcnS2XU5LBkVQneGzqIqnDRskQtJvi7ADMe",
+      @resolver.integrity("one.txt")
+  end
+
+  test "integrity of missing asset raises a custom error" do
+    assert_raise Propshaft::MissingAssetError do
+      assert_nil @resolver.integrity("nowhere.txt")
+    end
+  end
 end

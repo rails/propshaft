@@ -20,6 +20,10 @@ class Propshaft::Asset
     content.size
   end
 
+  def integrity
+    @integrity ||= "sha384-#{[Digest::SHA384.digest(content)].pack('m0')}"
+  end
+
   def digest
     @digest ||= Digest::SHA1.hexdigest("#{content}#{version}")
   end
