@@ -9,7 +9,7 @@ class Propshaft::Asset
   end
 
   def content
-    File.binread(path)
+    @content ||= File.binread(path)
   end
 
   def content_type
