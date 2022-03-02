@@ -132,7 +132,7 @@ Sass might raise deprecation warnings depending on what features you are using (
 
 Start by following these steps:
 
-1. Remove `sprockets` and `sass-rails` from the gemfile and add `propshaft`;
+1. Remove `sprockets`, `sprockets-rails`, and `sass-rails` from the gemfile and add `propshaft`;
 2. Run `./bin/bundle install`;
 3. Open `config/application.rb` and remove `config.assets.paths << Rails.root.join('app','assets')`;
 4. Remove `asset/config/manifest.js`.
