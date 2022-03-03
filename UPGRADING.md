@@ -11,9 +11,10 @@ Start by following these steps:
 3. Run `./bin/rails javascript:install:webpack`;
 4. Remove the file `config/initializers/assets.rb`;
 5. Remove the file `bin/webpack`;
-5. Remove the file `bin/webpack-dev-server`;
-6. Remove the folder `config/webpack` (note: any custom configuration should be migrated to the new `webpack.config.js` file);
-7. Replace all instances of `javascript_pack_tag` with `javascript_include_tag` and add `defer: true` to them.
+6. Remove the file `bin/webpack-dev-server`;
+7. Remove the folder `config/webpack` (note: any custom configuration should be migrated to the new `webpack.config.js` file);
+8. Remove the file `config/webpacker.yml`;
+9. Replace all instances of `javascript_pack_tag` with `javascript_include_tag` and add `defer: true` to them.
 
 After you are done you will notice that the install step added various files to your project and updated some of the existing ones.
 
