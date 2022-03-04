@@ -86,6 +86,53 @@ module.exports = {
 }
 ```
 
+**Extracting Sass/SCSS from JavaScript**
+
+In webpacker it is possible to extract Sass/SCSS from JavaScript by enabling `extract_css` in `webpacker.yml`. This allows for including those source files in JavaScript, e.g. `import '../scss/application.scss`
+
+If you wish to keep this functionality follow these steps:
+
+1. Run `yarn add mini-css-extract-plugin sass sass-loader css-loader`;
+2. Update your `webpack.config.js` to require `mini-css-extract-plugin` and configure the loaders (see example below).
+
+Example `webpack.config.js`:
+
+```javascript
+const path    = require("path")
+const webpack = require("webpack")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+
+module.exports = {
+  mode: "production",
+  devtool: "source-map",
+  entry: {
+    application: "./app/javascript/application.js"
+  },
+  resolve: {
+    modules: ["app/javascript", "node_modules"],
+  },
+  output: {
+    filename: "[name].js",
+    sourceMapFilename: "[file].map",
+    path: path.resolve(__dirname, "app/assets/builds"),
+  },
+  plugins: [
+    new MiniCssExtractPlugin(),
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 1
+    })
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.s[ac]ss$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+      },
+    ],
+  },
+}
+```
+
 Alternatively you can change to relative imports for those modules.
 
 ## 2. Migrate from sass-rails to cssbundling-rails
