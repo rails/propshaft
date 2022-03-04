@@ -137,6 +137,8 @@ Alternatively you can change to relative imports for those modules.
 
 ## 2. Migrate from sass-rails to cssbundling-rails
 
+Note: if your application used Webpacker's `extract_css` to build your CSS and did not require `sass-rails`, you can skip this section.
+
 Start by following these steps:
 
 1. Add `cssbundling-rails` to your Gemfile;
