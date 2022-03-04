@@ -76,7 +76,7 @@ Finally, download [webpackers babel preset](https://github.com/rails/webpacker/b
 
 **Module resolution**
 
-Webpacker included the the `source_path` into module resolution, so statements like `import 'channels'` imported`app/javascript/channels/`. After migrating to `jsbundling-rails` this is no longer the case. You will need to update your `webpack.config.js` to include the following if you wish to maintain that behaviour:
+Webpacker included the `source_path` (default: `app/javascript/`) into module resolution, so a statement like `import 'channels'` imported `app/javascript/channels/`. After migrating to `jsbundling-rails` this is no longer the case. You will need to update your `webpack.config.js` to include the following if you wish to maintain that behaviour:
 
 ```javascript
 module.exports = {
@@ -86,6 +86,12 @@ module.exports = {
   },
   //...
 }
+```
+
+Alternatively, you can change modules to use relative imports, for example:
+```diff
+- import 'channels'
++ import './channels'
 ```
 
 **Extracting Sass/SCSS from JavaScript**
@@ -134,8 +140,6 @@ module.exports = {
   },
 }
 ```
-
-Alternatively you can change to relative imports for those modules.
 
 ## 2. Migrate from sass-rails to cssbundling-rails
 
