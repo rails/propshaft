@@ -2,6 +2,8 @@
 
 Propshaft has a smaller scope than Sprockets, therefore migrating to it will also require you to adopt the [jsbundling-rails](https://github.com/rails/jsbundling-rails) and [cssbundling-rails](https://github.com/rails/cssbundling-rails) gems. This guide will assume your project follows Rails 6.1 conventions of using [webpacker](https://github.com/rails/webpacker) to bundle javascript, [sass-rails](https://github.com/rails/sass-rails) to bundle css and [sprockets](https://github.com/rails/sprockets) to digest assets. Finally, you will also need [npx](https://docs.npmjs.com/cli/v7/commands/npx) version 7.1.0 or later installed.
 
+Propshaft depends on Rails 7, so you will need to upgrade to Rails 7+ before starting the migration.
+
 ## 1. Migrate from Webpacker to jsbundling-rails
 
 Start by following these steps:
