@@ -76,7 +76,7 @@ Finally, download [webpackers babel preset](https://github.com/rails/webpacker/b
 
 **Module resolution**
 
-Webpacker included the `source_path` (default: `app/javascript/`) into module resolution, so a statement like `import 'channels'` imported `app/javascript/channels/`. After migrating to `jsbundling-rails` this is no longer the case. You will need to update your `webpack.config.js` to include the following if you wish to maintain that behaviour:
+Webpacker included the `source_path` (default: `app/javascript/`) into module resolution, so a statement like `import 'channels'` imported `app/javascript/channels/`. After migrating to `jsbundling-rails` this is no longer the case. You will need to update your `webpack.config.js` to include the following if you wish to maintain that behavior:
 
 ```javascript
 module.exports = {
