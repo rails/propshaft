@@ -72,6 +72,22 @@ Then open `packages.json` and add this:
 
 Finally, download [webpackers babel preset](https://github.com/rails/webpacker/blob/master/package/babel/preset.js) file and place it in the same directory as `packages.json` with the name `webpack.babel.js`.
 
+**Module resolution**
+
+Webpacker included the the `source_path` into module resolution, so statements like `import 'channels'` imported`app/javascript/channels/`. After migrating to `jsbundling-rails` this is no longer the case. You will need to update your `webpack.config.js` to include the following if you wish to maintain that behaviour:
+
+```javascript
+module.exports = {
+  // ...
+  resolve: {
+    modules: ["app/javascript", "node_modules"],
+  },
+  //...
+}
+```
+
+Alternatively you can change to relative imports for those modules.
+
 ## 2. Migrate from sass-rails to cssbundling-rails
 
 Start by following these steps:
