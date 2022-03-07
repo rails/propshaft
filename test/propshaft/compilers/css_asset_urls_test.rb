@@ -80,6 +80,11 @@ class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
     assert_match "{ background: url('https://rubyonrails.org/images/rails-logo.svg'); }", compiled
   end
 
+  test "relative protocol url" do
+    compiled = compile_asset_with_content(%({ background: url('//rubyonrails.org/images/rails-logo.svg'); }))
+    assert_match "{ background: url('//rubyonrails.org/images/rails-logo.svg'); }", compiled
+  end
+
   test "data" do
     compiled = compile_asset_with_content(%({ background: url(data:image/png;base64,iRxVB0); }))
     assert_match "{ background: url(data:image/png;base64,iRxVB0); }", compiled
