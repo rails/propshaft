@@ -20,7 +20,7 @@ module Propshaft::Resolver
 
     private
       def parsed_manifest
-        @parsed_manifest ||= JSON.parse(manifest_path.read)
+        @parsed_manifest ||= JSON.parse(manifest_path.read, symbolize_names: false)
       end
   end
 end
