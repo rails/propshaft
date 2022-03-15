@@ -97,12 +97,17 @@ class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
 
   test "fingerprint" do
     compiled = compile_asset_with_content(%({ background: url('/file.jpg?30af91bf14e37666a085fb8a161ff36d'); }))
-    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{40}.jpg\?30af91bf14e37666a085fb8a161ff36d"\); }/, compiled)
   end
 
-  test "hash symbol" do
-    compiled = compile_asset_with_content(%({ background: url('/file.jpg#fontawesome'); }))
-    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+  test "svg anchor" do
+    compiled = compile_asset_with_content(%({ content: url(file.svg#rails); }))
+    assert_match(/{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg#rails"\); }/, compiled)
+  end
+
+  test "non greedy anchors" do
+    compiled = compile_asset_with_content(%({ content: url(file.svg#demo) url(file.svg#demo); }))
+    assert_match(/{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg#demo"\) url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg#demo"\); }/, compiled)
   end
 
   test "missing asset" do
