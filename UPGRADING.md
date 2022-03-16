@@ -2,7 +2,9 @@
 
 Propshaft has a smaller scope than Sprockets, therefore migrating to it will also require you to adopt the [jsbundling-rails](https://github.com/rails/jsbundling-rails) and [cssbundling-rails](https://github.com/rails/cssbundling-rails) gems. This guide will assume your project follows Rails 6.1 conventions of using [webpacker](https://github.com/rails/webpacker) to bundle javascript, [sass-rails](https://github.com/rails/sass-rails) to bundle css and [sprockets](https://github.com/rails/sprockets) to digest assets. Finally, you will also need [npx](https://docs.npmjs.com/cli/v7/commands/npx) version 7.1.0 or later installed.
 
-## 1. Migrate from webpacker to jsbundling-rails
+Propshaft depends on Rails 7, so you will need to upgrade to Rails 7+ before starting the migration.
+
+## 1. Migrate from Webpacker to jsbundling-rails
 
 Start by following these steps:
 
@@ -11,21 +13,22 @@ Start by following these steps:
 3. Run `./bin/rails javascript:install:webpack`;
 4. Remove the file `config/initializers/assets.rb`;
 5. Remove the file `bin/webpack`;
-5. Remove the file `bin/webpack-dev-server`;
-6. Remove the folder `config/webpack`;
-7. Replace all instances of `javascript_pack_tag` with `javascript_include_tag` and add `defer: true` to them.
+6. Remove the file `bin/webpack-dev-server`;
+7. Remove the folder `config/webpack` (note: any custom configuration should be migrated to the new `webpack.config.js` file);
+8. Remove the file `config/webpacker.yml`;
+9. Replace all instances of `javascript_pack_tag` with `javascript_include_tag` and add `defer: true` to them.
 
 After you are done you will notice that the install step added various files to your project and updated some of the existing ones.
 
 **The new 'bin/dev' and 'Procfile.dev' files**
 
-The `./bin/dev` file is a shell script that uses [foreman](https://github.com/ddollar/foreman) and `Procfile.dev` to start two processes in a single terminal: `rails s` and `yarn build`. The latter replaces `webpack-dev-server` in bundling and watching for changes in javascript files.
+The `./bin/dev` file is a shell script that uses [foreman](https://github.com/ddollar/foreman) and `Procfile.dev` to start two processes in a single terminal: `rails s` and `yarn build`. The latter replaces `webpack-dev-server` for bundling and watching for changes in javascript files.
 
 **The 'build' attribute added to packages.json**
 
 This is the command that `yarn build` will use to bundle javascript files.
 
-**The new 'webpack.config.js file'**
+**The new 'webpack.config.js' file**
 
 In `webpacker` this file was hidden inside the gem, but now you can edit it directly. If you had custom configuration in `config/webpack` you can move them to here. Projects with multiple entrypoints will need to adjust the `entry` attribute:
 
@@ -71,7 +74,76 @@ Then open `packages.json` and add this:
 
 Finally, download [webpackers babel preset](https://github.com/rails/webpacker/blob/master/package/babel/preset.js) file and place it in the same directory as `packages.json` with the name `webpack.babel.js`.
 
+**Module resolution**
+
+Webpacker included the `source_path` (default: `app/javascript/`) into module resolution, so a statement like `import 'channels'` imported `app/javascript/channels/`. After migrating to `jsbundling-rails` this is no longer the case. You will need to update your `webpack.config.js` to include the following if you wish to maintain that behavior:
+
+```javascript
+module.exports = {
+  // ...
+  resolve: {
+    modules: ["app/javascript", "node_modules"],
+  },
+  //...
+}
+```
+
+Alternatively, you can change modules to use relative imports, for example:
+```diff
+- import 'channels'
++ import './channels'
+```
+
+**Extracting Sass/SCSS from JavaScript**
+
+In webpacker it is possible to extract Sass/SCSS from JavaScript by enabling `extract_css` in `webpacker.yml`. This allows for including those source files in JavaScript, e.g. `import '../scss/application.scss`
+
+If you wish to keep this functionality follow these steps:
+
+1. Run `yarn add mini-css-extract-plugin sass sass-loader css-loader`;
+2. Update your `webpack.config.js` to require `mini-css-extract-plugin` and configure the loaders (see example below).
+
+Example `webpack.config.js`:
+
+```javascript
+const path    = require("path")
+const webpack = require("webpack")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+
+module.exports = {
+  mode: "production",
+  devtool: "source-map",
+  entry: {
+    application: "./app/javascript/application.js"
+  },
+  resolve: {
+    modules: ["app/javascript", "node_modules"],
+  },
+  output: {
+    filename: "[name].js",
+    sourceMapFilename: "[file].map",
+    path: path.resolve(__dirname, "app/assets/builds"),
+  },
+  plugins: [
+    new MiniCssExtractPlugin(),
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 1
+    })
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.s[ac]ss$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+      },
+    ],
+  },
+}
+```
+
 ## 2. Migrate from sass-rails to cssbundling-rails
+
+Note: if your application used Webpacker's `extract_css` to build your CSS and did not require `sass-rails`, you can skip this section.
 
 Start by following these steps:
 
@@ -141,7 +213,7 @@ Start by following these steps:
 
 **Asset paths**
 
-Propshaft will automatically include in its search paths the folders `vendor/assets`, `lib/assets` and `app/assets` of your project and all the gems in your gemfile. You can see all included files by using the `reveal` rake task:
+Propshaft will automatically include in its search paths the folders `vendor/assets`, `lib/assets` and `app/assets` of your project and of all the gems in your Gemfile. You can see all included files by using the `reveal` rake task:
 ```
  rake assets:reveal
 ```
@@ -170,7 +242,7 @@ background: image_url('hero.jpg')
 
 Using the same path with `url` in Propshaft will cause it to raise an error, saying it cannot locate `theme/hero.jpg`. That's because Propshaft assumes all paths are relative to the path of the file it's processing. Since it was processing a css file inside the `theme` folder, it will also look for `hero.jpg` in the same folder.
 
-By adding a `/` at the start of the path we are telling Propshaft to consider to treat this path as an absolute path. While this change in behavior increases the work a bit when upgrading, it makes **external libraries like FontAwesome and Bootstrap themes work out-of-the-box**.  
+By adding a `/` at the start of the path we are telling Propshaft to consider this path as an absolute path. While this change in behavior increases the work a bit when upgrading, it makes **external libraries like FontAwesome and Bootstrap themes work out-of-the-box**.  
 
 **Asset content**
 
@@ -181,4 +253,4 @@ Rails.application.assets.load_path.find('logo.svg').content
 
 **Precompilation in development**
 
-Propshaft is using dynamic assets resolver in development mode. However, when you run `assets:precompile` locally - it's then switching to static assets resolver. Your changes to assets will not be anymore observed and you'd have to precompile assets each time. This is different to Sprockets.
+Propshaft uses a dynamic assets resolver in development mode. However, when you run `assets:precompile` locally Propshaft will then switch to a static assets resolver. Therefore, changes to assets will not be observed anymore and you will have to precompile the assets each time changes are made. This is different to Sprockets.
