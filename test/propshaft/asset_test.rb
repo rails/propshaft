@@ -21,6 +21,10 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
     assert_equal "f2e1ec14d6856e1958083094170ca6119c529a73", find_asset("one.txt").digest
   end
 
+  test "integrity" do
+    assert_equal "sha384-LdS8l2QTAF8bD8WPb8QSQv0skTWHhmcnS2XU5LBkVQneGzqIqnDRskQtJvi7ADMe", find_asset("one.txt").integrity
+  end
+
   test "fresh" do
     assert find_asset("one.txt").fresh?("f2e1ec14d6856e1958083094170ca6119c529a73")
     assert_not find_asset("one.txt").fresh?("e206c34fe404c8e2f25d60dd8303f61c02b8d381")

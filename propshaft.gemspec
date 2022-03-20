@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   }
 
   s.required_ruby_version = ">= 2.7.0"
+  s.add_dependency "actionview", ">= 7.0.0"
   s.add_dependency "actionpack", ">= 7.0.0"
   s.add_dependency "activesupport", ">= 7.0.0"
   s.add_dependency "railties", ">= 7.0.0"
