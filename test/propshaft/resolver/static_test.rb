@@ -1,4 +1,5 @@
 require "test_helper"
+require "minitest/mock"
 require "propshaft/resolver/static"
 
 class Propshaft::Resolver::StaticTest < ActiveSupport::TestCase
@@ -21,5 +22,16 @@ class Propshaft::Resolver::StaticTest < ActiveSupport::TestCase
 
   test "resolving missing asset returns nil" do
     assert_nil @resolver.resolve("nowhere.txt")
+  end
+
+  test "resolver requests json optimizer gems to keep parsed manifest keys as strings" do
+    stub = Proc.new do |_, opts|
+      assert_equal false, opts[:symbolize_names]
+      {}
+    end
+
+    JSON.stub :parse, stub do
+      @resolver.resolve("one.txt")
+    end
   end
 end
