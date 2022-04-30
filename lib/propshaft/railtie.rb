@@ -1,5 +1,6 @@
 require "rails"
 require "active_support/ordered_options"
+require "propshaft/quiet_assets"
 
 module Propshaft
   class Railtie < ::Rails::Railtie
@@ -8,6 +9,7 @@ module Propshaft
     config.assets.excluded_paths = []
     config.assets.version        = "1"
     config.assets.prefix         = "/assets"
+    config.assets.quiet          = false
     config.assets.compilers      = [
       [ "text/css", Propshaft::Compilers::CssAssetUrls ],
       [ "text/css", Propshaft::Compilers::SourceMappingUrls ],
@@ -54,6 +56,12 @@ module Propshaft
       Propshaft.logger = config.assets.logger || Rails.logger
     end
 
+    initializer :quiet_assets do |app|
+      if app.config.assets.quiet
+        app.middleware.insert_before ::Rails::Rack::Logger, Propshaft::QuietAssets
+      end
+    end
+
     rake_tasks do
       load "propshaft/railties/assets.rake"
     end
@@ -61,7 +69,6 @@ module Propshaft
     # Compatibility shiming (need to provide log warnings when used)
     config.assets.precompile     = []
     config.assets.debug          = nil
-    config.assets.quiet          = nil
     config.assets.compile        = nil
     config.assets.version        = nil
     config.assets.css_compressor = nil
