@@ -36,6 +36,16 @@ On the other hand, if you're already bundling JavaScript and CSS through a Node-
 
 But for greenfield apps using the default import-map approach, Propshaft can also work well, if you're able to deal with vanilla CSS.
 
+## Avoid issues related to browser cache
+
+Propshaft digests your file based on the content and your browser will by default cache the digested file.
+There are cases where if a CSS file references
+to another file via `@import url('/other-file.css)`
+or `url(/image-that-may-change.png)` browser may not pick up that the
+referenced file has changed.
+
+That's why we recommend to turn of caching in your browser during
+development (for example in Chrome you can `Disable the cache (while DevTools is open)`)
 
 ## Will Propshaft replace Sprockets as the Rails default?
 
