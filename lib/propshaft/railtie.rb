@@ -70,7 +70,6 @@ module Propshaft
     config.assets.precompile     = []
     config.assets.debug          = nil
     config.assets.compile        = nil
-    config.assets.version        = nil
     config.assets.css_compressor = nil
     config.assets.js_compressor  = nil
   end
