@@ -7,7 +7,7 @@ module Propshaft
     config.assets = ActiveSupport::OrderedOptions.new
     config.assets.paths          = []
     config.assets.excluded_paths = []
-    config.assets.version        = "1"
+    config.assets.version        = Rails.env.development? ? DateTime.new : "1"
     config.assets.prefix         = "/assets"
     config.assets.quiet          = false
     config.assets.compilers      = [

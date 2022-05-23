@@ -64,6 +64,7 @@ class Propshaft::LoadPath
 
     def clear_cache
       @cached_assets_by_path = nil
+      @version = DateTime.new
     end
 
     def dedup(paths)
