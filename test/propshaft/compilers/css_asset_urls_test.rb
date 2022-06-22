@@ -105,6 +105,11 @@ class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
     assert_match(/{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg#rails"\); }/, compiled)
   end
 
+  test "svg mask encoded anchor" do
+    compiled = compile_asset_with_content(%({ background: url("data:image/svg+xml;charset=utf-8,%3Csvg mask='url(%23MyMask)'%3E%3C/svg%3E"); }))
+    assert_match "{ background: url(\"data:image/svg+xml;charset=utf-8,%3Csvg mask='url(%23MyMask)'%3E%3C/svg%3E\"); }", compiled
+  end
+
   test "non greedy anchors" do
     compiled = compile_asset_with_content(%({ content: url(file.svg#demo) url(file.svg#demo); }))
     assert_match(/{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg#demo"\) url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg#demo"\); }/, compiled)
