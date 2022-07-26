@@ -23,7 +23,8 @@ class Propshaft::LoadPath
   def manifest
     Hash.new.tap do |manifest|
       assets.each do |asset|
-        manifest[asset.logical_path.to_s] = asset.digested_path.to_s
+        manifest[asset.logical_path.to_s] ||= asset.digested_path.to_s
+        manifest[asset.non_digested_path.to_s] ||= asset.digested_path.to_s if asset.already_digested?
       end
     end
   end
@@ -48,7 +49,9 @@ class Propshaft::LoadPath
         paths.each do |path|
           without_dotfiles(all_files_from_tree(path)).each do |file|
             logical_path = file.relative_path_from(path)
-            mapped[logical_path.to_s] ||= Propshaft::Asset.new(file, logical_path: logical_path, version: version)
+            asset = Propshaft::Asset.new(file, logical_path: logical_path, version: version)
+            mapped[asset.logical_path.to_s] ||= asset
+            mapped[asset.non_digested_path.to_s] ||= asset if asset.already_digested?
           end if path.exist?
         end
       end

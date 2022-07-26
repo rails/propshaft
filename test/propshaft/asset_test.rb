@@ -42,6 +42,10 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
       find_asset("file-not.digested.css").digested_path.to_s
   end
 
+  test "non digested path" do
+    assert_equal "file-already.css", find_asset("file-already.css").non_digested_path.to_s
+  end
+
   test "value object equality" do
     assert_equal find_asset("one.txt"), find_asset("one.txt")
   end
