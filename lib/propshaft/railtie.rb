@@ -33,6 +33,8 @@ module Propshaft
       config.assets.output_path ||=
         Pathname.new(File.join(app.config.paths["public"].first, app.config.assets.prefix))
 
+      app.singleton_class.attr_accessor(:assets) unless app.respond_to?(:assets=)
+
       app.assets = Propshaft::Assembly.new(app.config.assets)
 
       if config.assets.server
