@@ -30,7 +30,7 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
   end
 
   test "serve a predigested file" do
-    asset = @assembly.load_path.find("file-already-abcdefVWXYZ0123456789.digested.css")
+    asset = @assembly.load_path.find("file-already.css")
     get "/#{asset.digested_path}"
     assert_equal 200, last_response.status
   end

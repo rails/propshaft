@@ -42,7 +42,7 @@ class Propshaft::OutputPath
       modified_at = [ 0, Time.now - mtime ].max
       modified_at < expires_at || limit < count
     end
-  
+
     def remove(path)
       FileUtils.rm(@path.join(path))
       Propshaft.logger.info "Removed #{path}"
