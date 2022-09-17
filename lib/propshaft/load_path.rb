@@ -6,6 +6,7 @@ class Propshaft::LoadPath
   def initialize(paths = [], version: nil)
     @paths   = dedup(paths)
     @version = version
+    @mutex ||= Mutex.new
   end
 
   def find(asset_name)
@@ -64,7 +65,10 @@ class Propshaft::LoadPath
     end
 
     def clear_cache
-      @cached_assets_by_path = nil
+      @mutex.synchronize do
+        @cached_assets_by_path = nil
+        assets_by_path  # seeds the cache
+      end
     end
 
     def dedup(paths)
