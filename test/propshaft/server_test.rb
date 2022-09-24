@@ -20,11 +20,11 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
     get "/#{asset.digested_path}"
 
     assert_equal 200, last_response.status
-    assert_equal "94", last_response.headers['Content-Length']
-    assert_equal "text/css", last_response.headers['Content-Type']
-    assert_equal "Vary", last_response.headers['Accept-Encoding']
-    assert_equal asset.digest, last_response.headers['ETag']
-    assert_equal "public, max-age=31536000, immutable", last_response.headers['Cache-Control']
+    assert_equal "94", last_response.headers['content-length']
+    assert_equal "text/css", last_response.headers['content-type']
+    assert_equal "vary", last_response.headers['accept-encoding']
+    assert_equal asset.digest, last_response.headers['etag']
+    assert_equal "public, max-age=31536000, immutable", last_response.headers['cache-control']
     assert_equal ".hero { background: url(\"/foobar/source/file-3e6a129785ee3caf8eff23db339997e85334bfa9.jpg\") }\n",
                  last_response.body
   end
@@ -39,12 +39,12 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
     get "/not-found.js"
 
     assert_equal 404, last_response.status
-    assert_equal "9", last_response.headers['Content-Length']
-    assert_equal "text/plain", last_response.headers['Content-Type']
+    assert_equal "9", last_response.headers['content-length']
+    assert_equal "text/plain", last_response.headers['content-type']
     assert_equal "Not found", last_response.body
-    assert_not last_response.headers.key?('Cache-Control')
-    assert_not last_response.headers.key?('ETag')
-    assert_not last_response.headers.key?('Accept-Encoding')
+    assert_not last_response.headers.key?('cache-control')
+    assert_not last_response.headers.key?('etag')
+    assert_not last_response.headers.key?('accept-encoding')
   end
 
   test "not found if digest does not match" do
