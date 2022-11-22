@@ -27,6 +27,16 @@ These assets can be referenced through their logical path using the normal helpe
 
 If you need to put multiple files that refer to each other through Propshaft, like a JavaScript file and its source map, you have to digest these files in advance to retain stable file names. Propshaft looks for the specific pattern of `-[digest].digested.js` as the postfix to any asset file as an indication that the file has already been digested.
 
+## Improving performance in development
+
+Before every request Propshaft checks if any asset was updated to decide if a cache sweep is needed. This verification is done using the application's configured file watcher which, by default, is `ActiveSupport::FileUpdateChecker`. 
+
+If you have a lot of assets in your project, you can improve performance by adding the `listen` gem to the development group in your Gemfile, and this line to the `development.rb` environment file:
+
+```ruby
+config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+```
+
 
 ## Migrating from Sprockets
 

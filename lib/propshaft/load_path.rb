@@ -28,7 +28,7 @@ class Propshaft::LoadPath
     end
   end
 
-  # Returns a ActiveSupport::FileUpdateChecker object configured to clear the cache of the load_path
+  # Returns a file watcher object configured to clear the cache of the load_path
   # when the directories passed during its initialization have changes. This is used in development
   # and test to ensure the map caches are reset when javascript files are changed.
   def cache_sweeper
