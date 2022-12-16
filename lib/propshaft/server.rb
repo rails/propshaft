@@ -14,16 +14,16 @@ class Propshaft::Server
       [
         200,
         {
-          "Content-Length"  => compiled_content.length.to_s,
-          "Content-Type"    => asset.content_type.to_s,
-          "Accept-Encoding" => "Vary",
-          "ETag"            => asset.digest,
-          "Cache-Control"   => "public, max-age=31536000, immutable"
+          "content-length"  => compiled_content.length.to_s,
+          "content-type"    => asset.content_type.to_s,
+          "accept-encoding" => "vary",
+          "etag"            => asset.digest,
+          "cache-control"   => "public, max-age=31536000, immutable"
         },
         [ compiled_content ]
       ]
     else
-      [ 404, { "Content-Type" => "text/plain", "Content-Length" => "9" }, [ "Not found" ] ]
+      [ 404, { "content-type" => "text/plain", "content-length" => "9" }, [ "Not found" ] ]
     end
   end
 
