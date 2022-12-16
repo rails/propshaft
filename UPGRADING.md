@@ -260,3 +260,5 @@ raw Rails.application.assets.load_path.find('logo.svg')
 **Precompilation in development**
 
 Propshaft uses a dynamic assets resolver in development mode. However, when you run `assets:precompile` locally Propshaft will then switch to a static assets resolver. Therefore, changes to assets will not be observed anymore and you will have to precompile the assets each time changes are made. This is different to Sprockets.
+
+If you wish to have dynamic assets resolver enabled again, you need to clean your target folder (usually `public/assets`) and propshaft will start serving dynamic content from source.
