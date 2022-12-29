@@ -15,6 +15,11 @@ module Propshaft
       [ "text/css", Propshaft::Compilers::SourceMappingUrls ],
       [ "text/javascript", Propshaft::Compilers::SourceMappingUrls ]
     ]
+    if Rails.env.development?
+      config.assets.cache_control_header = "no-store"
+    else
+      config.assets.cache_control_header = "public, max-age=31536000, immutable"
+    end
     config.assets.sweep_cache = Rails.env.development?
     config.assets.server = Rails.env.development? || Rails.env.test?
 

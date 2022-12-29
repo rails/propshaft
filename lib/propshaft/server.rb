@@ -18,7 +18,7 @@ class Propshaft::Server
           "content-type"    => asset.content_type.to_s,
           "accept-encoding" => "vary",
           "etag"            => asset.digest,
-          "cache-control"   => "public, max-age=31536000, immutable"
+          "cache-control"   => Rails.application.config.assets.cache_control_header
         },
         [ compiled_content ]
       ]
