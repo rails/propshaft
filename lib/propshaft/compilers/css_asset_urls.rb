@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 class Propshaft::Compilers::CssAssetUrls
-  attr_reader :assembly
+  attr_reader :assembly, :url_prefix
 
   ASSET_URL_PATTERN = /url\(\s*["']?(?!(?:\#|%23|data|http|\/\/))([^"'\s?#)]+)([#?][^"')]+)?\s*["']?\)/
 
   def initialize(assembly)
-    @assembly = assembly
+    @assembly   = assembly
+    @url_prefix = File.join(assembly.config.host.to_s, assembly.config.prefix.to_s).chomp("/")
   end
 
   def compile(logical_path, input)
@@ -26,7 +27,7 @@ class Propshaft::Compilers::CssAssetUrls
 
     def asset_url(resolved_path, logical_path, fingerprint, pattern)
       if asset = assembly.load_path.find(resolved_path)
-        %[url("#{assembly.config.prefix}/#{asset.digested_path}#{fingerprint}")]
+        %[url("#{url_prefix}/#{asset.digested_path}#{fingerprint}")]
       else
         Propshaft.logger.warn "Unable to resolve '#{pattern}' for missing asset '#{resolved_path}' in #{logical_path}"
         %[url("#{pattern}")]
