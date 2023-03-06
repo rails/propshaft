@@ -24,7 +24,7 @@ class Propshaft::Compilers::SourceMappingUrls
 
     def source_mapping_url(resolved_path, comment)
       if asset = assembly.load_path.find(resolved_path)
-        "#{comment}# sourceMappingURL=#{assembly.config.prefix}/#{asset.digested_path}"
+        "#{comment}# sourceMappingURL=#{assembly.url_prefix}/#{asset.digested_path}"
       else
         Propshaft.logger.warn "Removed sourceMappingURL comment for missing asset '#{resolved_path}' from #{resolved_path}"
         nil

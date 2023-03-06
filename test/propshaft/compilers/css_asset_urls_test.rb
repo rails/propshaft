@@ -125,6 +125,13 @@ class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
     assert_match(/{ background: url\("https:\/\/example.com\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
   end
 
+  test "relative url root" do
+    @options.relative_url_root = "url-root"
+
+    compiled = compile_asset_with_content(%({ background: url(file.jpg); }))
+    assert_match(/{ background: url\("\/url-root\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+  end
+
   private
     def compile_asset_with_content(content)
       root_path    = Pathname.new("#{__dir__}/../../fixtures/assets/vendor")

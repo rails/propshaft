@@ -18,6 +18,7 @@ module Propshaft
     config.assets.sweep_cache = Rails.env.development?
     config.assets.server = Rails.env.development? || Rails.env.test?
     config.assets.host = nil
+    config.assets.relative_url_root = nil
 
     # Register propshaft initializer to copy the assets path in all the Rails Engines.
     # This makes possible for us to keep all `assets` config in this Railtie, but still
@@ -31,7 +32,8 @@ module Propshaft
     end
 
     config.after_initialize do |app|
-      config.assets.host = app.config.asset_host
+      config.assets.host ||= app.config.asset_host
+      config.assets.relative_url_root ||= app.config.relative_url_root
       config.assets.output_path ||=
         Pathname.new(File.join(app.config.paths["public"].first, app.config.assets.prefix))
 

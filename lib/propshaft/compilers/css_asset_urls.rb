@@ -7,7 +7,6 @@ class Propshaft::Compilers::CssAssetUrls
 
   def initialize(assembly)
     @assembly   = assembly
-    @url_prefix = File.join(assembly.config.host.to_s, assembly.config.prefix.to_s).chomp("/")
   end
 
   def compile(logical_path, input)
@@ -27,7 +26,7 @@ class Propshaft::Compilers::CssAssetUrls
 
     def asset_url(resolved_path, logical_path, fingerprint, pattern)
       if asset = assembly.load_path.find(resolved_path)
-        %[url("#{url_prefix}/#{asset.digested_path}#{fingerprint}")]
+        %[url("#{assembly.url_prefix}/#{asset.digested_path}#{fingerprint}")]
       else
         Propshaft.logger.warn "Unable to resolve '#{pattern}' for missing asset '#{resolved_path}' in #{logical_path}"
         %[url("#{pattern}")]

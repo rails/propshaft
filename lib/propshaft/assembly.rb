@@ -8,10 +8,11 @@ require "propshaft/compilers/css_asset_urls"
 require "propshaft/compilers/source_mapping_urls"
 
 class Propshaft::Assembly
-  attr_reader :config
+  attr_reader :config, :url_prefix
 
   def initialize(config)
     @config = config
+    @url_prefix = File.join(config.host.to_s, config.relative_url_root.to_s, config.prefix.to_s).chomp("/")
   end
 
   def load_path
