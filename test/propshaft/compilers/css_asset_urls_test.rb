@@ -6,13 +6,11 @@ require "propshaft/compilers"
 
 class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
   setup do
-    @assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config|
+    @options = ActiveSupport::OrderedOptions.new.tap { |config|
       config.paths = [ Pathname.new("#{__dir__}/../../fixtures/assets/vendor") ]
       config.output_path = Pathname.new("#{__dir__}/../../fixtures/output")
       config.prefix = "/assets"
-    })
-
-    @assembly.compilers.register "text/css", Propshaft::Compilers::CssAssetUrls
+    }
   end
 
   test "basic" do
@@ -120,6 +118,13 @@ class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
     assert_match(/{ background: url\("file-not-found.jpg"\); }/, compiled)
   end
 
+  test "relative url root" do
+    @options.relative_url_root = "/url-root"
+
+    compiled = compile_asset_with_content(%({ background: url(file.jpg); }))
+    assert_match(/{ background: url\("\/url-root\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+  end
+
   private
     def compile_asset_with_content(content)
       root_path    = Pathname.new("#{__dir__}/../../fixtures/assets/vendor")
@@ -127,7 +132,9 @@ class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
 
       asset     = Propshaft::Asset.new(root_path.join(logical_path), logical_path: logical_path)
       asset.stub :content, content do
-        @assembly.compilers.compile(asset)
+        assembly = Propshaft::Assembly.new(@options)
+        assembly.compilers.register "text/css", Propshaft::Compilers::CssAssetUrls
+        assembly.compilers.compile(asset)
       end
     end
 end
