@@ -16,7 +16,7 @@ class Propshaft::Server
         {
           "content-length"  => compiled_content.length.to_s,
           "content-type"    => asset.content_type.to_s,
-          "vary" => "Accept-Encoding",
+          "vary"            => "Accept-Encoding",
           "etag"            => asset.digest,
           "cache-control"   => "public, max-age=31536000, immutable"
         },
