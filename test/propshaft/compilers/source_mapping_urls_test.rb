@@ -6,7 +6,7 @@ require "propshaft/compilers"
 
 class Propshaft::Compilers::SourceMappingUrlsTest < ActiveSupport::TestCase
   setup do
-    @assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config| 
+    @assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config|
       config.paths = [ Pathname.new("#{__dir__}/../../fixtures/assets/mapped") ]
       config.output_path = Pathname.new("#{__dir__}/../../fixtures/output")
       config.prefix = "/assets"
@@ -33,6 +33,11 @@ class Propshaft::Compilers::SourceMappingUrlsTest < ActiveSupport::TestCase
                     @assembly.compilers.compile(find_asset("sourceless.js", fixture_path: "mapped"))
     assert_no_match %r{sourceMappingURL},
                     @assembly.compilers.compile(find_asset("sourceless.css", fixture_path: "mapped"))
+  end
+
+  test "sourceMappingURL removal due to missing map does not damage /* ... */ comments" do
+    assert_match %r{\A#{Regexp.escape ".failure { color: red; }\n/* */\n"}\Z},
+                 @assembly.compilers.compile(find_asset("sourceless.css", fixture_path: "mapped"))
   end
 
   test "sourceMappingURL outside of a comment should be left alone" do
