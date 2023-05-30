@@ -9,7 +9,7 @@ class Propshaft::Asset
   def initialize(path, logical_path:, version: nil)
     @path         = path
     @digest       = logical_path.to_s[PREDIGESTED_REGEX, 1]
-    @logical_path = Pathname.new(@digest ? logical_path.sub("-#{@digest}", "") : logical_path)
+    @logical_path = logical_path
     @version      = version
   end
 
@@ -30,7 +30,11 @@ class Propshaft::Asset
   end
 
   def digested_path
-    logical_path.sub(/\.(\w+)$/) { |ext| "-#{digest}#{ext}" }
+    if already_digested?
+      logical_path
+    else
+      logical_path.sub(/\.(\w+)$/) { |ext| "-#{digest}#{ext}" }
+    end
   end
 
   def fresh?(digest)
@@ -40,4 +44,10 @@ class Propshaft::Asset
   def ==(other_asset)
     logical_path.hash == other_asset.logical_path.hash
   end
+
+  private
+
+    def already_digested?
+      logical_path.to_s =~ PREDIGESTED_REGEX
+    end
 end
