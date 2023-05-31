@@ -9,7 +9,7 @@ class Propshaft::Asset
   def initialize(path, logical_path:, version: nil)
     @path         = path
     @digest       = logical_path.to_s[PREDIGESTED_REGEX, 1]
-    @logical_path = logical_path
+    @logical_path = Pathname.new(logical_path)
     @version      = version
   end
 

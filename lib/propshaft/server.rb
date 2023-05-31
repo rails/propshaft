@@ -36,7 +36,7 @@ class Propshaft::Server
     def extract_path_and_digest(env)
       full_path = Rack::Utils.unescape(env["PATH_INFO"].to_s.sub(/^\//, ""))
       digest = full_path[/-([0-9a-zA-Z]{7,128}(?:\.digested)?)\.[^.]+\z/, 1]
-      is_predigested = digest.match(Propshaft::Asset.PREDIGESTED_REGEX)
+      is_predigested = full_path.match(Propshaft::Asset::PREDIGESTED_REGEX)
       path = digest && !is_predigested ? full_path.sub("-#{digest}", "") : full_path
 
       [ path, digest ]
