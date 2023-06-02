@@ -9,7 +9,7 @@ require "open-uri"
 require_relative "./trackrod"
 require_relative "../lib/propshaft"
 require_relative "../lib/propshaft/compilers"
-require_relative "../lib/propshaft/compilers/css_asset_urls"
+require_relative "../lib/propshaft/compiler/css_asset_urls"
 
 trackrod = Trackrod.new(Dir.mktmpdir)
 trackrod.build
@@ -17,11 +17,11 @@ trackrod.build
 assets = ActiveSupport::OrderedOptions.new
 assets.paths     = [ trackrod.root ]
 assets.prefix    = "/assets"
-assets.compilers = [ [ "text/css", Propshaft::Compilers::CssAssetUrls ] ]
+assets.compilers = [ [ "text/css", Propshaft::Compiler::CssAssetUrls ] ]
 
 assembly = Propshaft::Assembly.new(assets)
 asset    = assembly.load_path.find(trackrod.assets.css)
-compiler = Propshaft::Compilers::CssAssetUrls.new(assembly)
+compiler = Propshaft::Compiler::CssAssetUrls.new(assembly)
 
 Benchmark.ips do |x|
   x.config(time: 5, warmup: 2)

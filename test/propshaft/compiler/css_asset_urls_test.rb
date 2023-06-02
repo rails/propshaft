@@ -4,7 +4,7 @@ require "propshaft/asset"
 require "propshaft/assembly"
 require "propshaft/compilers"
 
-class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
+class Propshaft::Compiler::CssAssetUrlsTest < ActiveSupport::TestCase
   setup do
     @options = ActiveSupport::OrderedOptions.new.tap { |config|
       config.paths = [ Pathname.new("#{__dir__}/../../fixtures/assets/vendor") ]
@@ -133,7 +133,7 @@ class Propshaft::Compilers::CssAssetUrlsTest < ActiveSupport::TestCase
       asset     = Propshaft::Asset.new(root_path.join(logical_path), logical_path: logical_path)
       asset.stub :content, content do
         assembly = Propshaft::Assembly.new(@options)
-        assembly.compilers.register "text/css", Propshaft::Compilers::CssAssetUrls
+        assembly.compilers.register "text/css", Propshaft::Compiler::CssAssetUrls
         assembly.compilers.compile(asset)
       end
     end

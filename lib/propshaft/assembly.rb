@@ -4,15 +4,14 @@ require "propshaft/resolver/static"
 require "propshaft/server"
 require "propshaft/processor"
 require "propshaft/compilers"
-require "propshaft/compilers/css_asset_urls"
-require "propshaft/compilers/source_mapping_urls"
+require "propshaft/compiler/css_asset_urls"
+require "propshaft/compiler/source_mapping_urls"
 
 class Propshaft::Assembly
-  attr_reader :config, :url_prefix
+  attr_reader :config
 
   def initialize(config)
     @config = config
-    @url_prefix = File.join(config.relative_url_root.to_s, config.prefix.to_s).chomp("/")
   end
 
   def load_path

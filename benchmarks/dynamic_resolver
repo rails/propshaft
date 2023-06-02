@@ -15,7 +15,7 @@ trackrod.build
 assets = ActiveSupport::OrderedOptions.new
 assets.paths         = [ trackrod.root ]
 assets.prefix        = "/assets"
-assets.compilers     = [ [ "text/css", Propshaft::Compilers::CssAssetUrls ] ]
+assets.compilers     = [ [ "text/css", Propshaft::Compiler::CssAssetUrls ] ]
 assets.output_path ||= Pathname.new(Dir.mktmpdir)
 
 assembly = Propshaft::Assembly.new(assets)

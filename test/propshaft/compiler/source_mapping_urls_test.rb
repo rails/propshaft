@@ -4,7 +4,7 @@ require "propshaft/asset"
 require "propshaft/assembly"
 require "propshaft/compilers"
 
-class Propshaft::Compilers::SourceMappingUrlsTest < ActiveSupport::TestCase
+class Propshaft::Compiler::SourceMappingUrlsTest < ActiveSupport::TestCase
   setup do
     @options = ActiveSupport::OrderedOptions.new.tap { |config|
       config.paths = [ Pathname.new("#{__dir__}/../../fixtures/assets/mapped") ]
@@ -58,8 +58,8 @@ class Propshaft::Compilers::SourceMappingUrlsTest < ActiveSupport::TestCase
     def compile_asset(asset)
 
       assembly = Propshaft::Assembly.new(@options)
-      assembly.compilers.register "text/javascript", Propshaft::Compilers::SourceMappingUrls
-      assembly.compilers.register "text/css", Propshaft::Compilers::SourceMappingUrls
+      assembly.compilers.register "text/javascript", Propshaft::Compiler::SourceMappingUrls
+      assembly.compilers.register "text/css", Propshaft::Compiler::SourceMappingUrls
 
       assembly.compilers.compile(asset)
     end

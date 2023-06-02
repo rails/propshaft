@@ -11,9 +11,9 @@ module Propshaft
     config.assets.prefix         = "/assets"
     config.assets.quiet          = false
     config.assets.compilers      = [
-      [ "text/css", Propshaft::Compilers::CssAssetUrls ],
-      [ "text/css", Propshaft::Compilers::SourceMappingUrls ],
-      [ "text/javascript", Propshaft::Compilers::SourceMappingUrls ]
+      [ "text/css", Propshaft::Compiler::CssAssetUrls ],
+      [ "text/css", Propshaft::Compiler::SourceMappingUrls ],
+      [ "text/javascript", Propshaft::Compiler::SourceMappingUrls ]
     ]
     config.assets.sweep_cache = Rails.env.development?
     config.assets.server = Rails.env.development? || Rails.env.test?
