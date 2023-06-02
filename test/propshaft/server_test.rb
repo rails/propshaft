@@ -11,7 +11,7 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
       config.output_path = Pathname.new("#{__dir__}../fixtures/output")
     })
 
-    @assembly.compilers.register "text/css", Propshaft::Compilers::CssAssetUrls
+    @assembly.compilers.register "text/css", Propshaft::Compiler::CssAssetUrls
     @server = Propshaft::Server.new(@assembly)
   end
 
