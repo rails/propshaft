@@ -25,6 +25,16 @@ class Propshaft::Compiler::SourceMappingUrlsTest < ActiveSupport::TestCase
                  compile_asset(find_asset("nested/another-source.js", fixture_path: "mapped"))
   end
 
+  test "matching source map in css compressed mode" do
+    assert_match %r{/\*# sourceMappingURL=/assets/compressed.css-[a-z0-9]{40}\.map},
+                 compile_asset(find_asset("compressed.css", fixture_path: "mapped"))
+  end
+
+  test "matching source map in js minified mode" do
+    assert_match %r{//# sourceMappingURL=/assets/minified.js-[a-z0-9]{40}\.map},
+                 compile_asset(find_asset("minified.js", fixture_path: "mapped"))
+  end
+
   test "missing source map" do
     assert_no_match %r{sourceMappingURL},
                     compile_asset(find_asset("sourceless.js", fixture_path: "mapped"))
@@ -42,7 +52,7 @@ class Propshaft::Compiler::SourceMappingUrlsTest < ActiveSupport::TestCase
                  compile_asset(find_asset("sourceMappingURL-outside-comment.css", fixture_path: "mapped"))
   end
 
-  test "sourceMappingURL not at the beginning of the line should be left alone" do
+  test "sourceMappingURL not at the end of the source should be left alone" do
     assert_match %r{sourceMappingURL=sourceMappingURL-not-at-start.css.map},
                  compile_asset(find_asset("sourceMappingURL-not-at-start.css", fixture_path: "mapped"))
   end
