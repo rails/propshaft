@@ -22,7 +22,7 @@ class Propshaft::Compiler::SourceMappingUrls < Propshaft::Compiler
       if asset = assembly.load_path.find(resolved_path)
         "#{comment}# sourceMappingURL=#{url_prefix}/#{asset.digested_path}"
       else
-        Propshaft.logger.warn "Removed sourceMappingURL comment for missing asset '#{resolved_path}' from #{resolved_path}"
+        Propshaft.logger.warn "Removed sourceMappingURL comment for missing asset '#{resolved_path}'"
         comment
       end
     end
