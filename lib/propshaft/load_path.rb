@@ -48,8 +48,7 @@ class Propshaft::LoadPath
         paths.each do |path|
           without_dotfiles(all_files_from_tree(path)).each do |file|
             logical_path = file.relative_path_from(path)
-            asset = Propshaft::Asset.new(file, logical_path: logical_path, version: version)
-            mapped[asset.logical_path.to_s] ||= asset
+            mapped[logical_path.to_s] ||= Propshaft::Asset.new(file, logical_path: logical_path, version: version)
           end if path.exist?
         end
       end
