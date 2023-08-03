@@ -11,19 +11,19 @@ class Propshaft::Server
     if (asset = @assembly.load_path.find(path)) && asset.fresh?(digest)
       compiled_content = @assembly.compilers.compile(asset)
 
-      [ 
-        200, 
+      [
+        200,
         {
-          "content-length"  => compiled_content.length.to_s,
-          "content-type"    => asset.content_type.to_s,
-          "vary"            => "Accept-Encoding",
-          "etag"            => asset.digest,
-          "cache-control"   => "public, max-age=31536000, immutable"
+          Rack::CONTENT_LENGTH  => compiled_content.length.to_s,
+          Rack::CONTENT_TYPE    => asset.content_type.to_s,
+          VARY                  => "Accept-Encoding",
+          Rack::ETAG            => asset.digest,
+          Rack::CACHE_CONTROL   => "public, max-age=31536000, immutable"
         },
         [ compiled_content ]
       ]
     else
-      [ 404, { "content-type" => "text/plain", "content-length" => "9" }, [ "Not found" ] ]
+      [ 404, { Rack::CONTENT_TYPE => "text/plain", Rack::CONTENT_LENGTH => "9" }, [ "Not found" ] ]
     end
   end
 
@@ -38,5 +38,11 @@ class Propshaft::Server
       path      = digest ? full_path.sub("-#{digest}", "") : full_path
 
       [ path, digest ]
+    end
+
+    if Gem::Version.new(Rack::RELEASE) < Gem::Version.new("3")
+      VARY = "Vary"
+    else
+      VARY = "vary"
     end
 end
