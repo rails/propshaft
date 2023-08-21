@@ -4,7 +4,7 @@ namespace :assets do
     Rails.application.assets.processor.process
     if Rails.env.development?
       puts "Warning: You are precompiling assets in development. Rails will not " \
-        "serve any changed assets until you delete public/assets/.manifest.json"
+        "serve any changed assets until you delete public#{Rails.application.config.assets.prefix}/.manifest.json"
     end
   end
 
