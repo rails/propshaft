@@ -25,6 +25,11 @@ class Propshaft::Compiler::SourceMappingUrlsTest < ActiveSupport::TestCase
                  compile_asset(find_asset("nested/another-source.js", fixture_path: "mapped"))
   end
 
+  test "resolves prefix on source map filename" do
+    assert_match %r{//# sourceMappingURL=/assets/source.js-[a-z0-9]{40}\.map},
+                 compile_asset(find_asset("prefixed-source.js", fixture_path: "mapped"))
+  end
+
   test "missing source map" do
     assert_no_match %r{sourceMappingURL},
                     compile_asset(find_asset("sourceless.js", fixture_path: "mapped"))
