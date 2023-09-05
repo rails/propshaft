@@ -29,7 +29,7 @@ If you need to put multiple files that refer to each other through Propshaft, li
 
 ## Improving performance in development
 
-Before every request Propshaft checks if any asset was updated to decide if a cache sweep is needed. This verification is done using the application's configured file watcher which, by default, is `ActiveSupport::FileUpdateChecker`. 
+Before every request Propshaft checks if any asset was updated to decide if a cache sweep is needed. This verification is done using the application's configured file watcher which, by default, is `ActiveSupport::FileUpdateChecker`.
 
 If you have a lot of assets in your project, you can improve performance by adding the `listen` gem to the development group in your Gemfile, and this line to the `development.rb` environment file:
 
@@ -37,6 +37,9 @@ If you have a lot of assets in your project, you can improve performance by addi
 config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 ```
 
+## Service-Worker-Allowed Header
+
+A **"Service-Worker-Allowed"** header can be added through the `Rails.configuration.assets.service_worker_scope` variable in your environment configuration file.
 
 ## Migrating from Sprockets
 
