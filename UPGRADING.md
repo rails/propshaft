@@ -24,7 +24,7 @@ After you are done you will notice that the install step added various files to 
 
 The `./bin/dev` file is a shell script that uses [foreman](https://github.com/ddollar/foreman) and `Procfile.dev` to start two processes in a single terminal: `rails s` and `yarn build`. The latter replaces `webpack-dev-server` for bundling and watching for changes in javascript files.
 
-**The 'build' attribute added to packages.json**
+**The 'build' attribute added to package.json**
 
 This is the command that `yarn build` will use to bundle javascript files.
 
@@ -63,7 +63,7 @@ module.exports = {
 }
 ```
 
-Then open `packages.json` and add this:
+Then open `package.json` and add this:
 ```json
 "babel": {
   "presets": [
@@ -72,7 +72,7 @@ Then open `packages.json` and add this:
 }
 ```
 
-Finally, download [webpackers babel preset](https://github.com/rails/webpacker/blob/master/package/babel/preset.js) file and place it in the same directory as `packages.json` with the name `webpack.babel.js`.
+Finally, download [webpackers babel preset](https://github.com/rails/webpacker/blob/master/package/babel/preset.js) file and place it in the same directory as `package.json` with the name `webpack.babel.js`.
 
 **Module resolution**
 
@@ -157,7 +157,7 @@ After you are done you will notice that the install step updated some files.
 
 Just like the javascript process, this one will bundle and watch for changes in css files.
 
-**The 'build:css' attribute added to packages.json**
+**The 'build:css' attribute added to package.json**
 
 This is the command `yarn build` will use to bundle css files.
 
@@ -191,7 +191,7 @@ stylesheets/sources/application/source_1.scss
 stylesheets/sources/application/source_2.scss
 ```
 
-Then adjust the `build` attribute in `packages.json`:
+Then adjust the `build` attribute in `package.json`:
 ```
 "build:css": "sass ./app/assets/stylesheets/entrypoints:./app/assets/builds --no-source-map --load-path=node_modules"
 ```
@@ -207,7 +207,7 @@ Start by following these steps:
 1. Remove `sprockets`, `sprockets-rails`, and `sass-rails` from the Gemfile and add `propshaft`;
 2. Run `./bin/bundle install`;
 3. Open `config/application.rb` and remove `config.assets.paths << Rails.root.join('app','assets')`;
-4. Remove `asset/config/manifest.js`.
+4. Remove `app/assets/config/manifest.js`.
 5. Replace all asset_helpers (`image_url`, `font_url`) in css files with standard `urls`.
 6. If you are importing only the frameworks you need (instead of `rails/all`), remove `require "sprockets/railtie"`;
 

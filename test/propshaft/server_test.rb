@@ -11,7 +11,7 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
       config.output_path = Pathname.new("#{__dir__}../fixtures/output")
     })
 
-    @assembly.compilers.register "text/css", Propshaft::Compilers::CssAssetUrls
+    @assembly.compilers.register "text/css", Propshaft::Compiler::CssAssetUrls
     @server = Propshaft::Server.new(@assembly)
   end
 
@@ -30,7 +30,7 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
   end
 
   test "serve a predigested file" do
-    asset = @assembly.load_path.find("file-already.css")
+    asset = @assembly.load_path.find("file-already-abcdefVWXYZ0123456789.digested.css")
     get "/#{asset.digested_path}"
     assert_equal 200, last_response.status
   end
