@@ -18,7 +18,7 @@ class Propshaft::Assembly
     @load_path ||= Propshaft::LoadPath.new(
       config.paths,
       version: config.version,
-      digest_class: confing.digest_class,
+      digest_class: config.digest_class,
     )
   end
 
