@@ -10,6 +10,7 @@ class Propshaft::Compiler::CssAssetUrlsTest < ActiveSupport::TestCase
       config.paths = [ Pathname.new("#{__dir__}/../../fixtures/assets/vendor") ]
       config.output_path = Pathname.new("#{__dir__}/../../fixtures/output")
       config.prefix = "/assets"
+      config.digest_class = Digest::SHA1
     }
   end
 

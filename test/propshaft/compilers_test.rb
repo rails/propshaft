@@ -9,6 +9,7 @@ class Propshaft::CompilersTest < ActiveSupport::TestCase
       config.paths = [ Pathname.new("#{__dir__}/../fixtures/assets/first_path") ]
       config.output_path = Pathname.new("#{__dir__}/../fixtures/output")
       config.prefix = "/assets"
+      config.digest_class = Digest::SHA1
     })
   end
 

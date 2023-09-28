@@ -9,6 +9,7 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
     @assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config|
       config.paths = [Pathname.new("#{__dir__}/../fixtures/assets/vendor"), Pathname.new("#{__dir__}/../fixtures/assets/first_path")]
       config.output_path = Pathname.new("#{__dir__}../fixtures/output")
+      config.digest_class = Digest::SHA1
     })
 
     @assembly.compilers.register "text/css", Propshaft::Compiler::CssAssetUrls

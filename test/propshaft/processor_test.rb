@@ -11,6 +11,7 @@ class Propshaft::ProcessorTest < ActiveSupport::TestCase
         Pathname.new("#{__dir__}/../fixtures/assets/first_path"),
         Pathname.new("#{__dir__}/../fixtures/assets/second_path")
       ]
+      config.digest_class = Digest::SHA1
     })
   end
 
