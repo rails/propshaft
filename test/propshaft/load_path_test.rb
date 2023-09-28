@@ -55,6 +55,14 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
     assert_nil Propshaft::LoadPath.new(Pathname.new("#{__dir__}/../fixtures/assets/nowhere")).find("missing")
   end
 
+  test "custom digest class" do
+    @load_path = Propshaft::LoadPath.new(@load_path.paths, version: "1", digest_class: Digest::SHA256)
+    @load_path.manifest.tap do |manifest|
+      assert_equal "one-eb08cb2ea42bc732b848716bbc062289448f1bd3c12c5949aeb80f511c9bb99a.txt", manifest["one.txt"]
+      assert_equal "nested/three-68540fa36185a8a95d7d6b34d96915f466204e8b72fb1292aafdc6086547df26.txt", manifest["nested/three.txt"]
+    end
+  end
+
   test "deduplicate paths" do
     load_path = Propshaft::LoadPath.new [
       "app/javascript",

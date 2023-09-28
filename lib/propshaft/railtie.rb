@@ -18,6 +18,7 @@ module Propshaft
     config.assets.sweep_cache = Rails.env.development?
     config.assets.server = Rails.env.development? || Rails.env.test?
     config.assets.relative_url_root = nil
+    config.assets.digest_class = Digest::SHA1
 
     # Register propshaft initializer to copy the assets path in all the Rails Engines.
     # This makes possible for us to keep all `assets` config in this Railtie, but still

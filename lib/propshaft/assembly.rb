@@ -15,7 +15,11 @@ class Propshaft::Assembly
   end
 
   def load_path
-    @load_path ||= Propshaft::LoadPath.new(config.paths, version: config.version)
+    @load_path ||= Propshaft::LoadPath.new(
+      config.paths,
+      version: config.version,
+      digest_class: confing.digest_class,
+    )
   end
 
   def resolver
@@ -46,7 +50,7 @@ class Propshaft::Assembly
 
   def reveal(path_type = :logical_path)
     path_type = path_type.presence_in(%i[ logical_path path ]) || raise(ArgumentError, "Unknown path_type: #{path_type}")
-    
+
     load_path.assets.collect do |asset|
       asset.send(path_type)
     end

@@ -1,11 +1,12 @@
 require "propshaft/asset"
 
 class Propshaft::LoadPath
-  attr_reader :paths, :version
+  attr_reader :paths, :digest_class, :version
 
-  def initialize(paths = [], version: nil)
-    @paths   = dedup(paths)
-    @version = version
+  def initialize(paths = [], digest_class: Digest::SHA1, version: nil)
+    @paths        = dedup(paths)
+    @version      = version
+    @digest_class = digest_class
   end
 
   def find(asset_name)
@@ -48,7 +49,12 @@ class Propshaft::LoadPath
         paths.each do |path|
           without_dotfiles(all_files_from_tree(path)).each do |file|
             logical_path = file.relative_path_from(path)
-            mapped[logical_path.to_s] ||= Propshaft::Asset.new(file, logical_path: logical_path, version: version)
+            mapped[logical_path.to_s] ||= Propshaft::Asset.new(
+              file,
+              logical_path: logical_path,
+              version: version,
+              digest_class: digest_class,
+            )
           end if path.exist?
         end
       end

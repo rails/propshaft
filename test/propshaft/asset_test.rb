@@ -51,10 +51,16 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
     assert_equal asset.digest.object_id, asset.digest.object_id
   end
 
+  test "custom digest class" do
+    asset = find_asset("one.txt", digest_class: Digest::SHA256)
+    assert_equal "one-f82fcaff474fbc87520bcae5fcd0d2f33a8fa74f11d151fe84a30ce03f2d349b.txt",
+      asset.digested_path.to_s
+  end
+
   private
-    def find_asset(logical_path)
+    def find_asset(logical_path, digest_class: nil)
       root_path = Pathname.new("#{__dir__}/../fixtures/assets/first_path")
       path = root_path.join(logical_path)
-      Propshaft::Asset.new(path, logical_path: logical_path)
+      Propshaft::Asset.new(path, **{ logical_path: logical_path, digest_class: }.compact)
     end
 end
