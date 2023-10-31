@@ -47,6 +47,29 @@ On the other hand, if you're already bundling JavaScript and CSS through a Node-
 But for greenfield apps using the default import-map approach, Propshaft can also work well, if you're able to deal with vanilla CSS.
 
 
+## Providing compressed versions of assets
+
+If you're not using a CDN that will automatically serve compressed versions of the compiled assets, you may want your web server to do so. You could let your web server compress assets on the fly, or to minimize overhead you could configure it to serve already-compressed files from disk (e.g. through NGINX's `gzip_static` directive).
+In order to provide those compressed asset files (if your existing build configuration doesn't already create them), you can enhance the `assets:precompile` rake task to create the compressed files. For example, to create Brotli-compressed versions of each file, you could add this to your application (e.g. inside an initializer):
+
+```rb
+Rake::Task["assets:precompile"].enhance do
+  assembly    = Rails.application.assets
+  output_path = assembly.config.output_path
+
+  assembly.load_path.assets.each do |asset|
+    asset_path      = output_path.join(asset.digested_path)
+    compressed_path = output_path.join(asset.digested_path.to_s + ".br")
+
+    unless compressed_path.exist?
+      Propshaft.logger.info "Compressing #{asset.digested_path}"
+      `brotli #{asset_path} -o #{compressed_path}`
+    end
+  end
+end if Rake::Task.task_defined?("assets:precompile")
+```
+
+
 ## Will Propshaft replace Sprockets as the Rails default?
 
 Most likely, but Sprockets need to be supported as well for a long time to come. Plenty of apps and gems were built on Sprocket features, and they won't be migrating soon. Still working out the compatibility story. This is very much beta software at the moment.
