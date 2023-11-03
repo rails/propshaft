@@ -16,7 +16,7 @@ jobs:
     continue-on-error: ${{ matrix.continue-on-error }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
