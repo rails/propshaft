@@ -14,8 +14,9 @@ namespace :assets do
   end
 
   desc "Removes old files in config.assets.output_path"
-  task clean: :environment do
-    Rails.application.assets.processor.clean
+  task :clean, [:count] => [:environment] do |_, args|
+    count = args.fetch(:count, 2)
+    Rails.application.assets.processor.clean(count.to_i)
   end
 
   desc "Print all the assets available in config.assets.paths"
