@@ -20,8 +20,8 @@ class Propshaft::Processor
     FileUtils.rm_r(output_path) if File.exist?(output_path)
   end
 
-  def clean
-    Propshaft::OutputPath.new(output_path, load_path.manifest).clean(2, 1.hour)
+  def clean(count)
+    Propshaft::OutputPath.new(output_path, load_path.manifest).clean(count, 1.hour)
   end
 
   private
