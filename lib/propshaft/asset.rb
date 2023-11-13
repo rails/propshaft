@@ -9,7 +9,7 @@ class Propshaft::Asset
   end
 
   def content
-    File.binread(path)
+    File.binread(path).force_encoding("UTF-8")
   end
 
   def content_type

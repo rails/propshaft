@@ -51,6 +51,10 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
     assert_equal asset.digest.object_id, asset.digest.object_id
   end
 
+  test "content with utf-8" do
+    assert_equal "Œï", find_asset("utf-8.txt").content
+  end
+
   private
     def find_asset(logical_path)
       root_path = Pathname.new("#{__dir__}/../fixtures/assets/first_path")
