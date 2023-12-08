@@ -11,6 +11,8 @@ class Propshaft::Compiler::SourceMappingUrls < Propshaft::Compiler
 
   private
     def asset_path(source_mapping_url, logical_path)
+      source_mapping_url.gsub!(/^\/?#{url_prefix}\//, "")
+
       if logical_path.dirname.to_s == "."
         source_mapping_url
       else
@@ -19,7 +21,7 @@ class Propshaft::Compiler::SourceMappingUrls < Propshaft::Compiler
     end
 
     def source_mapping_url(resolved_path, comment_start, comment_end)
-      if asset = assembly.load_path.find(resolved_path)
+      if (asset = assembly.load_path.find(resolved_path))
         "#{comment_start}# sourceMappingURL=#{url_prefix}/#{asset.digested_path}#{comment_end}"
       else
         Propshaft.logger.warn "Removed sourceMappingURL comment for missing asset '#{resolved_path}' from #{resolved_path}"
