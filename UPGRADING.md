@@ -253,8 +253,8 @@ Rails.application.assets.load_path.find('logo.svg').content
 
 As Rails escapes html tags in views by default, in order to output a rendered svg you will need to specify rails not to escape the string using [html_safe](https://api.rubyonrails.org/classes/String.html#method-i-html_safe) or [raw](https://api.rubyonrails.org/classes/ActionView/Helpers/OutputSafetyHelper.html#method-i-raw).
 ```ruby
-Rails.application.assets.load_path.find('logo.svg').html_safe
-raw Rails.application.assets.load_path.find('logo.svg')
+Rails.application.assets.load_path.find('logo.svg').content.html_safe
+raw Rails.application.assets.load_path.find('logo.svg').content
 ```
 
 **Precompilation in development**
