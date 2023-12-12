@@ -14,14 +14,14 @@ class Propshaft::Compiler::SourceMappingUrlsTest < ActiveSupport::TestCase
   end
 
   test "matching source map" do
-    assert_match %r{//# sourceMappingURL=/assets/source.js-[a-z0-9]{40}\.map},
+    assert_match %r{//# sourceMappingURL=/assets/source-[a-z0-9]{40}\.js.map},
                  compile_asset(find_asset("source.js", fixture_path: "mapped"))
-    assert_match %r{/\*# sourceMappingURL=/assets/source.css-[a-z0-9]{40}\.map},
+    assert_match %r{/\*# sourceMappingURL=/assets/source-[a-z0-9]{40}\.css.map},
                  compile_asset(find_asset("source.css", fixture_path: "mapped"))
   end
 
   test "matching nested source map" do
-    assert_match %r{//# sourceMappingURL=/assets/nested/another-source.js-[a-z0-9]{40}\.map},
+    assert_match %r{//# sourceMappingURL=/assets/nested/another-source-[a-z0-9]{40}\.js.map},
                  compile_asset(find_asset("nested/another-source.js", fixture_path: "mapped"))
   end
 
@@ -38,9 +38,9 @@ class Propshaft::Compiler::SourceMappingUrlsTest < ActiveSupport::TestCase
   end
 
   test "sourceMappingURL not at the beginning of the line, but at end of file, is processed" do
-    assert_match %r{//# sourceMappingURL=/assets/sourceMappingURL-not-at-start.js-[a-z0-9]{40}\.map},
+    assert_match %r{//# sourceMappingURL=/assets/sourceMappingURL-not-at-start-[a-z0-9]{40}\.js.map},
                  compile_asset(find_asset("sourceMappingURL-not-at-start.js", fixture_path: "mapped"))
-    assert_match %r{/\*# sourceMappingURL=/assets/sourceMappingURL-not-at-start.css-[a-z0-9]{40}\.map \*/},
+    assert_match %r{/\*# sourceMappingURL=/assets/sourceMappingURL-not-at-start-[a-z0-9]{40}\.css.map \*/},
                  compile_asset(find_asset("sourceMappingURL-not-at-start.css", fixture_path: "mapped"))
   end
 
@@ -56,7 +56,7 @@ class Propshaft::Compiler::SourceMappingUrlsTest < ActiveSupport::TestCase
   test "relative url root" do
     @options.relative_url_root = "/url-root"
 
-    assert_match %r{//# sourceMappingURL=/url-root/assets/source.js-[a-z0-9]{40}\.map},
+    assert_match %r{//# sourceMappingURL=/url-root/assets/source-[a-z0-9]{40}\.js.map},
                   compile_asset(find_asset("source.js", fixture_path: "mapped"))
   end
 

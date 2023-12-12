@@ -28,7 +28,7 @@ class Propshaft::Asset
     if already_digested?
       logical_path
     else
-      logical_path.sub(/\.(\w+)$/) { |ext| "-#{digest}#{ext}" }
+      logical_path.sub(/\.(\w+(\.map)?)$/) { |ext| "-#{digest}#{ext}" }
     end
   end
 
