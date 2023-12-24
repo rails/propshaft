@@ -49,7 +49,7 @@ But for greenfield apps using the default import-map approach, Propshaft can als
 
 ## Will Propshaft replace Sprockets as the Rails default?
 
-Most likely, but Sprockets needs to be supported as well for a long time to come. Plenty of apps and gems were built on Sprocket features, and they won't be migrating soon. Still working out the compatibility story. This is very much beta software at the moment.
+Most likely, but Sprockets needs to be supported as well for a long time to come. Plenty of apps and gems were built on Sprocket features, and they won't be migrating soon. Still working out the compatibility story.
 
 
 ## License
