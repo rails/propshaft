@@ -21,7 +21,7 @@ class Propshaft::Asset
   end
 
   def digest
-    @digest ||= Digest::SHA1.hexdigest("#{content}#{version}")
+    @digest ||= Digest::SHA1.hexdigest("#{content}#{version}")[0,8]
   end
 
   def digested_path
