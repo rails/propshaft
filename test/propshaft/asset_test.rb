@@ -18,18 +18,18 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
   end
 
   test "digest" do
-    assert_equal "f2e1ec14d6856e1958083094170ca6119c529a73", find_asset("one.txt").digest
+    assert_equal "f2e1ec14", find_asset("one.txt").digest
   end
 
   test "fresh" do
-    assert find_asset("one.txt").fresh?("f2e1ec14d6856e1958083094170ca6119c529a73")
-    assert_not find_asset("one.txt").fresh?("e206c34fe404c8e2f25d60dd8303f61c02b8d381")
+    assert find_asset("one.txt").fresh?("f2e1ec14")
+    assert_not find_asset("one.txt").fresh?("e206c34f")
 
     assert find_asset("file-already-abcdefVWXYZ0123456789_-.digested.css").fresh?(nil)
   end
 
   test "digested path" do
-    assert_equal "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt",
+    assert_equal "one-f2e1ec14.txt",
       find_asset("one.txt").digested_path.to_s
 
     assert_equal "file-already-abcdefVWXYZ0123456789_-.digested.css",
@@ -38,7 +38,7 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
     assert_equal "file-already-abcdefVWXYZ0123456789_-.digested.debug.css",
       find_asset("file-already-abcdefVWXYZ0123456789_-.digested.debug.css").digested_path.to_s
 
-    assert_equal "file-not.digested-e206c34fe404c8e2f25d60dd8303f61c02b8d381.css",
+    assert_equal "file-not.digested-e206c34f.css",
       find_asset("file-not.digested.css").digested_path.to_s
 
     assert_equal "file-is-a-sourcemap-da39a3ee5e6b4b0d3255bfef95601890afd80709.js.map",

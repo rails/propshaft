@@ -14,7 +14,7 @@ class Propshaft::CompilersTest < ActiveSupport::TestCase
 
   test "replace asset-path function in css with digested url" do
     @assembly.compilers.register "text/css", Propshaft::Compiler::CssAssetUrls
-    assert_match(/"\/assets\/archive-[a-z0-9]{40}.svg/, @assembly.compilers.compile(find_asset("another.css")))
+    assert_match(/"\/assets\/archive-[a-z0-9]{8}.svg/, @assembly.compilers.compile(find_asset("another.css")))
   end
 
   private
