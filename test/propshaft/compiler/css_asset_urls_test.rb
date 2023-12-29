@@ -15,62 +15,62 @@ class Propshaft::Compiler::CssAssetUrlsTest < ActiveSupport::TestCase
 
   test "basic" do
     compiled = compile_asset_with_content(%({ background: url(file.jpg); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
   end
 
   test "blank spaces around name" do
     compiled = compile_asset_with_content(%({ background: url( file.jpg ); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
   end
 
   test "quotes around name" do
     compiled = compile_asset_with_content(%({ background: url("file.jpg"); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
   end
 
   test "single quotes around name" do
     compiled = compile_asset_with_content(%({ background: url('file.jpg'); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
   end
 
   test "root directory" do
     compiled = compile_asset_with_content(%({ background: url('/file.jpg'); }))
-    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
   end
 
   test "same directory" do
     compiled = compile_asset_with_content(%({ background: url('./file.jpg'); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
   end
 
   test "subdirectory" do
     compiled = compile_asset_with_content(%({ background: url('./images/file.jpg'); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/source\/images\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+    assert_match(/{ background: url\("\/assets\/foobar\/source\/images\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
   end
 
   test "parent directory" do
     compiled = compile_asset_with_content(%({ background: url('../file.jpg'); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+    assert_match(/{ background: url\("\/assets\/foobar\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
   end
 
   test "grandparent directory" do
     compiled = compile_asset_with_content(%({ background: url('../../file.jpg'); }))
-    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
   end
 
   test "sibling directory" do
     compiled = compile_asset_with_content(%({ background: url('../sibling/file.jpg'); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/sibling\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+    assert_match(/{ background: url\("\/assets\/foobar\/sibling\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
   end
 
   test "mixed" do
     compiled = compile_asset_with_content(%({ mask-image: image(url(file.jpg), skyblue, linear-gradient(rgba(0, 0, 0, 1.0), transparent)); }))
-    assert_match(/{ mask-image: image\(url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\), skyblue, linear-gradient\(rgba\(0, 0, 0, 1.0\), transparent\)\); }/, compiled)
+    assert_match(/{ mask-image: image\(url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\), skyblue, linear-gradient\(rgba\(0, 0, 0, 1.0\), transparent\)\); }/, compiled)
   end
 
   test "multiple" do
     compiled = compile_asset_with_content(%({ content: url(file.svg) url(file.svg); }))
-    assert_match(/{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg"\) url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg"\); }/, compiled)
+    assert_match(/{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.svg"\) url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.svg"\); }/, compiled)
   end
 
   test "url" do
@@ -95,12 +95,12 @@ class Propshaft::Compiler::CssAssetUrlsTest < ActiveSupport::TestCase
 
   test "fingerprint" do
     compiled = compile_asset_with_content(%({ background: url('/file.jpg?30af91bf14e37666a085fb8a161ff36d'); }))
-    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{40}.jpg\?30af91bf14e37666a085fb8a161ff36d"\); }/, compiled)
+    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{8}.jpg\?30af91bf14e37666a085fb8a161ff36d"\); }/, compiled)
   end
 
   test "svg anchor" do
     compiled = compile_asset_with_content(%({ content: url(file.svg#rails); }))
-    assert_match(/{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg#rails"\); }/, compiled)
+    assert_match(/{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.svg#rails"\); }/, compiled)
   end
 
   test "svg mask encoded anchor" do
@@ -110,7 +110,7 @@ class Propshaft::Compiler::CssAssetUrlsTest < ActiveSupport::TestCase
 
   test "non greedy anchors" do
     compiled = compile_asset_with_content(%({ content: url(file.svg#demo) url(file.svg#demo); }))
-    assert_match(/{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg#demo"\) url\("\/assets\/foobar\/source\/file-[a-z0-9]{40}.svg#demo"\); }/, compiled)
+    assert_match(/{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.svg#demo"\) url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.svg#demo"\); }/, compiled)
   end
 
   test "missing asset" do
@@ -122,7 +122,7 @@ class Propshaft::Compiler::CssAssetUrlsTest < ActiveSupport::TestCase
     @options.relative_url_root = "/url-root"
 
     compiled = compile_asset_with_content(%({ background: url(file.jpg); }))
-    assert_match(/{ background: url\("\/url-root\/assets\/foobar\/source\/file-[a-z0-9]{40}.jpg"\); }/, compiled)
+    assert_match(/{ background: url\("\/url-root\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
   end
 
   private

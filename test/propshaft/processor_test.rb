@@ -16,17 +16,17 @@ class Propshaft::ProcessorTest < ActiveSupport::TestCase
 
   test "manifest is written" do
     processed do |processor|
-      assert_equal "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt",
+      assert_equal "one-f2e1ec14.txt",
          JSON.parse(processor.output_path.join(".manifest.json").read)["one.txt"]
     end
   end
 
   test "assets are copied" do
     processed do |processor|
-      digested_asset_name = "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt"
+      digested_asset_name = "one-f2e1ec14.txt"
       assert processor.output_path.join(digested_asset_name).exist?
 
-      nested_digested_asset_name = "nested/three-6c2b86a0206381310375abdd9980863c2ea7b2c3.txt"
+      nested_digested_asset_name = "nested/three-6c2b86a0.txt"
       assert processor.output_path.join(nested_digested_asset_name).exist?
     end
   end

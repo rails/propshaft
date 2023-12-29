@@ -6,10 +6,10 @@ class PropshaftIntegrationTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    assert_select 'link[href="/assets/hello_world-4137140a1298c3924d5f7135617c23e23fb167a8.css"]'
-    assert_select 'link[href="/assets/goodbye-b1dc9940e9800d8bc96f7434617c043e58277419.css"]'
+    assert_select 'link[href="/assets/hello_world-4137140a.css"]'
+    assert_select 'link[href="/assets/goodbye-b1dc9940.css"]'
 
-    assert_select 'script[src="/assets/hello_world-888761f849ba63a95a56f6ef898a9eb70ca4c46e.js"]'
+    assert_select 'script[src="/assets/hello_world-888761f8.js"]'
   end
 
   test "should raise an exception when resolving nonexistent assets" do

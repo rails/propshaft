@@ -8,7 +8,7 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
   setup do
     @manifest    = {
       ".manifest.json": ".manifest.json",
-      "one.txt": "one-f2e1ec14d6856e1958083094170ca6119c529a73.txt"
+      "one.txt": "one-f2e1ec14.txt"
     }.stringify_keys
     @output_path = Propshaft::OutputPath.new(Pathname.new("#{__dir__}/../fixtures/output"), @manifest)
   end
@@ -16,9 +16,9 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
   test "files" do
     files = @output_path.files
 
-    file = files["one-f2e1ec14d6856e1958083094170ca6119c529a73.txt"]
+    file = files["one-f2e1ec14.txt"]
     assert_equal "one.txt", file[:logical_path]
-    assert_equal "f2e1ec14d6856e1958083094170ca6119c529a73", file[:digest]
+    assert_equal "f2e1ec14", file[:digest]
     assert file[:mtime].is_a?(Time)
   end
 
