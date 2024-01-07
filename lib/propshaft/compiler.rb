@@ -13,6 +13,10 @@ class Propshaft::Compiler
     raise NotImplementedError
   end
 
+  def find_dependencies(logical_path, input)
+    Set.new
+  end
+
   private
     def url_prefix
       @url_prefix ||= File.join(assembly.config.relative_url_root.to_s, assembly.config.prefix.to_s).chomp("/")

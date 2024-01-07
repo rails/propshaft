@@ -9,6 +9,14 @@ class Propshaft::Compiler::CssAssetUrls < Propshaft::Compiler
     input.gsub(ASSET_URL_PATTERN) { asset_url resolve_path(logical_path.dirname, $1), logical_path, $2, $1 }
   end
 
+  def find_dependencies(logical_path, input)
+    Set.new.tap do |deps|
+      input.scan(ASSET_URL_PATTERN).each do |fn, _|
+        deps << resolve_path(logical_path.dirname, fn)
+      end
+    end
+  end
+
   private
     def resolve_path(directory, filename)
       if filename.start_with?("../")

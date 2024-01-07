@@ -30,4 +30,14 @@ class Propshaft::Compilers
       asset.content
     end
   end
+
+  def find_dependencies(asset)
+    Set.new.tap do |deps|
+      if relevant_registrations = registrations[asset.content_type.to_s]
+        relevant_registrations.each do |compiler|
+          deps.merge compiler.new(assembly).find_dependencies(asset.logical_path, asset.content)
+        end
+      end
+    end
+  end
 end

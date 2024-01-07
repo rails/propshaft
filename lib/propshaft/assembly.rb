@@ -6,6 +6,7 @@ require "propshaft/processor"
 require "propshaft/compilers"
 require "propshaft/compiler/css_asset_urls"
 require "propshaft/compiler/source_mapping_urls"
+require "propshaft/dependency_tree"
 
 class Propshaft::Assembly
   attr_reader :config
@@ -15,7 +16,7 @@ class Propshaft::Assembly
   end
 
   def load_path
-    @load_path ||= Propshaft::LoadPath.new(config.paths, version: config.version)
+    @load_path ||= Propshaft::LoadPath.new(config.paths, version: config.version, dependency_tree: dependency_tree)
   end
 
   def resolver
@@ -24,6 +25,10 @@ class Propshaft::Assembly
     else
       Propshaft::Resolver::Dynamic.new load_path: load_path, prefix: config.prefix
     end
+  end
+
+  def dependency_tree
+    Propshaft::DependencyTree.new(compilers: compilers)
   end
 
   def server
