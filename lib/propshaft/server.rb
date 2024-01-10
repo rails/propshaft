@@ -1,4 +1,5 @@
 require "rack/utils"
+require "rack/version"
 
 class Propshaft::Server
   def initialize(assembly)

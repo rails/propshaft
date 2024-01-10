@@ -21,14 +21,14 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
       get "/#{asset.digested_path}"
 
       assert_equal 200, last_response.status
-      assert_equal "94", last_response.headers['content-length']
+      assert_equal "62", last_response.headers['content-length']
       assert_equal "text/css", last_response.headers['content-type']
       assert_equal "Accept-Encoding", last_response.headers['vary']
       assert_equal asset.digest, last_response.headers['etag']
-      assert_equal "/", last_response.headers['service-worker-allowed']
       assert_equal "public, max-age=31536000, immutable", last_response.headers['cache-control']
-      assert_equal ".hero { background: url(\"/foobar/source/file-3e6a129785ee3caf8eff23db339997e85334bfa9.jpg\") }\n",
-                  last_response.body
+      assert_equal "/", last_response.headers['service-worker-allowed']
+      assert_equal ".hero { background: url(\"/foobar/source/file-3e6a1297.jpg\") }\n",
+                   last_response.body
     end
   end
 
@@ -38,12 +38,12 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
 
     assert_equal 200, last_response.status
     assert_nil last_response.headers['service-worker-allowed']
-    assert_equal ".hero { background: url(\"/foobar/source/file-3e6a129785ee3caf8eff23db339997e85334bfa9.jpg\") }\n",
-                last_response.body
+    assert_equal ".hero { background: url(\"/foobar/source/file-3e6a1297.jpg\") }\n",
+                 last_response.body
   end
 
   test "serve a predigested file" do
-    asset = @assembly.load_path.find("file-already-abcdefVWXYZ0123456789.digested.css")
+    asset = @assembly.load_path.find("file-already-abcdefVWXYZ0123456789_-.digested.css")
     get "/#{asset.digested_path}"
     assert_equal 200, last_response.status
   end

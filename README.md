@@ -29,7 +29,7 @@ If you need to put multiple files that refer to each other through Propshaft, li
 
 ## Improving performance in development
 
-Before every request Propshaft checks if any asset was updated to decide if a cache sweep is needed. This verification is done using the application's configured file watcher which, by default, is `ActiveSupport::FileUpdateChecker`.
+Before every request Propshaft checks if any asset was updated to decide if a cache sweep is needed. This verification is done using the application's configured file watcher which, by default, is `ActiveSupport::FileUpdateChecker`. 
 
 If you have a lot of assets in your project, you can improve performance by adding the `listen` gem to the development group in your Gemfile, and this line to the `development.rb` environment file:
 
@@ -52,7 +52,7 @@ But for greenfield apps using the default import-map approach, Propshaft can als
 
 ## Will Propshaft replace Sprockets as the Rails default?
 
-Most likely, but Sprockets need to be supported as well for a long time to come. Plenty of apps and gems were built on Sprocket features, and they won't be migrating soon. Still working out the compatibility story. This is very much beta software at the moment.
+Most likely, but Sprockets needs to be supported as well for a long time to come. Plenty of apps and gems were built on Sprocket features, and they won't be migrating soon. Still working out the compatibility story. This is very much beta software at the moment.
 
 
 ## License

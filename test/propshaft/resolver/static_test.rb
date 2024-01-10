@@ -12,7 +12,7 @@ class Propshaft::Resolver::StaticTest < ActiveSupport::TestCase
 
   test "resolving present asset returns uri path" do
     assert_equal \
-      "/assets/one-f2e1ec14d6856e1958083094170ca6119c529a73.txt",
+      "/assets/one-f2e1ec14.txt",
       @resolver.resolve("one.txt")
   end
 
