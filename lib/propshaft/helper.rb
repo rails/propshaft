@@ -5,9 +5,9 @@ module Propshaft
     end
 
     # Add an option to call `stylesheet_link_tag` with `:all` to include every css file found on the load path.
-    def stylesheet_link_tag(*sources)
+    def stylesheet_link_tag(*sources, **options)
       if sources.first == :all
-        super *all_stylesheets_paths
+        super *all_stylesheets_paths, **options
       else
         super
       end

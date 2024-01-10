@@ -6,8 +6,8 @@ class PropshaftIntegrationTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    assert_select 'link[href="/assets/hello_world-4137140a.css"]'
-    assert_select 'link[href="/assets/goodbye-b1dc9940.css"]'
+    assert_select 'link[href="/assets/hello_world-4137140a.css"][data-custom-attribute="true"]'
+    assert_select 'link[href="/assets/goodbye-b1dc9940.css"][data-custom-attribute="true"]'
 
     assert_select 'script[src="/assets/hello_world-888761f8.js"]'
   end
