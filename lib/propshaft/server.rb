@@ -19,7 +19,7 @@ class Propshaft::Server
         Rack::CACHE_CONTROL   => "public, max-age=31536000, immutable"
       }
 
-      headers.merge!("Service-Worker-Allowed" => Rails.configuration.assets.service_worker_scope) if Rails.configuration.assets.service_worker_scope
+      headers.merge!(Rails.configuration.assets.headers) if Rails.configuration.assets.headers
 
       [ 200, headers, [ compiled_content ] ]
     else

@@ -37,9 +37,13 @@ If you have a lot of assets in your project, you can improve performance by addi
 config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 ```
 
-## Service-Worker-Allowed Header
+## Custom Headers
 
-A **"Service-Worker-Allowed"** header can be added through the `Rails.configuration.assets.service_worker_scope` variable in your environment configuration file.
+Customs headers can be added through the `Rails.configuration.assets.headers` variable in your environment configuration file. Your headers will be merged with default headers, overriding existing headers.
+
+```ruby
+Rails.configuration.assets.headers = {"service-worker-allowed" => "/", "cache-control" => "public, max-age=604800, immutable"}
+```
 
 ## Migrating from Sprockets
 
