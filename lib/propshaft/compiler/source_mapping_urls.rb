@@ -11,6 +11,8 @@ class Propshaft::Compiler::SourceMappingUrls < Propshaft::Compiler
 
   private
     def asset_path(source_mapping_url, logical_path)
+      source_mapping_url.gsub!(/^(.+\/)?#{url_prefix}\//, "")
+
       if logical_path.dirname.to_s == "."
         source_mapping_url
       else

@@ -53,6 +53,18 @@ class Propshaft::Compiler::SourceMappingUrlsTest < ActiveSupport::TestCase
                  compile_asset(find_asset("sourceMappingURL-outside-comment.css", fixture_path: "mapped"))
   end
 
+  test "sourceMapURL is already prefixed with url_prefix" do
+    assert_match %r{//# sourceMappingURL=/assets/sourceMappingURL-already-prefixed.js-[a-z0-9]{40}\.map},
+                 compile_asset(find_asset("sourceMappingURL-already-prefixed.js", fixture_path: "mapped"))
+    assert_match %r{//# sourceMappingURL=/assets/nested/sourceMappingURL-already-prefixed-nested.js-[a-z0-9]{40}\.map},
+                 compile_asset(find_asset("nested/sourceMappingURL-already-prefixed-nested.js", fixture_path: "mapped"))
+  end
+
+  test "sourceMapURL is already prefixed with an incorrect url_prefix" do
+    refute_match %r{//# sourceMappingURL=thisisinvalidassets/sourceMappingURL-already-prefixed-invalid.js-[a-z0-9]{40}\.map},
+                 compile_asset(find_asset("sourceMappingURL-already-prefixed-invalid.js", fixture_path: "mapped"))
+  end
+
   test "relative url root" do
     @options.relative_url_root = "/url-root"
 
