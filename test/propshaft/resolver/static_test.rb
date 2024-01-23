@@ -17,7 +17,13 @@ class Propshaft::Resolver::StaticTest < ActiveSupport::TestCase
   end
 
   test "reading static asset" do
+    assert_equal "ASCII-8BIT", @resolver.read("one.txt").encoding.to_s
     assert_equal "One from first path", @resolver.read("one.txt")
+  end
+
+  test "reading static asset with encoding option" do
+    assert_equal "UTF-8", @resolver.read("one.txt", encoding: "UTF-8").encoding.to_s
+    assert_equal "One from first path", @resolver.read("one.txt", encoding: "UTF-8")
   end
 
   test "resolving missing asset returns nil" do

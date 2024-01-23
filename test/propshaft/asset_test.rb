@@ -4,7 +4,13 @@ require "propshaft/load_path"
 
 class Propshaft::AssetTest < ActiveSupport::TestCase
   test "content" do
+    assert_equal "ASCII-8BIT", find_asset("one.txt").content.encoding.to_s
     assert_equal "One from first path", find_asset("one.txt").content
+  end
+
+  test "content with encoding" do
+    assert_equal "UTF-8", find_asset("one.txt").content(encoding: "UTF-8").encoding.to_s
+    assert_equal "One from first path", find_asset("one.txt").content(encoding: "UTF-8")
   end
 
   test "content type" do
