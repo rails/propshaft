@@ -54,14 +54,14 @@ class Propshaft::Compiler::SourceMappingUrlsTest < ActiveSupport::TestCase
   end
 
   test "sourceMapURL is already prefixed with url_prefix" do
-    assert_match %r{//# sourceMappingURL=/assets/sourceMappingURL-already-prefixed.js-[a-z0-9]{40}\.map},
+    assert_match %r{//# sourceMappingURL=/assets/sourceMappingURL-already-prefixed.js-[a-z0-9]{8}\.map},
                  compile_asset(find_asset("sourceMappingURL-already-prefixed.js", fixture_path: "mapped"))
-    assert_match %r{//# sourceMappingURL=/assets/nested/sourceMappingURL-already-prefixed-nested.js-[a-z0-9]{40}\.map},
+    assert_match %r{//# sourceMappingURL=/assets/nested/sourceMappingURL-already-prefixed-nested.js-[a-z0-9]{8}\.map},
                  compile_asset(find_asset("nested/sourceMappingURL-already-prefixed-nested.js", fixture_path: "mapped"))
   end
 
   test "sourceMapURL is already prefixed with an incorrect url_prefix" do
-    refute_match %r{//# sourceMappingURL=thisisinvalidassets/sourceMappingURL-already-prefixed-invalid.js-[a-z0-9]{40}\.map},
+    refute_match %r{//# sourceMappingURL=thisisinvalidassets/sourceMappingURL-already-prefixed-invalid.js-[a-z0-9]{8}\.map},
                  compile_asset(find_asset("sourceMappingURL-already-prefixed-invalid.js", fixture_path: "mapped"))
   end
 
@@ -82,3 +82,6 @@ class Propshaft::Compiler::SourceMappingUrlsTest < ActiveSupport::TestCase
       assembly.compilers.compile(asset)
     end
 end
+
+# //# sourceMappingURL=/assets/sourceMappingURL-already-prefixed.js-[a-z0-9]{40}.map
+# //# sourceMappingURL=/assets/sourceMappingURL-already-prefixed.js-da39a3ee.map
