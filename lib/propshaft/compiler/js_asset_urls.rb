@@ -3,7 +3,7 @@
 require "propshaft/compiler"
 
 class Propshaft::Compiler::JsAssetUrls < Propshaft::Compiler
-  ASSET_URL_PATTERN = /((?:import|export)(?:\s*|.*from\s*))["']((?:\.\/|\.\.\/|\/).+\.js)["']/
+  ASSET_URL_PATTERN = /((?:import|export)(?:\s*|[^]*?from\s*))(?:["']((?:\.\/|\.\.\/|\/)[^"']+)["'])/
 
   def compile(logical_path, input)
     input.gsub(ASSET_URL_PATTERN) { asset_url resolve_path(logical_path.dirname, $2), logical_path, $2, $1 }
@@ -22,10 +22,10 @@ class Propshaft::Compiler::JsAssetUrls < Propshaft::Compiler
 
     def asset_url(resolved_path, logical_path, pattern, import)
       if asset = assembly.load_path.find(resolved_path)
-        %[#{import} "#{url_prefix}/#{asset.digested_path}"]
+        %[#{import} "#{url_prefix}/#{asset.digested_path} /* hello */"]
       else
         Propshaft.logger.warn "Unable to resolve '#{pattern}' for missing asset '#{resolved_path}' in #{logical_path}"
-        %[#{import} "#{pattern}"]
+        %[#{import} "#{pattern}" /* world */]
       end
     end
 end
