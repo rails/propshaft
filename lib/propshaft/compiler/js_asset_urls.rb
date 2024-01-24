@@ -22,10 +22,10 @@ class Propshaft::Compiler::JsAssetUrls < Propshaft::Compiler
 
     def asset_url(resolved_path, logical_path, pattern, import)
       if asset = assembly.load_path.find(resolved_path)
-        %[#{import} "#{url_prefix}/#{asset.digested_path} /* hello */"]
+        %[#{import} "#{url_prefix}/#{asset.digested_path}"]
       else
         Propshaft.logger.warn "Unable to resolve '#{pattern}' for missing asset '#{resolved_path}' in #{logical_path}"
-        %[#{import} "#{pattern}" /* world */]
+        %[#{import} "#{pattern}"]
       end
     end
 end
