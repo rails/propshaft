@@ -5,7 +5,7 @@ require "propshaft/server"
 require "propshaft/processor"
 require "propshaft/compilers"
 require "propshaft/compiler/css_asset_urls"
-require "propshaft/compiler/js_asset_urls"
+require "propshaft/compiler/js_import_urls"
 require "propshaft/compiler/source_mapping_urls"
 
 class Propshaft::Assembly
