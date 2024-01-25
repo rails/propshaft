@@ -13,116 +13,119 @@ class Propshaft::Compiler::JsImportUrlsTest < ActiveSupport::TestCase
     }
   end
 
-  test "basic" do
-    compiled = compile_asset_with_content(%({ background: url(file.jpg); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
+  test "basic relative imports and exports to file in same folder" do
+    compiled = compile_asset_with_content(%(import "./file.js"))
+    assert_match(/import "\/assets\/foobar\/source\/file-[a-z0-9]{8}.js"/, compiled)
+    compiled = compile_asset_with_content(%(import * from "./file.js"))
+    assert_match(/import \* from "\/assets\/foobar\/source\/file-[a-z0-9]{8}.js"/, compiled)
+    compiled = compile_asset_with_content(%(export * from "./file.js"))
+    assert_match(/export \* from "\/assets\/foobar\/source\/file-[a-z0-9]{8}.js"/, compiled)
   end
 
-  test "blank spaces around name" do
-    compiled = compile_asset_with_content(%({ background: url( file.jpg ); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
+  test "basic relative imports and exports to file with single quotes" do
+    compiled = compile_asset_with_content(%(import './file.js'))
+    assert_match(/import '\/assets\/foobar\/source\/file-[a-z0-9]{8}.js'/, compiled)
+    compiled = compile_asset_with_content(%(import * from './file.js'))
+    assert_match(/import \* from '\/assets\/foobar\/source\/file-[a-z0-9]{8}.js'/, compiled)
+    compiled = compile_asset_with_content(%(export * from './file.js'))
+    assert_match(/export \* from '\/assets\/foobar\/source\/file-[a-z0-9]{8}.js'/, compiled)
   end
 
-  test "quotes around name" do
-    compiled = compile_asset_with_content(%({ background: url("file.jpg"); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
+  test "multiline imports and exports to file in same folder" do
+    compiled = compile_asset_with_content("import {\na as b\n} from \"./file.js\"")
+    assert_match(/import {\na as b\n} from "\/assets\/foobar\/source\/file-[a-z0-9]{8}.js"/m, compiled)
+    compiled = compile_asset_with_content("export {\na as b\n} from \"./file.js\"")
+    assert_match(/export {\na as b\n} from "\/assets\/foobar\/source\/file-[a-z0-9]{8}.js"/m, compiled)
   end
 
-  test "single quotes around name" do
-    compiled = compile_asset_with_content(%({ background: url('file.jpg'); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
+  test "imports and exports with excess space to file in same folder" do
+    compiled = compile_asset_with_content(%(import    "./file.js"))
+    assert_match(/import    "\/assets\/foobar\/source\/file-[a-z0-9]{8}.js"/, compiled)
+    compiled = compile_asset_with_content(%(import  *   from    "./file.js"))
+    assert_match(/import  \*   from    "\/assets\/foobar\/source\/file-[a-z0-9]{8}.js"/, compiled)
+    compiled = compile_asset_with_content(%(export    *  from     "./file.js"))
+    assert_match(/export    \*  from     "\/assets\/foobar\/source\/file-[a-z0-9]{8}.js"/, compiled)
   end
 
-  test "root directory" do
-    compiled = compile_asset_with_content(%({ background: url('/file.jpg'); }))
-    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
+  test "basic relative imports and exports to file in same parent" do
+    compiled = compile_asset_with_content(%(import "../file.js"))
+    assert_match(/import "\/assets\/foobar\/file-[a-z0-9]{8}.js"/, compiled)
+    compiled = compile_asset_with_content(%(import * from "../file.js"))
+    assert_match(/import \* from "\/assets\/foobar\/file-[a-z0-9]{8}.js"/, compiled)
+    compiled = compile_asset_with_content(%(export * from "../file.js"))
+    assert_match(/export \* from "\/assets\/foobar\/file-[a-z0-9]{8}.js"/, compiled)
   end
 
-  test "same directory" do
-    compiled = compile_asset_with_content(%({ background: url('./file.jpg'); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
+  test "multiline imports and exports to file in same parent" do
+    compiled = compile_asset_with_content("import {\na as b\n} from \"../file.js\"")
+    assert_match(/import {\na as b\n} from "\/assets\/foobar\/file-[a-z0-9]{8}.js"/m, compiled)
+    compiled = compile_asset_with_content("export {\na as b\n} from \"../file.js\"")
+    assert_match(/export {\na as b\n} from "\/assets\/foobar\/file-[a-z0-9]{8}.js"/m, compiled)
   end
 
-  test "subdirectory" do
-    compiled = compile_asset_with_content(%({ background: url('./images/file.jpg'); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/source\/images\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
+  test "imports and exports with excess space to file in same parent" do
+    compiled = compile_asset_with_content(%(import    "../file.js"))
+    assert_match(/import    "\/assets\/foobar\/file-[a-z0-9]{8}.js"/, compiled)
+    compiled = compile_asset_with_content(%(import  *   from    "../file.js"))
+    assert_match(/import  \*   from    "\/assets\/foobar\/file-[a-z0-9]{8}.js"/, compiled)
+    compiled = compile_asset_with_content(%(export    *  from     "../file.js"))
+    assert_match(/export    \*  from     "\/assets\/foobar\/file-[a-z0-9]{8}.js"/, compiled)
   end
 
-  test "parent directory" do
-    compiled = compile_asset_with_content(%({ background: url('../file.jpg'); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
+  test "basic relative imports and exports to file in the root" do
+    compiled = compile_asset_with_content(%(import "/file.js"))
+    assert_match(/import "\/assets\/file-[a-z0-9]{8}.js"/, compiled)
+    compiled = compile_asset_with_content(%(import * from "/file.js"))
+    assert_match(/import \* from "\/assets\/file-[a-z0-9]{8}.js"/, compiled)
+    compiled = compile_asset_with_content(%(export * from "/file.js"))
+    assert_match(/export \* from "\/assets\/file-[a-z0-9]{8}.js"/, compiled)
   end
 
-  test "grandparent directory" do
-    compiled = compile_asset_with_content(%({ background: url('../../file.jpg'); }))
-    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
+  test "multiline imports and exports to file in the root" do
+    compiled = compile_asset_with_content("import {\na as b\n} from \"/file.js\"")
+    assert_match(/import {\na as b\n} from "\/assets\/file-[a-z0-9]{8}.js"/m, compiled)
+    compiled = compile_asset_with_content("export {\na as b\n} from \"/file.js\"")
+    assert_match(/export {\na as b\n} from "\/assets\/file-[a-z0-9]{8}.js"/m, compiled)
   end
 
-  test "sibling directory" do
-    compiled = compile_asset_with_content(%({ background: url('../sibling/file.jpg'); }))
-    assert_match(/{ background: url\("\/assets\/foobar\/sibling\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
+  test "imports and exports with excess space to file in the root" do
+    compiled = compile_asset_with_content(%(import    "/file.js"))
+    assert_match(/import    "\/assets\/file-[a-z0-9]{8}.js"/, compiled)
+    compiled = compile_asset_with_content(%(import  *   from    "/file.js"))
+    assert_match(/import  \*   from    "\/assets\/file-[a-z0-9]{8}.js"/, compiled)
+    compiled = compile_asset_with_content(%(export    *  from     "/file.js"))
+    assert_match(/export    \*  from     "\/assets\/file-[a-z0-9]{8}.js"/, compiled)
   end
 
-  test "mixed" do
-    compiled = compile_asset_with_content(%({ mask-image: image(url(file.jpg), skyblue, linear-gradient(rgba(0, 0, 0, 1.0), transparent)); }))
-    assert_match(/{ mask-image: image\(url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\), skyblue, linear-gradient\(rgba\(0, 0, 0, 1.0\), transparent\)\); }/, compiled)
+  test "basic relative dynamic imports to file in same folder" do
+    compiled = compile_asset_with_content(%(import("./file.js").then()))
+    assert_match(/import\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.js"\).then\(\)/, compiled)
   end
 
-  test "multiple" do
-    compiled = compile_asset_with_content(%({ content: url(file.svg) url(file.svg); }))
-    assert_match(/{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.svg"\) url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.svg"\); }/, compiled)
+  test "basic relative dynamic imports to file with single quotes" do
+    compiled = compile_asset_with_content(%(import('./file.js')))
+    assert_match(/import\('\/assets\/foobar\/source\/file-[a-z0-9]{8}.js'\)/, compiled)
   end
 
-  test "url" do
-    compiled = compile_asset_with_content(%({ background: url('https://rubyonrails.org/images/rails-logo.svg'); }))
-    assert_match "{ background: url('https://rubyonrails.org/images/rails-logo.svg'); }", compiled
-  end
-
-  test "relative protocol url" do
-    compiled = compile_asset_with_content(%({ background: url('//rubyonrails.org/images/rails-logo.svg'); }))
-    assert_match "{ background: url('//rubyonrails.org/images/rails-logo.svg'); }", compiled
-  end
-
-  test "data" do
-    compiled = compile_asset_with_content(%({ background: url(data:image/png;base64,iRxVB0); }))
-    assert_match "{ background: url(data:image/png;base64,iRxVB0); }", compiled
-  end
-
-  test "anchor" do
-    compiled = compile_asset_with_content(%({ background: url(#IDofSVGpath); }))
-    assert_match "{ background: url(#IDofSVGpath); }", compiled
-  end
-
-  test "fingerprint" do
-    compiled = compile_asset_with_content(%({ background: url('/file.jpg?30af91bf14e37666a085fb8a161ff36d'); }))
-    assert_match(/{ background: url\("\/assets\/file-[a-z0-9]{8}.jpg\?30af91bf14e37666a085fb8a161ff36d"\); }/, compiled)
-  end
-
-  test "svg anchor" do
-    compiled = compile_asset_with_content(%({ content: url(file.svg#rails); }))
-    assert_match(/{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.svg#rails"\); }/, compiled)
-  end
-
-  test "svg mask encoded anchor" do
-    compiled = compile_asset_with_content(%({ background: url("data:image/svg+xml;charset=utf-8,%3Csvg mask='url(%23MyMask)'%3E%3C/svg%3E"); }))
-    assert_match "{ background: url(\"data:image/svg+xml;charset=utf-8,%3Csvg mask='url(%23MyMask)'%3E%3C/svg%3E\"); }", compiled
-  end
-
-  test "non greedy anchors" do
-    compiled = compile_asset_with_content(%({ content: url(file.svg#demo) url(file.svg#demo); }))
-    assert_match(/{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.svg#demo"\) url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.svg#demo"\); }/, compiled)
+  test "dynamic imports with excess space to file in same folder" do
+    compiled = compile_asset_with_content(%(import  \(  "./file.js"    \) ))
+    assert_match(/import  \(  "\/assets\/foobar\/source\/file-[a-z0-9]{8}.js"    \)/, compiled)
   end
 
   test "missing asset" do
-    compiled = compile_asset_with_content(%({ background: url("file-not-found.jpg"); }))
-    assert_match(/{ background: url\("file-not-found.jpg"\); }/, compiled)
+    compiled = compile_asset_with_content(%(import "./nothere.js"))
+    assert_match(/import "\.\/nothere.js"/, compiled)
+    compiled = compile_asset_with_content(%(import * from "./nothere.js"))
+    assert_match(/import \* from "\.\/nothere.js"/, compiled)
+    compiled = compile_asset_with_content(%(export * from "./nothere.js"))
+    assert_match(/export \* from "\.\/nothere.js"/, compiled)
+    compiled = compile_asset_with_content(%(import("./nothere.js").then()))
+    assert_match(/import\("\.\/nothere.js"\).then\(\)/, compiled)
   end
 
-  test "relative url root" do
-    @options.relative_url_root = "/url-root"
-
-    compiled = compile_asset_with_content(%({ background: url(file.jpg); }))
-    assert_match(/{ background: url\("\/url-root\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
+  test "relative protocol url" do
+    compiled = compile_asset_with_content(%(import "//rubyonrails.org/assets/main.js"))
+    assert_match(/import "\/\/rubyonrails\.org\/assets\/main\.js"/, compiled)
   end
 
   private
