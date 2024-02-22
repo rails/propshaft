@@ -29,6 +29,23 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
                  last_response.body
   end
 
+  test "serve a compiled file with custom headers" do
+    Rails.configuration.assets.stub :headers, {"service-worker-allowed" => "/", "cache-control" => "public, max-age=604800, immutable"} do
+      asset = @assembly.load_path.find("foobar/source/test.css")
+      get "/#{asset.digested_path}"
+
+      assert_equal 200, last_response.status
+      assert_equal "62", last_response.headers['content-length']
+      assert_equal "text/css", last_response.headers['content-type']
+      assert_equal "Accept-Encoding", last_response.headers['vary']
+      assert_equal asset.digest, last_response.headers['etag']
+      assert_equal "/", last_response.headers['service-worker-allowed']
+      assert_equal "public, max-age=604800, immutable", last_response.headers['cache-control']
+      assert_equal ".hero { background: url(\"/foobar/source/file-3e6a1297.jpg\") }\n",
+                   last_response.body
+    end
+  end
+
   test "serve a predigested file" do
     asset = @assembly.load_path.find("file-already-abcdefVWXYZ0123456789_-.digested.css")
     get "/#{asset.digested_path}"
