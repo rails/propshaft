@@ -12,9 +12,9 @@ module Propshaft::Resolver
       end
     end
 
-    def read(logical_path)
+    def read(logical_path, encoding: "ASCII-8BIT")
       if asset_path = parsed_manifest[logical_path]
-        manifest_path.dirname.join(asset_path).read
+        File.read(manifest_path.dirname.join(asset_path), encoding: encoding)
       end
     end
 
