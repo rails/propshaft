@@ -15,7 +15,7 @@ module Propshaft
       [ "text/css", Propshaft::Compiler::SourceMappingUrls ],
       [ "text/javascript", Propshaft::Compiler::SourceMappingUrls ]
     ]
-    config.assets.sweep_cache = Rails.env.development?
+    config.assets.sweep_cache = Rails.env.development? || Rails.env.test?
     config.assets.server = Rails.env.development? || Rails.env.test?
     config.assets.relative_url_root = nil
 
