@@ -3,9 +3,10 @@ require "propshaft/asset"
 class Propshaft::LoadPath
   attr_reader :paths, :version
 
-  def initialize(paths = [], version: nil)
-    @paths   = dedup(paths)
-    @version = version
+  def initialize(paths = [], version: nil, dependency_tree: nil)
+    @paths           = dedup(paths)
+    @version         = version
+    @dependency_tree = dependency_tree
   end
 
   def find(asset_name)
@@ -42,6 +43,11 @@ class Propshaft::LoadPath
     end
   end
 
+  # needed for testing
+  def clear_cache
+    @cached_assets_by_path = nil
+  end
+
   private
     def assets_by_path
       @cached_assets_by_path ||= Hash.new.tap do |mapped|
@@ -51,6 +57,7 @@ class Propshaft::LoadPath
             mapped[logical_path.to_s] ||= Propshaft::Asset.new(file, logical_path: logical_path, version: version)
           end if path.exist?
         end
+        @dependency_tree&.traverse(mapped)
       end
     end
 
@@ -60,10 +67,6 @@ class Propshaft::LoadPath
 
     def without_dotfiles(files)
       files.reject { |file| file.basename.to_s.starts_with?(".") }
-    end
-
-    def clear_cache
-      @cached_assets_by_path = nil
     end
 
     def dedup(paths)
