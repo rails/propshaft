@@ -1,5 +1,7 @@
 # Configure Rails Environment
 ENV["RAILS_ENV"] = "test"
+Warning[:deprecated] = true
+$VERBOSE = true
 
 require_relative "../test/dummy/config/environment"
 require "rails/test_help"
