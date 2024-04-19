@@ -6,7 +6,7 @@ class Propshaft::DependencyTree
 
   # a single pass through the dependent assets, calculating all the dependency
   # fingerprints we can.
-  def dependency_fingerprint_pass(mapped, dependent_assets)
+  def dependency_fingerprint_pass(dependent_assets)
     dependent_assets.each do |asset|
       # the fingerprint can be calculated unless a dependency of this asset
       # is not ready yet.
@@ -26,11 +26,11 @@ class Propshaft::DependencyTree
   # digests, we are done.  But if we notice that we aren't making any progress on
   # an iteration, it means there is an asset dependency cycle.  In that case we
   # bail out and warn.
-  def set_dependency_fingerprints(mapped, dependent_assets)
+  def set_dependency_fingerprints(dependent_assets)
     # There will be N iterations where N is the depth of the longest dependency chain.
     loop do
       initial_count = dependent_assets.size
-      dependency_fingerprint_pass(mapped, dependent_assets)
+      dependency_fingerprint_pass(dependent_assets)
       break if dependent_assets.empty?    # success, all done
       if dependent_assets.size == initial_count
         # failing to make progress
@@ -56,6 +56,6 @@ class Propshaft::DependencyTree
       # create dependency-aware digests. Keep a list of such assets to visit.
       dependent_assets << asset if asset.dependencies.any?
     end
-    set_dependency_fingerprints(mapped, dependent_assets)
+    set_dependency_fingerprints(dependent_assets)
   end
 end
