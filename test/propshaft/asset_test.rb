@@ -41,7 +41,7 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
     assert_equal "file-not.digested-e206c34f.css",
       find_asset("file-not.digested.css").digested_path.to_s
 
-    assert_equal "file-is-a-sourcemap-da39a3ee5e6b4b0d3255bfef95601890afd80709.js.map",
+    assert_equal "file-is-a-sourcemap-da39a3ee.js.map",
       find_asset("file-is-a-sourcemap.js.map").digested_path.to_s
   end
 
