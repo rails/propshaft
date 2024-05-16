@@ -31,5 +31,6 @@ module Dummy
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.assets.paths << File.join(Rails.root, "vendor", "stylesheets")
   end
 end

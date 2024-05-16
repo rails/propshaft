@@ -8,8 +8,18 @@ class PropshaftIntegrationTest < ActionDispatch::IntegrationTest
 
     assert_select 'link[href="/assets/hello_world-4137140a.css"][data-custom-attribute="true"]'
     assert_select 'link[href="/assets/goodbye-b1dc9940.css"][data-custom-attribute="true"]'
+    assert_select 'link[href="/assets/library-356a192b.css"][data-custom-attribute="true"]'
 
     assert_select 'script[src="/assets/hello_world-888761f8.js"]'
+  end
+
+  test "using stylesheet_link_tag :app option should only resolve assets contained in app/assets/stylesheets" do
+    get sample_load_real_assets_url(stylesheets: :app)
+
+    assert_response :success
+    assert_select 'link[href="/assets/hello_world-4137140a.css"][data-custom-attribute="true"]'
+    assert_select 'link[href="/assets/goodbye-b1dc9940.css"][data-custom-attribute="true"]'
+    assert_select 'link[href="/assets/library-356a192b.css"][data-custom-attribute="true"]', 0
   end
 
   test "should raise an exception when resolving nonexistent assets" do

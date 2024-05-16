@@ -7,6 +7,11 @@ class Propshaft::LoadPath
     @paths, @compilers, @version = dedup(paths), compilers, version
   end
 
+  def paths=(paths)
+    @paths = dedup(paths)
+    clear_cache
+  end
+
   def find(asset_name)
     assets_by_path[asset_name]
   end

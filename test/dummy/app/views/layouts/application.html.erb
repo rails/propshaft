@@ -5,7 +5,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag :all, data: { custom_attribute: true } %>
+    <%= stylesheet_link_tag(app_stylesheets? ? :app : :all, data: { custom_attribute: true }) %>
   </head>
 
   <body>
