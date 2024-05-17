@@ -41,11 +41,11 @@ class Propshaft::Asset
   end
 
   private
-    def already_digested?
-      logical_path.to_s =~ /-([0-9a-zA-Z_-]{7,128})\.digested/
+    def content_with_compile_dependencies
+      content + load_path.find_references_by(self).collect(&:content).join
     end
 
-    def content_with_compile_dependencies
-      content + load_path.find_compiler_dependencies_to(self).collect(&:content).join
+    def already_digested?
+      logical_path.to_s =~ /-([0-9a-zA-Z_-]{7,128})\.digested/
     end
 end
