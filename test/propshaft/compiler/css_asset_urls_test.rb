@@ -130,10 +130,11 @@ class Propshaft::Compiler::CssAssetUrlsTest < ActiveSupport::TestCase
       root_path    = Pathname.new("#{__dir__}/../../fixtures/assets/vendor")
       logical_path = "foobar/source/test.css"
 
-      asset     = Propshaft::Asset.new(root_path.join(logical_path), logical_path: logical_path)
+      assembly = Propshaft::Assembly.new(@options)
+      assembly.compilers.register "text/css", Propshaft::Compiler::CssAssetUrls
+
+      asset     = Propshaft::Asset.new(root_path.join(logical_path), logical_path: logical_path, load_path: assembly.load_path)
       asset.stub :content, content do
-        assembly = Propshaft::Assembly.new(@options)
-        assembly.compilers.register "text/css", Propshaft::Compiler::CssAssetUrls
         assembly.compilers.compile(asset)
       end
     end

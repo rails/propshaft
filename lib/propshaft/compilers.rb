@@ -23,11 +23,21 @@ class Propshaft::Compilers
     if relevant_registrations = registrations[asset.content_type.to_s]
       asset.content.dup.tap do |input|
         relevant_registrations.each do |compiler|
-          input.replace compiler.new(assembly).compile(asset.logical_path, input)
+          input.replace compiler.new(assembly).compile(asset)
         end
       end
     else
       asset.content
+    end
+  end
+
+  def find_dependencies(asset)
+    Set.new.tap do |dependencies|
+      if relevant_registrations = registrations[asset.content_type.to_s]
+        relevant_registrations.each do |compiler|
+          dependencies.merge compiler.new(assembly).find_dependencies(asset)
+        end
+      end
     end
   end
 end

@@ -9,8 +9,12 @@ class Propshaft::Compiler
   end
 
   # Override this in a specific compiler
-  def compile(logical_path, input)
+  def compile(asset)
     raise NotImplementedError
+  end
+
+  def find_dependencies(asset)
+    Set.new
   end
 
   private

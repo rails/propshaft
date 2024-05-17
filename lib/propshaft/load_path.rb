@@ -1,15 +1,18 @@
 require "propshaft/asset"
 
 class Propshaft::LoadPath
-  attr_reader :paths, :version
+  attr_reader :paths, :compilers, :version
 
-  def initialize(paths = [], version: nil)
-    @paths   = dedup(paths)
-    @version = version
+  def initialize(paths = [], compilers: nil, version: nil)
+    @paths, @compilers, @version = dedup(paths), compilers, version
   end
 
   def find(asset_name)
     assets_by_path[asset_name]
+  end
+
+  def find_compiler_dependencies_to(asset)
+    compilers&.find_dependencies(asset) || Set.new
   end
 
   def assets(content_types: nil)
@@ -48,7 +51,7 @@ class Propshaft::LoadPath
         paths.each do |path|
           without_dotfiles(all_files_from_tree(path)).each do |file|
             logical_path = file.relative_path_from(path)
-            mapped[logical_path.to_s] ||= Propshaft::Asset.new(file, logical_path: logical_path, version: version)
+            mapped[logical_path.to_s] ||= Propshaft::Asset.new(file, logical_path: logical_path, load_path: self)
           end if path.exist?
         end
       end

@@ -2,10 +2,10 @@ require "digest/sha1"
 require "action_dispatch/http/mime_type"
 
 class Propshaft::Asset
-  attr_reader :path, :logical_path, :version
+  attr_reader :path, :logical_path, :load_path
 
-  def initialize(path, logical_path:, version: nil)
-    @path, @logical_path, @version = path, Pathname.new(logical_path), version
+  def initialize(path, logical_path:, load_path:)
+    @path, @logical_path, @load_path = path, Pathname.new(logical_path), load_path
   end
 
   def content
@@ -21,7 +21,7 @@ class Propshaft::Asset
   end
 
   def digest
-    @digest ||= Digest::SHA1.hexdigest("#{content}#{version}").first(8)
+    @digest ||= Digest::SHA1.hexdigest("#{content_with_compile_dependencies}#{load_path.version}").first(8)
   end
 
   def digested_path
@@ -43,5 +43,9 @@ class Propshaft::Asset
   private
     def already_digested?
       logical_path.to_s =~ /-([0-9a-zA-Z_-]{7,128})\.digested/
+    end
+
+    def content_with_compile_dependencies
+      content + load_path.find_compiler_dependencies_to(self).collect(&:content).join
     end
 end

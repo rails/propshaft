@@ -5,8 +5,21 @@ require "propshaft/compiler"
 class Propshaft::Compiler::CssAssetUrls < Propshaft::Compiler
   ASSET_URL_PATTERN = /url\(\s*["']?(?!(?:\#|%23|data|http|\/\/))([^"'\s?#)]+)([#?][^"')]+)?\s*["']?\)/
 
-  def compile(logical_path, input)
-    input.gsub(ASSET_URL_PATTERN) { asset_url resolve_path(logical_path.dirname, $1), logical_path, $2, $1 }
+  def compile(asset)
+    asset.content.gsub(ASSET_URL_PATTERN) { asset_url resolve_path(asset.logical_path.dirname, $1), asset.logical_path, $2, $1 }
+  end
+
+  def find_dependencies(asset)
+    Set.new.tap do |dependencies|
+      asset.content.scan(ASSET_URL_PATTERN).each do |dependent_asset_url, _|
+        dependent_asset = assembly.load_path.find(resolve_path(asset.logical_path.dirname, dependent_asset_url))
+
+        if dependencies.exclude?(dependent_asset)
+          dependencies << dependent_asset
+          dependencies.merge(find_dependencies(dependent_asset))
+        end
+      end
+    end
   end
 
   private

@@ -64,7 +64,7 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
 
   private
     def output_asset(filename, content, created_at: Time.now)
-      asset = Propshaft::Asset.new(nil, logical_path: filename)
+      asset = Propshaft::Asset.new(nil, logical_path: filename, load_path: Propshaft::LoadPath.new)
       asset.stub :content, content do
         output_path = @output_path.path.join(asset.digested_path)
         `touch -mt #{created_at.strftime('%y%m%d%H%M')} #{output_path}`

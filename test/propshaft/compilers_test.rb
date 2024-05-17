@@ -20,6 +20,6 @@ class Propshaft::CompilersTest < ActiveSupport::TestCase
   private
     def find_asset(logical_path)
       root_path = Pathname.new("#{__dir__}/../fixtures/assets/first_path")
-      Propshaft::Asset.new(root_path.join(logical_path), logical_path: logical_path)
+      Propshaft::Asset.new(root_path.join(logical_path), logical_path: logical_path, load_path: Propshaft::LoadPath.new([ root_path ]))
     end
 end
