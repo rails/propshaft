@@ -11,7 +11,7 @@ class Propshaft::LoadPath
     assets_by_path[asset_name]
   end
 
-  def find_references_by(asset)
+  def find_referenced_by(asset)
     compilers.referenced_by(asset)
   end
 

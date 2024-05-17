@@ -42,7 +42,7 @@ class Propshaft::Asset
 
   private
     def content_with_compile_references
-      content + load_path.find_references_by(self).collect(&:content).join
+      content + load_path.find_referenced_by(self).collect(&:content).join
     end
 
     def already_digested?
