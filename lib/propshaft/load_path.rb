@@ -12,7 +12,7 @@ class Propshaft::LoadPath
   end
 
   def find_referenced_by(asset)
-    compilers.referenced_by(asset)
+    compilers.referenced_by(asset).delete(self)
   end
 
   def assets(content_types: nil)
