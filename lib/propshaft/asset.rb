@@ -21,7 +21,7 @@ class Propshaft::Asset
   end
 
   def digest
-    @digest ||= Digest::SHA1.hexdigest("#{content_with_compile_dependencies}#{load_path.version}").first(8)
+    @digest ||= Digest::SHA1.hexdigest("#{content_with_compile_references}#{load_path.version}").first(8)
   end
 
   def digested_path
@@ -41,7 +41,7 @@ class Propshaft::Asset
   end
 
   private
-    def content_with_compile_dependencies
+    def content_with_compile_references
       content + load_path.find_references_by(self).collect(&:content).join
     end
 
