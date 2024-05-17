@@ -31,11 +31,11 @@ class Propshaft::Compilers
     end
   end
 
-  def find_dependencies(asset)
-    Set.new.tap do |dependencies|
+  def referenced_by(asset)
+    Set.new.tap do |references|
       if relevant_registrations = registrations[asset.content_type.to_s]
         relevant_registrations.each do |compiler|
-          dependencies.merge compiler.new(assembly).find_dependencies(asset)
+          references.merge compiler.new(assembly).referenced_by(asset)
         end
       end
     end

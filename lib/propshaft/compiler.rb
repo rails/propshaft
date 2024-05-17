@@ -13,7 +13,7 @@ class Propshaft::Compiler
     raise NotImplementedError
   end
 
-  def find_dependencies(asset)
+  def referenced_by(asset)
     Set.new
   end
 

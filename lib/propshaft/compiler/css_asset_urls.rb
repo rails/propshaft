@@ -9,14 +9,14 @@ class Propshaft::Compiler::CssAssetUrls < Propshaft::Compiler
     asset.content.gsub(ASSET_URL_PATTERN) { asset_url resolve_path(asset.logical_path.dirname, $1), asset.logical_path, $2, $1 }
   end
 
-  def find_dependencies(asset)
-    Set.new.tap do |dependencies|
-      asset.content.scan(ASSET_URL_PATTERN).each do |dependent_asset_url, _|
-        dependent_asset = assembly.load_path.find(resolve_path(asset.logical_path.dirname, dependent_asset_url))
+  def referenced_by(asset)
+    Set.new.tap do |references|
+      asset.content.scan(ASSET_URL_PATTERN).each do |referenced_asset_url, _|
+        referenced_asset = assembly.load_path.find(resolve_path(asset.logical_path.dirname, referenced_asset_url))
 
-        if dependencies.exclude?(dependent_asset)
-          dependencies << dependent_asset
-          dependencies.merge(find_dependencies(dependent_asset))
+        if references.exclude?(referenced_asset)
+          references << referenced_asset
+          references.merge referenced_by(referenced_asset)
         end
       end
     end

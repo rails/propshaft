@@ -11,8 +11,8 @@ class Propshaft::LoadPath
     assets_by_path[asset_name]
   end
 
-  def find_compiler_dependencies_to(asset)
-    compilers&.find_dependencies(asset) || Set.new
+  def find_references_by(asset)
+    compilers&.referenced_by(asset) || Set.new
   end
 
   def assets(content_types: nil)
