@@ -5,8 +5,8 @@ require "propshaft/compiler"
 class Propshaft::Compiler::SourceMappingUrls < Propshaft::Compiler
   SOURCE_MAPPING_PATTERN = %r{(//|/\*)# sourceMappingURL=(.+\.map)(\s*?\*\/)?\s*?\Z}
 
-  def compile(asset)
-    asset.content.gsub(SOURCE_MAPPING_PATTERN) { source_mapping_url(asset.logical_path, asset_path($2, asset.logical_path), $1, $3) }
+  def compile(asset, input)
+    input.gsub(SOURCE_MAPPING_PATTERN) { source_mapping_url(asset.logical_path, asset_path($2, asset.logical_path), $1, $3) }
   end
 
   private

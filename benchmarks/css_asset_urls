@@ -25,5 +25,5 @@ compiler = Propshaft::Compiler::CssAssetUrls.new(assembly)
 
 Benchmark.ips do |x|
   x.config(time: 5, warmup: 2)
-  x.report("compile") { compiler.compile(asset.logical_path, asset.content) }
+  x.report("compile") { compiler.compile(asset, asset.content) }
 end
