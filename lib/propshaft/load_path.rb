@@ -12,7 +12,7 @@ class Propshaft::LoadPath
   end
 
   def find_references_by(asset)
-    compilers.referenced_by(asset) || Set.new
+    compilers.referenced_by(asset)
   end
 
   def assets(content_types: nil)
