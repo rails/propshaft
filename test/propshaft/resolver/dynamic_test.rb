@@ -3,7 +3,7 @@ require "propshaft/resolver/dynamic"
 
 class Propshaft::Resolver::DynamicTest < ActiveSupport::TestCase
   setup do
-    @load_path = Propshaft::LoadPath.new Pathname.new("#{__dir__}/../../fixtures/assets/first_path")
+    @load_path = Propshaft::LoadPath.new Pathname.new("#{__dir__}/../../fixtures/assets/first_path"), compilers: Propshaft::Compilers.new(nil)
     @resolver  = Propshaft::Resolver::Dynamic.new(load_path: @load_path, prefix: "/assets")
   end
 

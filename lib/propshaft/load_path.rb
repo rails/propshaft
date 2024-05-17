@@ -3,7 +3,7 @@ require "propshaft/asset"
 class Propshaft::LoadPath
   attr_reader :paths, :compilers, :version
 
-  def initialize(paths = [], compilers: nil, version: nil)
+  def initialize(paths = [], compilers:, version: nil)
     @paths, @compilers, @version = dedup(paths), compilers, version
   end
 
@@ -12,7 +12,7 @@ class Propshaft::LoadPath
   end
 
   def find_references_by(asset)
-    compilers&.referenced_by(asset) || Set.new
+    compilers.referenced_by(asset) || Set.new
   end
 
   def assets(content_types: nil)

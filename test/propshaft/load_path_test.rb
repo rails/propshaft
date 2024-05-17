@@ -6,7 +6,7 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
     @load_path = Propshaft::LoadPath.new [
       Pathname.new("#{__dir__}/../fixtures/assets/first_path"),
       Pathname.new("#{__dir__}/../fixtures/assets/second_path").to_s
-    ]
+    ], compilers: Propshaft::Compilers.new(nil)
   end
 
   test "find asset that only appears once in the paths" do
@@ -44,7 +44,7 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
   end
 
   test "manifest with version" do
-    @load_path = Propshaft::LoadPath.new(@load_path.paths, version: "1")
+    @load_path = Propshaft::LoadPath.new(@load_path.paths, version: "1", compilers: Propshaft::Compilers.new(nil))
     @load_path.manifest.tap do |manifest|
       assert_equal "one-c9373b68.txt", manifest["one.txt"]
       assert_equal "nested/three-a41a5d38.txt", manifest["nested/three.txt"]
@@ -52,7 +52,7 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
   end
 
   test "missing load path directory" do
-    assert_nil Propshaft::LoadPath.new(Pathname.new("#{__dir__}/../fixtures/assets/nowhere")).find("missing")
+    assert_nil Propshaft::LoadPath.new(Pathname.new("#{__dir__}/../fixtures/assets/nowhere"), compilers: Propshaft::Compilers.new(nil)).find("missing")
   end
 
   test "deduplicate paths" do
@@ -62,7 +62,7 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
       "app/assets/stylesheets",
       "app/assets/images",
       "app/assets"
-    ]
+    ], compilers: Propshaft::Compilers.new(nil)
 
     paths = load_path.paths
     assert_equal 2, paths.count
@@ -73,6 +73,7 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
   private
     def find_asset(logical_path)
       root_path = Pathname.new("#{__dir__}/../fixtures/assets/first_path")
-      Propshaft::Asset.new(root_path.join(logical_path), logical_path: logical_path, load_path: Propshaft::LoadPath.new([ root_path ]))
+      load_path = Propshaft::LoadPath.new([ root_path ], compilers: Propshaft::Compilers.new(nil))
+      Propshaft::Asset.new(root_path.join(logical_path), logical_path: logical_path, load_path: load_path)
     end
 end
