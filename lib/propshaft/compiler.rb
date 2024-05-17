@@ -3,6 +3,7 @@
 # Base compiler from which other compilers can inherit
 class Propshaft::Compiler
   attr_reader :assembly
+  delegate :config, :load_path, to: :assembly
 
   def initialize(assembly)
     @assembly = assembly
@@ -19,6 +20,6 @@ class Propshaft::Compiler
 
   private
     def url_prefix
-      @url_prefix ||= File.join(assembly.config.relative_url_root.to_s, assembly.config.prefix.to_s).chomp("/")
+      @url_prefix ||= File.join(config.relative_url_root.to_s, config.prefix.to_s).chomp("/")
     end
 end
