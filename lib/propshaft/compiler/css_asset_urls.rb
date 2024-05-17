@@ -14,7 +14,7 @@ class Propshaft::Compiler::CssAssetUrls < Propshaft::Compiler
       asset.content.scan(ASSET_URL_PATTERN).each do |referenced_asset_url, _|
         referenced_asset = load_path.find(resolve_path(asset.logical_path.dirname, referenced_asset_url))
 
-        if references.exclude?(referenced_asset)
+        unless references.include?(referenced_asset)
           references << referenced_asset
           references.merge referenced_by(referenced_asset)
         end
