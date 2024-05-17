@@ -10,7 +10,7 @@ class Propshaft::Compiler
   end
 
   # Override this in a specific compiler
-  def compile(asset)
+  def compile(asset, input)
     raise NotImplementedError
   end
 
