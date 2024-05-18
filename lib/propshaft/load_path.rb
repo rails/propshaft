@@ -38,9 +38,13 @@ class Propshaft::LoadPath
     @cache_sweeper ||= begin
       exts_to_watch  = Mime::EXTENSION_LOOKUP.map(&:first)
       files_to_watch = Array(paths).collect { |dir| [ dir.to_s, exts_to_watch ] }.to_h
+      mutex = Mutex.new
 
       Rails.application.config.file_watcher.new([], files_to_watch) do
-        clear_cache
+        mutex.synchronize do
+          clear_cache
+          seed_cache
+        end
       end
     end
   end
@@ -67,6 +71,10 @@ class Propshaft::LoadPath
 
     def clear_cache
       @cached_assets_by_path = nil
+    end
+
+    def seed_cache
+      assets_by_path
     end
 
     def dedup(paths)
