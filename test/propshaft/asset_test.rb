@@ -54,10 +54,51 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
     assert_equal asset.digest.object_id, asset.digest.object_id
   end
 
+  test "digest depends on first level of compiler dependency" do
+    open_asset_with_reset("dependent/b.css") do |asset_file|
+      digest_before_dependency_change = find_asset("dependent/a.css").digest
+
+      asset_file.write "changes!"
+      asset_file.flush
+
+      digest_after_dependency_change = find_asset("dependent/a.css").digest
+
+      assert_not_equal digest_before_dependency_change, digest_after_dependency_change
+    end
+  end
+
+  test "digest depends on second level of compiler dependency" do
+    open_asset_with_reset("dependent/c.css") do |asset_file|
+      digest_before_dependency_change = find_asset("dependent/a.css").digest
+
+      asset_file.write "changes!"
+      asset_file.flush
+
+      digest_after_dependency_change = find_asset("dependent/a.css").digest
+
+      assert_not_equal digest_before_dependency_change, digest_after_dependency_change
+    end
+  end
+
   private
     def find_asset(logical_path)
       root_path = Pathname.new("#{__dir__}/../fixtures/assets/first_path")
       path = root_path.join(logical_path)
-      Propshaft::Asset.new(path, logical_path: logical_path)
+
+      assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config|
+        config.paths = [ root_path ]
+        config.compilers = [[ "text/css", Propshaft::Compiler::CssAssetUrls ]]
+      })
+
+      Propshaft::Asset.new(path, logical_path: logical_path, load_path: assembly.load_path)
+    end
+
+    def open_asset_with_reset(logical_path)
+      dependency_path = Pathname.new("#{__dir__}/../fixtures/assets/first_path/#{logical_path}")
+      existing_dependency_content = File.read(dependency_path)
+
+      File.open(dependency_path, "a") { |f| yield f }
+    ensure
+      File.write(dependency_path, existing_dependency_content)
     end
 end
