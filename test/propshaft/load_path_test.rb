@@ -29,13 +29,6 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
     assert_not_includes @load_path.assets, find_asset(".stuff")
   end
 
-  test "assets by given content types" do
-    assert_not_includes @load_path.assets(content_types: [ Mime[:js] ]), find_asset("one.txt")
-    assert_includes @load_path.assets(content_types: [ Mime[:js] ]), find_asset("again.js")
-    assert_includes @load_path.assets(content_types: [ Mime[:js], Mime[:css] ]), find_asset("again.js")
-    assert_includes @load_path.assets(content_types: [ Mime[:js], Mime[:css] ]), find_asset("another.css")
-  end
-
   test "manifest" do
     @load_path.manifest.tap do |manifest|
       assert_equal "one-f2e1ec14.txt", manifest["one.txt"]
@@ -68,6 +61,18 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
     assert_equal 2, paths.count
     assert_equal Pathname.new("app/javascript"), paths.first
     assert_equal Pathname.new("app/assets"), paths.last
+  end
+
+  test "asset paths by type" do
+    assert_equal \
+      ["another.css", "dependent/a.css", "dependent/b.css", "dependent/c.css", "file-already-abcdefVWXYZ0123456789_-.digested.css", "file-already-abcdefVWXYZ0123456789_-.digested.debug.css", "file-not.digested.css"],
+      @load_path.asset_paths_by_type("css")
+  end
+
+  test "asset paths by glob" do
+    assert_equal \
+      ["dependent/a.css", "dependent/b.css", "dependent/c.css"],
+      @load_path.asset_paths_by_glob("**/dependent/*.css")
   end
 
   private
