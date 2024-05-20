@@ -23,7 +23,7 @@ module Propshaft
 
     # Returns a sorted and unique array of logical paths for all stylesheets in app/assets/**/*.css.
     def app_stylesheets_paths
-      Rails.application.assets.load_path.asset_paths_by_glob("**/app/assets/**/*.css")
+      Rails.application.assets.load_path.asset_paths_by_glob("#{Rails.root.join("app/assets")}/**/*.css")
     end
   end
 end
