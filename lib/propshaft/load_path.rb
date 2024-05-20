@@ -15,12 +15,18 @@ class Propshaft::LoadPath
     compilers.referenced_by(asset).delete(self)
   end
 
-  def assets(content_types: nil)
-    if content_types
-      assets_by_path.values.select { |asset| asset.content_type.in?(content_types) }
-    else
-      assets_by_path.values
-    end
+  def assets
+    assets_by_path.values
+  end
+
+  def asset_paths_by_type(content_type)
+    (@cached_asset_paths_by_type ||= Hash.new)[content_type] ||=
+      extract_logical_paths_from(assets.select { |a| a.content_type == Mime::EXTENSION_LOOKUP[content_type] })
+  end
+
+  def asset_paths_by_glob(glob)
+    (@cached_asset_paths_by_glob ||= Hash.new)[glob] ||=
+      extract_logical_paths_from(assets.select { |a| a.path.fnmatch?(glob) })
   end
 
   def manifest
@@ -61,12 +67,18 @@ class Propshaft::LoadPath
       path.children.flat_map { |child| child.directory? ? all_files_from_tree(child) : child }
     end
 
+    def extract_logical_paths_from(assets)
+      assets.collect { |asset| asset.logical_path.to_s }.sort
+    end
+
     def without_dotfiles(files)
       files.reject { |file| file.basename.to_s.starts_with?(".") }
     end
 
     def clear_cache
       @cached_assets_by_path = nil
+      @cached_asset_paths_by_type = nil
+      @cached_asset_paths_by_glob = nil
     end
 
     def dedup(paths)
