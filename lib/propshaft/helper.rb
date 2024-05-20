@@ -4,7 +4,8 @@ module Propshaft
       Rails.application.assets.resolver.resolve(path) || raise(MissingAssetError.new(path))
     end
 
-    # Add an option to call `stylesheet_link_tag` with `:all` to include every css file found on the load path.
+    # Add an option to call `stylesheet_link_tag` with `:all` to include every css file found on the load path
+    # or `:app` to include css files found in `Rails.root("app/assets/**/*.css")`, which will exclude lib/ and plugins.
     def stylesheet_link_tag(*sources, **options)
       case sources.first
       when :all
