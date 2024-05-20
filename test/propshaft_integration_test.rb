@@ -8,6 +8,7 @@ class PropshaftIntegrationTest < ActionDispatch::IntegrationTest
 
     assert_select 'link[href="/assets/hello_world-4137140a.css"][data-custom-attribute="true"]'
     assert_select 'link[href="/assets/goodbye-b1dc9940.css"][data-custom-attribute="true"]'
+    assert_select 'link[href="/assets/library-86a3b7a9.css"][data-custom-attribute="true"]'
 
     assert_select 'script[src="/assets/hello_world-888761f8.js"]'
   end
@@ -17,6 +18,7 @@ class PropshaftIntegrationTest < ActionDispatch::IntegrationTest
 
     assert_select 'link[href="/assets/hello_world-4137140a.css"][data-glob-attribute="true"]'
     assert_select 'link[href="/assets/goodbye-b1dc9940.css"][data-glob-attribute="true"]'
+    assert_select('link[href="/assets/library-86a3b7a9.css"][data-glob-attribute="true"]', count: 0)
   end
 
   test "should raise an exception when resolving nonexistent assets" do
