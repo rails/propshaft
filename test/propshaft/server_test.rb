@@ -35,6 +35,12 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
     assert_equal 200, last_response.status
   end
 
+  test "serve a sourcemap" do
+    asset = @assembly.load_path.find("file-is-a-sourcemap.js.map")
+    get "/#{asset.digested_path}"
+    assert_equal 200, last_response.status
+  end
+
   test "not found" do
     get "/not-found.js"
 
