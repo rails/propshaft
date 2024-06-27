@@ -1,12 +1,11 @@
 require "propshaft/output_path"
 
 class Propshaft::Processor
-  MANIFEST_FILENAME = ".manifest.json"
+  attr_reader :load_path, :output_path, :compilers, :manifest_path
 
-  attr_reader :load_path, :output_path, :compilers
-
-  def initialize(load_path:, output_path:, compilers:)
+  def initialize(load_path:, output_path:, compilers:, manifest_path:)
     @load_path, @output_path = load_path, output_path
+    @manifest_path = manifest_path
     @compilers = compilers
   end
 
@@ -31,7 +30,8 @@ class Propshaft::Processor
 
 
     def write_manifest
-      File.open(output_path.join(MANIFEST_FILENAME), "wb+") do |manifest|
+      FileUtils.mkdir_p(File.dirname(manifest_path))
+      File.open(manifest_path, "wb+") do |manifest|
         manifest.write load_path.manifest.to_json
       end
     end
