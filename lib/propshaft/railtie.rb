@@ -39,7 +39,7 @@ module Propshaft
 
       if config.assets.server
         app.routes.prepend do
-          mount app.assets.server => app.assets.config.prefix
+          mount app.assets.server, at: app.assets.config.prefix
         end
       end
 
