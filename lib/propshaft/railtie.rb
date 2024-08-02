@@ -34,6 +34,7 @@ module Propshaft
       config.assets.relative_url_root ||= app.config.relative_url_root
       config.assets.output_path ||=
         Pathname.new(File.join(app.config.paths["public"].first, app.config.assets.prefix))
+      config.assets.manifest_path ||= config.assets.output_path.join(".manifest.json")
 
       app.assets = Propshaft::Assembly.new(app.config.assets)
 

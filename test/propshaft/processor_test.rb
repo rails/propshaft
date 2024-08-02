@@ -42,9 +42,10 @@ class Propshaft::ProcessorTest < ActiveSupport::TestCase
   private
     def processed
       Dir.mktmpdir do |output_path|
+        output_path = Pathname.new(output_path)
         processor = Propshaft::Processor.new(
-          load_path: @assembly.load_path, output_path: Pathname.new(output_path),
-          compilers: @assembly.compilers
+          load_path: @assembly.load_path, output_path: output_path,
+          compilers: @assembly.compilers, manifest_path: output_path.join(".manifest.json")
         )
 
         processor.process
