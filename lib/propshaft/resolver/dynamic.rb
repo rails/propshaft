@@ -12,9 +12,9 @@ module Propshaft::Resolver
       end
     end
 
-    def read(logical_path)
+    def read(logical_path, options = {})
       if asset = load_path.find(logical_path)
-        asset.content
+        asset.content(**options)
       end
     end
   end
