@@ -94,7 +94,7 @@ Alternatively, you can change modules to use relative imports, for example:
 + import './channels'
 ```
 
-**Extracting Sass/SCSS from JavaScript**
+### Extracting Sass/SCSS from JavaScript
 
 In webpacker it is possible to extract Sass/SCSS from JavaScript by enabling `extract_css` in `webpacker.yml`. This allows for including those source files in JavaScript, e.g. `import '../scss/application.scss`
 
@@ -165,7 +165,7 @@ This is the command `yarn build` will use to bundle css files.
 
 Now that the CSS files will be placed into `app/assets/build`, Sprockets no longer needs to worry about the `app/assets/stylesheets` folder. If you have any other `link_tree` for css files, remove them too.
 
-**Configuring multiple entrypoints**
+### Configuring multiple entrypoints
 
 Sprockets will only compile files in the root directories listed in `manifest.js`, but the sass package that `yarn build` uses will also check subfolders, which might cause compilation errors if your scss files are using features like `@import` and variables. This means that if you have multiple entry points in your app, you have some extra work ahead of you. 
 
@@ -196,7 +196,7 @@ Then adjust the `build` attribute in `package.json`:
 "build:css": "sass ./app/assets/stylesheets/entrypoints:./app/assets/builds --no-source-map --load-path=node_modules"
 ```
 
-**Deprecation warnings**
+### Deprecation warnings
 
 Sass might raise deprecation warnings depending on what features you are using (such as division), but the messages will explain how to fix them. If you are not sure, see more details in the [official documentation](https://sass-lang.com/documentation/breaking-changes).
 
@@ -211,14 +211,14 @@ Start by following these steps:
 5. Replace all asset_helpers (`image_url`, `font_url`) in css files with standard `urls`.
 6. If you are importing only the frameworks you need (instead of `rails/all`), remove `require "sprockets/railtie"`;
 
-**Asset paths**
+### Asset paths
 
 Propshaft will automatically include in its search paths the folders `vendor/assets`, `lib/assets` and `app/assets` of your project and of all the gems in your Gemfile. You can see all included files by using the `reveal` rake task:
 ```
  rake assets:reveal
 ```
 
-**Asset helpers**
+### Asset helpers
 
 Propshaft does not rely on asset_helpers (`asset_path`, `asset_url`, `image_url`, etc.) like Sprockets did. Instead, it will search for every `url` function in your css files, and adjust them to include the digest of the assets they reference.
 
@@ -244,7 +244,7 @@ Using the same path with `url` in Propshaft will cause it to raise an error, say
 
 By adding a `/` at the start of the path we are telling Propshaft to consider this path as an absolute path. While this change in behavior increases the work a bit when upgrading, it makes **external libraries like FontAwesome and Bootstrap themes work out-of-the-box**.  
 
-**Asset content**
+### Asset content
 
 It's a common pattern in apps to inline small SVG files and low resolution versions of images that need to be displayed as quickly as possible. In Propshaft, the same line of code works for all environments: 
 ```ruby
@@ -257,7 +257,7 @@ Rails.application.assets.load_path.find('logo.svg').content.html_safe
 raw Rails.application.assets.load_path.find('logo.svg').content
 ```
 
-**Precompilation in development**
+### Precompilation in development
 
 Propshaft uses a dynamic assets resolver in development mode. However, when you run `assets:precompile` locally Propshaft will then switch to a static assets resolver. Therefore, changes to assets will not be observed anymore and you will have to precompile the assets each time changes are made. This is different to Sprockets.
 
