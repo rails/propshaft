@@ -53,7 +53,7 @@ class Propshaft::OutputPath
     end
 
     def extract_path_and_digest(digested_path)
-      digest = digested_path.to_s[/-([0-9a-f]{7,128})\.(?!digested)[^.]+\z/, 1]
+      digest = digested_path.to_s[/-([0-9a-f]{7,128})\.(?!digested)/, 1]
       path = digest ? digested_path.sub("-#{digest}", "") : digested_path
 
       [path, digest]

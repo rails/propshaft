@@ -8,7 +8,8 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
   setup do
     @manifest    = {
       ".manifest.json": ".manifest.json",
-      "one.txt": "one-f2e1ec14.txt"
+      "one.txt": "one-f2e1ec14.txt",
+      "one.txt.map": "one-f2e1ec15.txt.map"
     }.stringify_keys
     @output_path = Propshaft::OutputPath.new(Pathname.new("#{__dir__}/../fixtures/output"), @manifest)
   end
@@ -39,6 +40,19 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
   test "clean keeps the correct number of versions" do
     old     = output_asset("by_count.txt", "old", created_at: Time.now - 300)
     current = output_asset("by_count.txt", "current", created_at: Time.now - 180)
+
+    @output_path.clean(1, 0)
+
+    assert File.exist?(current)
+    assert_not File.exist?(old)
+  ensure
+    FileUtils.rm(old) if File.exist?(old)
+    FileUtils.rm(current) if File.exist?(current)
+  end
+
+  test "clean keeps the correct number of versions regardless of the file extension" do
+    old     = output_asset("by_count.txt.map", "old", created_at: Time.now - 300)
+    current = output_asset("by_count.txt.map", "current", created_at: Time.now - 180)
 
     @output_path.clean(1, 0)
 
