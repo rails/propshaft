@@ -26,7 +26,7 @@ class Propshaft::OutputPath
     Hash.new.tap do |files|
       all_files_from_tree(path).each do |file|
         digested_path = file.relative_path_from(path)
-        logical_path, digest = extract_path_and_digest(digested_path)
+        logical_path, digest = Propshaft::Asset.extract_path_and_digest(digested_path.to_s)
 
         files[digested_path.to_s] = {
           logical_path: logical_path.to_s,
@@ -42,7 +42,7 @@ class Propshaft::OutputPath
       modified_at = [ 0, Time.now - mtime ].max
       modified_at < expires_at || limit < count
     end
-  
+
     def remove(path)
       FileUtils.rm(@path.join(path))
       Propshaft.logger.info "Removed #{path}"
@@ -50,12 +50,5 @@ class Propshaft::OutputPath
 
     def all_files_from_tree(path)
       path.children.flat_map { |child| child.directory? ? all_files_from_tree(child) : child }
-    end
-
-    def extract_path_and_digest(digested_path)
-      digest = digested_path.to_s[/-([0-9a-f]{7,128})\.(?!digested)/, 1]
-      path = digest ? digested_path.sub("-#{digest}", "") : digested_path
-
-      [path, digest]
     end
 end
