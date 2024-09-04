@@ -17,8 +17,8 @@ class Propshaft::Asset
     @path, @logical_path, @load_path = path, Pathname.new(logical_path), load_path
   end
 
-  def content
-    File.binread(path)
+  def content(encoding: "ASCII-8BIT")
+    File.read(path, encoding: encoding)
   end
 
   def content_type
