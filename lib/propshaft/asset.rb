@@ -4,6 +4,15 @@ require "action_dispatch/http/mime_type"
 class Propshaft::Asset
   attr_reader :path, :logical_path, :load_path
 
+  class << self
+    def extract_path_and_digest(digested_path)
+      digest    = digested_path[/-([0-9a-zA-Z]{7,128})\.(?!digested)([^.]|.map)+\z/, 1]
+      path      = digest ? digested_path.sub("-#{digest}", "") : digested_path
+
+      [path, digest]
+    end
+  end
+
   def initialize(path, logical_path:, load_path:)
     @path, @logical_path, @load_path = path, Pathname.new(logical_path), load_path
   end

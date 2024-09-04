@@ -54,10 +54,13 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
     old     = output_asset("by_count.txt.map", "old", created_at: Time.now - 300)
     current = output_asset("by_count.txt.map", "current", created_at: Time.now - 180)
 
+    assert File.exist?(current)
+    assert File.exist?(old)
+
     @output_path.clean(1, 0)
 
     assert File.exist?(current)
-    assert_not File.exist?(old)
+    assert_not File.exist?(old), "#{old} should not exist"
   ensure
     FileUtils.rm(old) if File.exist?(old)
     FileUtils.rm(current) if File.exist?(current)
