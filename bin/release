@@ -14,6 +14,3 @@ git commit -m "Bump version for $VERSION"
 git push
 git tag v$VERSION
 git push --tags
-gem build propshaft.gemspec
-gem push "propshaft-$VERSION.gem" --host https://rubygems.org
-rm "propshaft-$VERSION.gem"
