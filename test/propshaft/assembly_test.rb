@@ -6,6 +6,7 @@ class Propshaft::AssemblyTest < ActiveSupport::TestCase
   test "uses static resolver when manifest is present" do
     assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config| 
       config.output_path = Pathname.new("#{__dir__}/../fixtures/output")
+      config.manifest_path = config.output_path.join(".manifest.json")
       config.prefix = "/assets"
     })
 
@@ -15,6 +16,7 @@ class Propshaft::AssemblyTest < ActiveSupport::TestCase
   test "uses dynamic resolver when manifest is missing" do
     assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config| 
       config.output_path = Pathname.new("#{__dir__}/../fixtures/assets")
+      config.manifest_path = config.output_path.join(".manifest.json")
       config.prefix = "/assets"
     })
 
@@ -24,6 +26,7 @@ class Propshaft::AssemblyTest < ActiveSupport::TestCase
   test "costly methods are memoized" do
     assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config|
       config.output_path = Pathname.new("#{__dir__}/../fixtures/assets")
+      config.manifest_path = config.output_path.join(".manifest.json")
       config.prefix = "/assets"
     })
 
