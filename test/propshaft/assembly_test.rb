@@ -33,4 +33,14 @@ class Propshaft::AssemblyTest < ActiveSupport::TestCase
     assert_equal assembly.resolver.object_id, assembly.resolver.object_id
     assert_equal assembly.load_path.object_id, assembly.load_path.object_id
   end
+
+  test "instantiates a valid processor" do
+    assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config|
+      config.output_path = Pathname.new("#{__dir__}/../fixtures/assets")
+      config.manifest_path = config.output_path.join(".manifest.json")
+      config.prefix = "/assets"
+    })
+
+    assert assembly.processor.is_a?(Propshaft::Processor)
+  end
 end
