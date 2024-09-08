@@ -32,7 +32,7 @@ class Propshaft::Assembly
 
   def processor
     Propshaft::Processor.new \
-      load_path: load_path, output_path: config.output_path, compilers: compilers, manifest_path: config.manifest_path.manifest_path
+      load_path: load_path, output_path: config.output_path, compilers: compilers, manifest_path: config.manifest_path
   end
 
   def compilers
