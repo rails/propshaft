@@ -12,7 +12,7 @@ So that's what Propshaft doesn't do. Here's what it does provide:
 
 ## Installation
 
-With Rails 7+, you can start a new application with propshaft using `rails new myapp -a propshaft`. For existing applications, check the [upgrade guide](https://github.com/rails/propshaft/blob/main/UPGRADING.md) which contains step-by-step instructions.
+With Rails 8, Propshaft is the default asset pipeline for new applications. With Rails 7, you can start a new application with propshaft using `rails new myapp -a propshaft`. For existing applications, check the [upgrade guide](https://github.com/rails/propshaft/blob/main/UPGRADING.md) which contains step-by-step instructions.
 
 ## Usage
 
@@ -45,11 +45,6 @@ Propshaft does a lot less than Sprockets, by design, so it might well be a fair 
 On the other hand, if you're already bundling JavaScript and CSS through a Node-based setup, then Propshaft is going to slot in easily. Since you don't need another tool to bundle or transpile. Just to digest and serve.
 
 But for greenfield apps using the default import-map approach, Propshaft can also work well, if you're able to deal with vanilla CSS.
-
-
-## Will Propshaft replace Sprockets as the Rails default?
-
-Most likely, but Sprockets needs to be supported as well for a long time to come. Plenty of apps and gems were built on Sprocket features, and they won't be migrating soon. Still working out the compatibility story. This is very much beta software at the moment.
 
 
 ## License
