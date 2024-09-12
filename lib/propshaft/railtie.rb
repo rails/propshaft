@@ -1,5 +1,6 @@
 require "rails"
 require "active_support/ordered_options"
+require "propshaft"
 require "propshaft/quiet_assets"
 
 module Propshaft
