@@ -2,6 +2,7 @@ require "rails"
 require "active_support/ordered_options"
 require "propshaft"
 require "propshaft/quiet_assets"
+require "propshaft/puma_config"
 
 module Propshaft
   class Railtie < ::Rails::Railtie
@@ -42,6 +43,10 @@ module Propshaft
       if config.assets.server
         app.routes.prepend do
           mount app.assets.server, at: app.assets.config.prefix
+        end
+
+        if Rails.env.development?
+          exit 1 unless PumaConfig.perform_dev_check!
         end
       end
 

@@ -5,3 +5,4 @@ gemspec
 gem "rails", ">= 7.0.1"
 gem "rake"
 gem "debug"
+gem "puma"

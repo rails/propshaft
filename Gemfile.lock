@@ -134,6 +134,8 @@ GEM
       racc (~> 1.4)
     psych (5.1.2)
       stringio
+    puma (6.4.2)
+      nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.1.7)
     rack-session (2.0.0)
@@ -199,6 +201,7 @@ PLATFORMS
 DEPENDENCIES
   debug
   propshaft!
+  puma
   rails (>= 7.0.1)
   rake
 
