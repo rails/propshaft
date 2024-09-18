@@ -6,8 +6,8 @@ class Propshaft::Asset
 
   class << self
     def extract_path_and_digest(digested_path)
-      digest    = digested_path[/-([0-9a-zA-Z]{7,128})\.(?!digested)([^.]|.map)+\z/, 1]
-      path      = digest ? digested_path.sub("-#{digest}", "") : digested_path
+      digest = digested_path[/-([0-9a-zA-Z]{7,128})\.(?!digested)([^.]|.map)+\z/, 1]
+      path   = digest ? digested_path.sub("-#{digest}", "") : digested_path
 
       [path, digest]
     end
