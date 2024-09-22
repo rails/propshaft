@@ -13,6 +13,12 @@ class PropshaftIntegrationTest < ActionDispatch::IntegrationTest
     assert_select 'script[src="/assets/hello_world-888761f8.js"]'
   end
 
+  test "should prioritize app assets over engine assets" do
+    get sample_load_real_assets_url
+
+    assert_select 'script[src="/assets/actioncable-2e7de4f9.js"]'
+  end
+
   test "should find app styles via glob" do
     get sample_load_real_assets_url
 
