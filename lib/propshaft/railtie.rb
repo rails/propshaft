@@ -33,7 +33,7 @@ module Propshaft
 
     config.after_initialize do |app|
       # Prioritize assets from within the application over assets of the same path from engines/gems.
-      config.assets.paths.sort_by! { |path| path.to_s.start_with?(Rails.root.to_s) ? 0 : 1 }
+      config.assets.paths.sort_by!.with_index { |path, i| [path.to_s.start_with?(Rails.root.to_s) ? 0 : 1, i] }
 
       config.assets.relative_url_root ||= app.config.relative_url_root
       config.assets.output_path ||=
