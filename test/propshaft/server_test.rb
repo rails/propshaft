@@ -23,7 +23,7 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
     assert_equal "62", last_response.headers['content-length']
     assert_equal "text/css", last_response.headers['content-type']
     assert_equal "Accept-Encoding", last_response.headers['vary']
-    assert_equal asset.digest, last_response.headers['etag']
+    assert_equal "\"#{asset.digest}\"", last_response.headers['etag']
     assert_equal "public, max-age=31536000, immutable", last_response.headers['cache-control']
     assert_equal ".hero { background: url(\"/foobar/source/file-3e6a1297.jpg\") }\n",
                  last_response.body
