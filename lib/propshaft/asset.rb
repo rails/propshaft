@@ -18,7 +18,7 @@ class Propshaft::Asset
   end
 
   def content(encoding: "ASCII-8BIT")
-    File.read(path, encoding: encoding)
+    File.read(path, encoding: encoding, mode: "rb")
   end
 
   def content_type
