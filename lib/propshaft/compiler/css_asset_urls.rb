@@ -3,7 +3,7 @@
 require "propshaft/compiler"
 
 class Propshaft::Compiler::CssAssetUrls < Propshaft::Compiler
-  ASSET_URL_PATTERN = /url\(\s*["']?(?!(?:\#|%23|data|http|\/\/))([^"'\s?#)]+)([#?][^"')]+)?\s*["']?\)/
+  ASSET_URL_PATTERN = /url\(\s*["']?(?!(?:\#|%23|data:|http:|https:|\/\/))([^"'\s?#)]+)([#?][^"')]+)?\s*["']?\)/
 
   def compile(asset, input)
     input.gsub(ASSET_URL_PATTERN) { asset_url resolve_path(asset.logical_path.dirname, $1), asset.logical_path, $2, $1 }
