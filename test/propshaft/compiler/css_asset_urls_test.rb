@@ -76,6 +76,9 @@ class Propshaft::Compiler::CssAssetUrlsTest < ActiveSupport::TestCase
   test "url" do
     compiled = compile_asset_with_content(%({ background: url('https://rubyonrails.org/images/rails-logo.svg'); }))
     assert_match "{ background: url('https://rubyonrails.org/images/rails-logo.svg'); }", compiled
+
+    compiled = compile_asset_with_content(%({ background: url(http-diagram.jpg); }))
+    assert_match(/{ background: url\("\/assets\/foobar\/source\/http-diagram-[a-z0-9]{8}.jpg"\); }/, compiled)
   end
 
   test "relative protocol url" do
@@ -86,6 +89,9 @@ class Propshaft::Compiler::CssAssetUrlsTest < ActiveSupport::TestCase
   test "data" do
     compiled = compile_asset_with_content(%({ background: url(data:image/png;base64,iRxVB0); }))
     assert_match "{ background: url(data:image/png;base64,iRxVB0); }", compiled
+
+    compiled = compile_asset_with_content(%({ background: url(database.jpg); }))
+    assert_match(/{ background: url\("\/assets\/foobar\/source\/database-[a-z0-9]{8}.jpg"\); }/, compiled)
   end
 
   test "anchor" do
