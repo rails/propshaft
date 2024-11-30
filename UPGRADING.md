@@ -210,6 +210,8 @@ Start by following these steps:
 4. Remove `app/assets/config/manifest.js`.
 5. Replace all asset_helpers (`image_url`, `font_url`) in css files with standard `urls`.
 6. If you are importing only the frameworks you need (instead of `rails/all`), remove `require "sprockets/railtie"`;
+7. If you want your existing javascript files in app/assets/javascripts/ to be digested too, Add `config.assets.paths << "app/assets/javascripts"` to `config/application.rb`
+
 
 ### Asset paths
 
