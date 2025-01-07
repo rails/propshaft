@@ -30,7 +30,7 @@ class Propshaft::Asset
   end
 
   def digest
-    @digest ||= Digest::SHA1.hexdigest("#{content_with_compile_references}#{load_path.version}").first(8)
+    @digest ||= perform_digest("#{content_with_compile_references}#{load_path.version}")
   end
 
   def digested_path
@@ -56,5 +56,9 @@ class Propshaft::Asset
 
     def already_digested?
       logical_path.to_s =~ /-([0-9a-zA-Z_-]{7,128})\.digested/
+    end
+
+    def perform_digest(text)
+      Digest::SHA1.hexdigest(text).first(8)
     end
 end
