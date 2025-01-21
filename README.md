@@ -22,6 +22,8 @@ You can however exempt directories that have been added through the `config.asse
 
 These assets can be referenced through their logical path using the normal helpers like `asset_path`, `image_tag`, `javascript_include_tag`, and all the other asset helper tags. These logical references are automatically converted into digest-aware paths in production when `assets:precompile` has been run (through a JSON mapping file found in `public/assets/.manifest.json`).
 
+See [API documentation](https://www.rubydoc.info/gems/propshaft/) for further technical details.
+
 ## Referencing digested assets in CSS and JavaScript
 
 Propshaft will automatically convert asset references in CSS to use the digested file names. So `background: url("/bg/pattern.svg")` is converted to `background: url("/assets/bg/pattern-2169cbef.svg")` before the stylesheet is served.
