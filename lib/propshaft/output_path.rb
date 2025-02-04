@@ -25,11 +25,13 @@ class Propshaft::OutputPath
   def files
     Hash.new.tap do |files|
       all_files_from_tree(path).each do |file|
-        digested_path = file.relative_path_from(path)
-        logical_path, digest = Propshaft::Asset.extract_path_and_digest(digested_path.to_s)
+        digested_path = file.relative_path_from(path).to_s
 
-        files[digested_path.to_s] = {
-          logical_path: logical_path.to_s,
+        digest = digested_path[/-([0-9a-zA-Z]{7,128})\.(digested\.)?([^.]|.map)+\z/, 1]
+        logical_path = digest ? digested_path.sub("-#{digest}", "") : digested_path
+
+        files[digested_path] = {
+          logical_path: logical_path,
           digest: digest,
           mtime: File.mtime(file)
         }

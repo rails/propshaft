@@ -9,7 +9,8 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
     @manifest    = {
       ".manifest.json": ".manifest.json",
       "one.txt": "one-f2e1ec14.txt",
-      "one.txt.map": "one-f2e1ec15.txt.map"
+      "one.txt.map": "one-f2e1ec15.txt.map",
+      "file-already-abcdefVWXYZ0123456789_-.digested.css": "file-already-abcdefVWXYZ0123456789_-.digested.css"
     }.stringify_keys
     @output_path = Propshaft::OutputPath.new(Pathname.new("#{__dir__}/../fixtures/output"), @manifest)
   end
@@ -21,6 +22,8 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
     assert_equal "one.txt", file[:logical_path]
     assert_equal "f2e1ec14", file[:digest]
     assert file[:mtime].is_a?(Time)
+
+    assert files["file-already-abcdefVWXYZ0123456789_-.digested.css"]
   end
 
   test "clean always keeps most current versions" do
@@ -74,6 +77,19 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
 
     assert File.exist?(current)
     assert File.exist?(old)
+  ensure
+    FileUtils.rm(old) if File.exist?(old)
+    FileUtils.rm(current) if File.exist?(current)
+  end
+
+  test "clean keeps the correct number of predigested versions" do
+    old     = output_asset("Vue3Lottie-23af1d5aa7baee8b1ca8.digested.js", "old", created_at: Time.now - 300)
+    current = output_asset("Vue3Lottie-337a4df42c71a547bccd.digested.js", "current", created_at: Time.now - 180)
+
+    @output_path.clean(1, 0)
+
+    assert File.exist?(current), "#{current} should still exist"
+    assert_not File.exist?(old), "#{old} should be removed"
   ensure
     FileUtils.rm(old) if File.exist?(old)
     FileUtils.rm(current) if File.exist?(current)
