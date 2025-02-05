@@ -7,6 +7,7 @@ class Propshaft::Server
   end
 
   def call(env)
+    execute_cache_sweeper_if_updated
     path, digest = extract_path_and_digest(env)
 
     if (asset = @assembly.load_path.find(path)) && asset.fresh?(digest)
@@ -43,5 +44,9 @@ class Propshaft::Server
       VARY = "Vary"
     else
       VARY = "vary"
+    end
+
+    def execute_cache_sweeper_if_updated
+      Rails.application.assets.load_path.cache_sweeper.execute_if_updated
     end
 end
