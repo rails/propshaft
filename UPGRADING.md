@@ -196,6 +196,13 @@ Then adjust the `build` attribute in `package.json`:
 "build:css": "sass ./app/assets/stylesheets/entrypoints:./app/assets/builds --no-source-map --load-path=node_modules"
 ```
 
+Note, you will need to update your references to your entrypoint files in your layouts to include the `entrypoints` directory:
+
+```
+<%= stylesheet_link_tag 'entrypoints/application' %>
+<%= stylesheet_link_tag 'entrypoints/admin' %>
+```
+
 ### Deprecation warnings
 
 Sass might raise deprecation warnings depending on what features you are using (such as division), but the messages will explain how to fix them. If you are not sure, see more details in the [official documentation](https://sass-lang.com/documentation/breaking-changes).
