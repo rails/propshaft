@@ -16,7 +16,9 @@ With Rails 8, Propshaft is the default asset pipeline for new applications. With
 
 ## Usage
 
-Propshaft makes all the assets from all the paths it's been configured with through `config.assets.paths` available for serving and will copy all of them into `public/assets` when precompiling. This is unlike Sprockets, which did not copy over assets that hadn't been explicitly included in one of the bundled assets. 
+Propshaft makes all the assets from all the paths it's been configured with through `config.assets.paths` available for serving and will copy all of them into `public/assets` when precompiling. This is unlike Sprockets, which did not copy over assets that hadn't been explicitly included in one of the bundled assets. As an example, supposed you are vendoring libraries into a custom components path under the "vendor/assets" directory, thus the full directory is "vendor/assets/components". In order for Propshaft to use the libraries in this path you would have to add the following in your config/application.rb:
+
+```config.assets.paths << Rails.root.join("vendor", "assets", "components")```
 
 You can however exempt directories that have been added through the `config.assets.excluded_paths`. This is useful if you're for example using `app/assets/stylesheets` exclusively as a set of inputs to a compiler like Dart Sass for Rails, and you don't want these input files to be part of the load path. (Remember you need to add full paths, like `Rails.root.join("app/assets/stylesheets")`).
 
