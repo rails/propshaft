@@ -3,8 +3,8 @@ require "propshaft/asset"
 class Propshaft::LoadPath
   attr_reader :paths, :compilers, :version
 
-  def initialize(paths = [], compilers:, version: nil)
-    @paths, @compilers, @version = dedup(paths), compilers, version
+  def initialize(paths = [], compilers:, version: nil, integrity_hash_algorithm: nil)
+    @paths, @compilers, @version, @integrity_hash_algorithm = dedup(paths), compilers, version, integrity_hash_algorithm
   end
 
   def find(asset_name)
@@ -32,7 +32,14 @@ class Propshaft::LoadPath
   def manifest
     Hash.new.tap do |manifest|
       assets.each do |asset|
-        manifest[asset.logical_path.to_s] = asset.digested_path.to_s
+        manifest[asset.logical_path.to_s] = if @integrity_hash_algorithm.nil?
+          asset.digested_path.to_s
+        else
+          {
+            digested_path: asset.digested_path.to_s,
+            integrity: asset.integrity(hash_algorithm: @integrity_hash_algorithm)
+          }
+        end
       end
     end
   end
