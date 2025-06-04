@@ -1,4 +1,5 @@
 require "digest/sha1"
+require "digest/sha2"
 require "action_dispatch/http/mime_type"
 
 class Propshaft::Asset
@@ -31,6 +32,24 @@ class Propshaft::Asset
 
   def digest
     @digest ||= Digest::SHA1.hexdigest("#{content_with_compile_references}#{load_path.version}").first(8)
+  end
+
+  # Following the Subresource Integrity spec draft
+  # https://w3c.github.io/webappsec-subresource-integrity/
+  # allowing only sha256, sha384, and sha512
+  def integrity(hash_algorithm:)
+    bitlen = case hash_algorithm
+      when "sha256"
+        256
+      when "sha384"
+        384
+      when "sha512"
+        512
+      else
+        raise(Error.new("Subresource Integrity hash algorithm must be one of SHA2 family (sha256, sha384, sha512)"))
+      end
+
+    [hash_algorithm, Digest::SHA2.new(bitlen).base64digest(content)].join("-")
   end
 
   def digested_path

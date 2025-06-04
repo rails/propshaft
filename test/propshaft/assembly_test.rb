@@ -43,4 +43,30 @@ class Propshaft::AssemblyTest < ActiveSupport::TestCase
 
     assert assembly.processor.is_a?(Propshaft::Processor)
   end
+
+  class Propshaft::AssemblyTest::WithIntegrityTest < ActiveSupport::TestCase
+    test "uses static resolver when manifest is present" do
+      assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config|
+        config.output_path = Pathname.new("#{__dir__}/../fixtures/output")
+        config.manifest_path = config.output_path.join(".manifest_with_integrity.json")
+        config.prefix = "/assets"
+
+        config.integrity_hash_algorithm = "sha384"
+      })
+
+      assert assembly.resolver.is_a?(Propshaft::Resolver::Static)
+    end
+
+    test "uses dynamic resolver when manifest is missing" do
+      assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config|
+        config.output_path = Pathname.new("#{__dir__}/../fixtures/assets")
+        config.manifest_path = config.output_path.join(".manifest_with_integrity.json")
+        config.prefix = "/assets"
+
+        config.integrity_hash_algorithm = "sha384"
+      })
+
+      assert assembly.resolver.is_a?(Propshaft::Resolver::Dynamic)
+    end
+  end
 end

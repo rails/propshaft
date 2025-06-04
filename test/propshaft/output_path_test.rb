@@ -8,6 +8,7 @@ class Propshaft::OutputPathTest < ActiveSupport::TestCase
   setup do
     @manifest    = {
       ".manifest.json": ".manifest.json",
+      ".manifest_with_integrity.json": ".manifest_with_integrity.json",
       "one.txt": "one-f2e1ec14.txt",
       "one.txt.map": "one-f2e1ec15.txt.map"
     }.stringify_keys
