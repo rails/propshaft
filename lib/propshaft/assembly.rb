@@ -16,7 +16,12 @@ class Propshaft::Assembly
   end
 
   def load_path
-    @load_path ||= Propshaft::LoadPath.new(config.paths, compilers: compilers, version: config.version)
+    @load_path ||= Propshaft::LoadPath.new(
+      config.paths,
+      compilers: compilers,
+      version: config.version,
+      integrity_hash_algorithm: config.integrity_hash_algorithm
+    )
   end
 
   def resolver
