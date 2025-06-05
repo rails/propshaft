@@ -27,6 +27,19 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
     assert_equal "f2e1ec14", find_asset("one.txt").digest
   end
 
+  test "digest override" do
+    original_digest = ::Propshaft::Asset.instance_method(:perform_digest)
+    module ::Propshaft
+      class Asset
+        def perform_digest(text)
+          Digest::SHA1.hexdigest(text).first(10)
+        end
+      end
+    end
+    assert_equal 10, find_asset("one.txt").digest.size
+    ::Propshaft::Asset.define_method(:perform_digest, original_digest)
+  end
+
   test "fresh" do
     assert find_asset("one.txt").fresh?("f2e1ec14")
     assert_not find_asset("one.txt").fresh?("e206c34f")
