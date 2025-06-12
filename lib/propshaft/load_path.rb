@@ -1,10 +1,21 @@
 require "propshaft/asset"
 
 class Propshaft::LoadPath
+  class NullFileWatcher # :nodoc:
+    def initialize(paths, files_to_watch, &block)
+      @block = block
+    end
+
+    def execute_if_updated
+      @block.call
+    end
+  end
+
   attr_reader :paths, :compilers, :version
 
-  def initialize(paths = [], compilers:, version: nil)
+  def initialize(paths = [], compilers:, version: nil, file_watcher: nil)
     @paths, @compilers, @version = dedup(paths), compilers, version
+    @file_watcher = file_watcher || NullFileWatcher
   end
 
   def find(asset_name)
@@ -46,7 +57,7 @@ class Propshaft::LoadPath
       files_to_watch = Array(paths).collect { |dir| [ dir.to_s, exts_to_watch ] }.to_h
       mutex = Mutex.new
 
-      Rails.application.config.file_watcher.new([], files_to_watch) do
+      @file_watcher.new([], files_to_watch) do
         mutex.synchronize do
           clear_cache
           seed_cache
