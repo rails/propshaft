@@ -5,7 +5,6 @@ PATH
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
       rack
-      railties (>= 7.0.0)
 
 GEM
   remote: https://rubygems.org/

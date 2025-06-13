@@ -35,6 +35,8 @@ module Propshaft
       # Prioritize assets from within the application over assets of the same path from engines/gems.
       config.assets.paths.sort_by!.with_index { |path, i| [path.to_s.start_with?(Rails.root.to_s) ? 0 : 1, i] }
 
+      config.assets.file_watcher ||= app.config.file_watcher
+
       config.assets.relative_url_root ||= app.config.relative_url_root
       config.assets.output_path ||=
         Pathname.new(File.join(app.config.paths["public"].first, app.config.assets.prefix))

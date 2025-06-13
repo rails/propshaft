@@ -10,4 +10,4 @@ end
 require "propshaft/assembly"
 require "propshaft/errors"
 require "propshaft/helper"
-require "propshaft/railtie"
+require "propshaft/railtie" if defined?(Rails::Railtie)

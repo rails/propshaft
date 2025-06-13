@@ -47,6 +47,6 @@ class Propshaft::Server
     end
 
     def execute_cache_sweeper_if_updated
-      Rails.application.assets.load_path.cache_sweeper.execute_if_updated
+      @assembly.load_path.cache_sweeper.execute_if_updated
     end
 end
