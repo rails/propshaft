@@ -1,3 +1,4 @@
+require "propshaft/manifest"
 require "propshaft/load_path"
 require "propshaft/resolver/dynamic"
 require "propshaft/resolver/static"

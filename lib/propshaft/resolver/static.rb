@@ -19,12 +19,12 @@ module Propshaft::Resolver
     end
 
     private
-      def parsed_manifest
-        @parsed_manifest ||= JSON.parse(manifest_path.read, symbolize_names: false)
+      def manifest
+        @manifest ||= Propshaft::Manifest.from_path(manifest_path)
       end
 
       def digested_path(logical_path)
-        entry = parsed_manifest[logical_path]
+        entry = manifest[logical_path]
 
         if entry.is_a?(String)
           return entry

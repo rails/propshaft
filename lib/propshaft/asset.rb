@@ -46,7 +46,7 @@ class Propshaft::Asset
       when "sha512"
         512
       else
-        raise(Error.new("Subresource Integrity hash algorithm must be one of SHA2 family (sha256, sha384, sha512)"))
+        raise(StandardError.new("Subresource Integrity hash algorithm must be one of SHA2 family (sha256, sha384, sha512)"))
       end
 
     [hash_algorithm, Digest::SHA2.new(bitlen).base64digest(content)].join("-")

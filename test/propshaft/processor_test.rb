@@ -17,7 +17,7 @@ class Propshaft::ProcessorTest < ActiveSupport::TestCase
   test "manifest is written" do
     processed do |processor|
       assert_equal "one-f2e1ec14.txt",
-         JSON.parse(processor.output_path.join(".manifest.json").read)["one.txt"]
+         JSON.parse(processor.output_path.join(".manifest.json").read)["one.txt"]["digested_path"]
     end
   end
 

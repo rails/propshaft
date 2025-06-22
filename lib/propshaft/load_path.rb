@@ -1,3 +1,4 @@
+require "propshaft/manifest"
 require "propshaft/asset"
 
 class Propshaft::LoadPath
@@ -11,10 +12,10 @@ class Propshaft::LoadPath
     end
   end
 
-  attr_reader :paths, :compilers, :version
+  attr_reader :paths, :compilers, :version, :integrity_hash_algorithm
 
   def initialize(paths = [], compilers:, version: nil, file_watcher: nil, integrity_hash_algorithm: nil)
-    @paths, @compilers, @version = dedup(paths), compilers, version, integrity_hash_algorithm
+    @paths, @compilers, @version, @integrity_hash_algorithm = dedup(paths), compilers, version, integrity_hash_algorithm
     @file_watcher = file_watcher || NullFileWatcher
   end
 
@@ -41,17 +42,8 @@ class Propshaft::LoadPath
   end
 
   def manifest
-    Hash.new.tap do |manifest|
-      assets.each do |asset|
-        manifest[asset.logical_path.to_s] = if @integrity_hash_algorithm.nil?
-          asset.digested_path.to_s
-        else
-          {
-            digested_path: asset.digested_path.to_s,
-            integrity: asset.integrity(hash_algorithm: @integrity_hash_algorithm)
-          }
-        end
-      end
+    Propshaft::Manifest.new(integrity_hash_algorithm:).tap do |manifest|
+      assets.each { |asset| manifest.push_asset(asset) }
     end
   end
 
