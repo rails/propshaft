@@ -12,6 +12,12 @@ module Propshaft::Resolver
       end
     end
 
+    def integrity(logical_path)
+      entry = manifest[logical_path]
+
+      entry&.integrity
+    end
+
     def read(logical_path, encoding: "ASCII-8BIT")
       if asset_path = digested_path(logical_path)
         File.read(manifest_path.dirname.join(asset_path), encoding: encoding)
@@ -26,11 +32,7 @@ module Propshaft::Resolver
       def digested_path(logical_path)
         entry = manifest[logical_path]
 
-        if entry.is_a?(String)
-          return entry
-        elsif entry.is_a?(Hash)
-          entry["digested_path"]
-        end
+        entry&.digested_path
       end
   end
 end

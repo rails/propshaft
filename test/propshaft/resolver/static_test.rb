@@ -30,6 +30,14 @@ class Propshaft::Resolver::StaticTest < ActiveSupport::TestCase
     assert_nil @resolver.resolve("nowhere.txt")
   end
 
+  test "integrity for asset returns nil for simple manifest" do
+    assert_nil @resolver.integrity("one.txt")
+  end
+
+  test "integrity for missing asset returns nil" do
+    assert_nil @resolver.integrity("nowhere.txt")
+  end
+
   test "resolver requests json optimizer gems to keep parsed manifest keys as strings" do
     stub = Proc.new do |_, opts|
       assert_equal false, opts[:symbolize_names]
@@ -41,10 +49,10 @@ class Propshaft::Resolver::StaticTest < ActiveSupport::TestCase
     end
   end
 
-  class Propshaft::Resolver::StaticTest::WithIntegrityTest < ActiveSupport::TestCase
+  class Propshaft::Resolver::StaticTest::WithExtensibleManifest < ActiveSupport::TestCase
     setup do
       @resolver = Propshaft::Resolver::Static.new(
-        manifest_path: Pathname.new("#{__dir__}/../../fixtures/output/.manifest_with_integrity.json"),
+        manifest_path: Pathname.new("#{__dir__}/../../fixtures/output/.extensible_manifest.json"),
         prefix: "/assets"
       )
     end
@@ -67,6 +75,14 @@ class Propshaft::Resolver::StaticTest < ActiveSupport::TestCase
 
     test "resolving missing asset returns nil" do
       assert_nil @resolver.resolve("nowhere.txt")
+    end
+
+    test "integrity for asset returns value from extensible manifest" do
+      assert_equal "sha384-LdS8l2QTAF8bD8WPb8QSQv0skTWHhmcnS2XU5LBkVQneGzqIqnDRskQtJvi7ADMe", @resolver.integrity("one.txt")
+    end
+
+    test "integrity for missing asset returns nil" do
+      assert_nil @resolver.integrity("nowhere.txt")
     end
 
     test "resolver requests json optimizer gems to keep parsed manifest keys as strings" do

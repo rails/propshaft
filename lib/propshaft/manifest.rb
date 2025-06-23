@@ -50,8 +50,8 @@ module Propshaft
 
     class << self
       def from_path(manifest_path)
-        JSON.parse(manifest_path.read, symbolize_names: false).tap do |serialized_manifest|
-          Manifest.new.tap do |manifest|
+        Manifest.new.tap do |manifest|
+          JSON.parse(manifest_path.read, symbolize_names: false).tap do |serialized_manifest|
             serialized_manifest.each_pair do |key, value|
               # Compatibility mode to be able to
               # read the old "simple manifest" format

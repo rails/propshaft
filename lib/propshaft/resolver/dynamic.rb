@@ -12,6 +12,13 @@ module Propshaft::Resolver
       end
     end
 
+    def integrity(logical_path)
+      hash_algorithm = load_path.integrity_hash_algorithm
+      if (asset = load_path.find(logical_path)) && hash_algorithm
+        asset.integrity(hash_algorithm:)
+      end
+    end
+
     def read(logical_path, options = {})
       if asset = load_path.find(logical_path)
         asset.content(**options)
