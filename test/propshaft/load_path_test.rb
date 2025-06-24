@@ -31,16 +31,16 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
 
   test "manifest" do
     @load_path.manifest.tap do |manifest|
-      assert_equal "one-f2e1ec14.txt", manifest["one.txt"]
-      assert_equal "nested/three-6c2b86a0.txt", manifest["nested/three.txt"]
+      assert_equal "one-f2e1ec14.txt", manifest["one.txt"].digested_path.to_s
+      assert_equal "nested/three-6c2b86a0.txt", manifest["nested/three.txt"].digested_path.to_s
     end
   end
 
   test "manifest with version" do
     @load_path = Propshaft::LoadPath.new(@load_path.paths, version: "1", compilers: Propshaft::Compilers.new(nil))
     @load_path.manifest.tap do |manifest|
-      assert_equal "one-c9373b68.txt", manifest["one.txt"]
-      assert_equal "nested/three-a41a5d38.txt", manifest["nested/three.txt"]
+      assert_equal "one-c9373b68.txt", manifest["one.txt"].digested_path.to_s
+      assert_equal "nested/three-a41a5d38.txt", manifest["nested/three.txt"].digested_path.to_s
     end
   end
 

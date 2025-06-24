@@ -7,20 +7,32 @@ module Propshaft::Resolver
     end
 
     def resolve(logical_path)
-      if asset_path = parsed_manifest[logical_path]
+      if asset_path = digested_path(logical_path)
         File.join prefix, asset_path
       end
     end
 
+    def integrity(logical_path)
+      entry = manifest[logical_path]
+
+      entry&.integrity
+    end
+
     def read(logical_path, encoding: "ASCII-8BIT")
-      if asset_path = parsed_manifest[logical_path]
+      if asset_path = digested_path(logical_path)
         File.read(manifest_path.dirname.join(asset_path), encoding: encoding)
       end
     end
 
     private
-      def parsed_manifest
-        @parsed_manifest ||= JSON.parse(manifest_path.read, symbolize_names: false)
+      def manifest
+        @manifest ||= Propshaft::Manifest.from_path(manifest_path)
+      end
+
+      def digested_path(logical_path)
+        entry = manifest[logical_path]
+
+        entry&.digested_path
       end
   end
 end

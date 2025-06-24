@@ -51,6 +51,23 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
       find_asset("file-is-a-sourcemap.js.map").digested_path.to_s
   end
 
+  test "integrity" do
+    assert_equal "sha256-+C/K/0dPvIdSC8rl/NDS8zqPp08R0VH+hKMM4D8tNJs=",
+      find_asset("one.txt").integrity(hash_algorithm: "sha256").to_s
+
+    assert_equal "sha384-LdS8l2QTAF8bD8WPb8QSQv0skTWHhmcnS2XU5LBkVQneGzqIqnDRskQtJvi7ADMe",
+      find_asset("one.txt").integrity(hash_algorithm: "sha384").to_s
+
+    assert_equal "sha512-wzPP7om24750PjHXRlgiDOhILPd4V2AbLRxomBudQaTDI1eYZkM5j8pSH/ylSSUxiGqXR3F6lgVCbsmXkqKrEg==",
+      find_asset("one.txt").integrity(hash_algorithm: "sha512").to_s
+
+    exception = assert_raises StandardError do
+      find_asset("one.txt").integrity(hash_algorithm: "md5")
+    end
+
+    assert_equal "Subresource Integrity hash algorithm must be one of SHA2 family (sha256, sha384, sha512)", exception.message
+  end
+
   test "value object equality" do
     assert_equal find_asset("one.txt"), find_asset("one.txt")
   end
