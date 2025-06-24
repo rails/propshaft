@@ -206,10 +206,11 @@ Start by following these steps:
 
 1. Remove `sprockets`, `sprockets-rails`, and `sass-rails` from the Gemfile and add `propshaft`;
 2. Run `./bin/bundle install`;
-3. Open `config/application.rb` and remove `config.assets.paths << Rails.root.join('app','assets')`;
-4. Remove `app/assets/config/manifest.js`.
-5. Replace all asset_helpers (`image_url`, `font_url`) in css files with standard `urls`.
-6. If you are importing only the frameworks you need (instead of `rails/all`), remove `require "sprockets/railtie"`;
+3. Check your `Gemfile.lock`, repeat steps 1 and 2 for gems that list `sprockets` or `sprockets-rails` as a dependency;
+4. Open `config/application.rb` and remove `config.assets.paths << Rails.root.join('app','assets')`;
+5. Remove `app/assets/config/manifest.js`.
+6. Replace all asset_helpers (`image_url`, `font_url`) in css files with standard `urls`.
+7. If you are importing only the frameworks you need (instead of `rails/all`), remove `require "sprockets/railtie"`;
 
 ### Asset paths
 
