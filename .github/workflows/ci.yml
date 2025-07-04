@@ -9,17 +9,23 @@ jobs:
           - "3.2"
           - "3.3"
           - "3.4"
-        continue-on-error: [false]
+        rails-version:
+          - "7.0"
+          - "7.1"
+          - "7.2"
+          - "8.0"
+        exclude:
+          - ruby-version: "3.1"
+            rails-version: "8.0"
+      fail-fast: false
+    env:
+      BUNDLE_GEMFILE: gemfiles/Gemfile.rails-${{ matrix.rails-version }}
 
-    name: ${{ format('Tests (Ruby {0})', matrix.ruby-version) }}
+    name: ${{ format('Tests (Ruby {0}) (Rails {1})', matrix.ruby-version, matrix.rails-version) }}
     runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.continue-on-error }}
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Remove Gemfile.lock
-        run: rm -f Gemfile.lock
 
       - name: Install Ruby
         uses: ruby/setup-ruby@v1

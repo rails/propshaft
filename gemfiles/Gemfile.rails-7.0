@@ -1,0 +1,7 @@
+source "https://rubygems.org"
+
+gemspec path: ".."
+
+gem "rails", github: "rails/rails", branch: "7-0-stable"
+gem "rake"
+gem "debug"
