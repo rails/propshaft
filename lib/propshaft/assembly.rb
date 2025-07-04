@@ -17,7 +17,6 @@ class Propshaft::Assembly
   end
 
   def load_path
-
     @load_path ||= Propshaft::LoadPath.new(
       config.paths,
       compilers: compilers,

@@ -34,10 +34,10 @@ class Propshaft::Asset
     @digest ||= Digest::SHA1.hexdigest("#{content_with_compile_references}#{load_path.version}").first(8)
   end
 
-  # Following the Subresource Integrity spec draft
-  # https://w3c.github.io/webappsec-subresource-integrity/
-  # allowing only sha256, sha384, and sha512
   def integrity(hash_algorithm:)
+    # Following the Subresource Integrity spec draft
+    # https://w3c.github.io/webappsec-subresource-integrity/
+    # allowing only sha256, sha384, and sha512
     bitlen = case hash_algorithm
       when "sha256"
         256

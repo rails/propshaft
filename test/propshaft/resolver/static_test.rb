@@ -52,7 +52,7 @@ class Propshaft::Resolver::StaticTest < ActiveSupport::TestCase
   class Propshaft::Resolver::StaticTest::WithExtensibleManifest < ActiveSupport::TestCase
     setup do
       @resolver = Propshaft::Resolver::Static.new(
-        manifest_path: Pathname.new("#{__dir__}/../../fixtures/output/.extensible_manifest.json"),
+        manifest_path: Pathname.new("#{__dir__}/../../fixtures/new_manifest_format/.manifest.json"),
         prefix: "/assets"
       )
     end

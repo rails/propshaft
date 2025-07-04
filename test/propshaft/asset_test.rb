@@ -64,7 +64,6 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
     exception = assert_raises StandardError do
       find_asset("one.txt").integrity(hash_algorithm: "md5")
     end
-
     assert_equal "Subresource Integrity hash algorithm must be one of SHA2 family (sha256, sha384, sha512)", exception.message
   end
 

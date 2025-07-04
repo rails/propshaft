@@ -42,7 +42,7 @@ class Propshaft::LoadPath
   end
 
   def manifest
-    Propshaft::Manifest.new(integrity_hash_algorithm:).tap do |manifest|
+    Propshaft::Manifest.new(integrity_hash_algorithm: integrity_hash_algorithm).tap do |manifest|
       assets.each { |asset| manifest.push_asset(asset) }
     end
   end

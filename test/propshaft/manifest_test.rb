@@ -28,6 +28,94 @@ class Propshaft::ManifestTest < ActiveSupport::TestCase
     assert_nil manifest_entry["integrity"]
   end
 
+  test "loads from new extensible manifest format" do
+    manifest_path = Pathname.new("#{__dir__}/../fixtures/new_manifest_format/.manifest.json")
+    manifest = Propshaft::Manifest.from_path(manifest_path)
+
+    entry = manifest["one.txt"]
+    assert_not_nil entry
+    assert_equal "one.txt", entry.logical_path
+    assert_equal "one-f2e1ec14.txt", entry.digested_path
+    assert_equal "sha384-LdS8l2QTAF8bD8WPb8QSQv0skTWHhmcnS2XU5LBkVQneGzqIqnDRskQtJvi7ADMe", entry.integrity
+  end
+
+  test "loads from old simple manifest format" do
+    manifest_path = Pathname.new("#{__dir__}/../fixtures/output/.manifest.json")
+    manifest = Propshaft::Manifest.from_path(manifest_path)
+
+    entry = manifest["one.txt"]
+    assert_not_nil entry
+    assert_equal "one.txt", entry.logical_path
+    assert_equal "one-f2e1ec14.txt", entry.digested_path
+    assert_nil entry.integrity
+  end
+
+  test "push method adds entry to manifest" do
+    manifest = Propshaft::Manifest.new
+    entry = Propshaft::Manifest::ManifestEntry.new(
+      logical_path: "test.js",
+      digested_path: "test-abc123.js",
+      integrity: "sha384-test"
+    )
+
+    manifest.push(entry)
+    retrieved_entry = manifest["test.js"]
+
+    assert_equal entry, retrieved_entry
+    assert_equal "test.js", retrieved_entry.logical_path
+    assert_equal "test-abc123.js", retrieved_entry.digested_path
+    assert_equal "sha384-test", retrieved_entry.integrity
+  end
+
+  test "<< alias works for push method" do
+    manifest = Propshaft::Manifest.new
+    entry = Propshaft::Manifest::ManifestEntry.new(
+      logical_path: "test.css",
+      digested_path: "test-def456.css",
+      integrity: nil
+    )
+
+    manifest << entry
+    retrieved_entry = manifest["test.css"]
+
+    assert_equal entry, retrieved_entry
+    assert_equal "test.css", retrieved_entry.logical_path
+    assert_equal "test-def456.css", retrieved_entry.digested_path
+    assert_nil retrieved_entry.integrity
+  end
+
+  test "[] accessor returns nil for missing entries" do
+    manifest = Propshaft::Manifest.new
+    assert_nil manifest["nonexistent.js"]
+  end
+
+  test "push_asset method creates entry from asset" do
+    manifest = Propshaft::Manifest.new(integrity_hash_algorithm: "sha384")
+    asset = find_asset("one.txt")
+
+    manifest.push_asset(asset)
+    entry = manifest["one.txt"]
+
+    assert_not_nil entry
+    assert_equal "one.txt", entry.logical_path
+    assert_equal "one-f2e1ec14.txt", entry.digested_path
+    assert_not_nil entry.integrity
+    assert entry.integrity.start_with?("sha384-")
+  end
+
+  test "push_asset without integrity algorithm" do
+    manifest = Propshaft::Manifest.new
+    asset = find_asset("one.txt")
+
+    manifest.push_asset(asset)
+    entry = manifest["one.txt"]
+
+    assert_not_nil entry
+    assert_equal "one.txt", entry.logical_path
+    assert_equal "one-f2e1ec14.txt", entry.digested_path
+    assert_nil entry.integrity
+  end
+
   private
     def create_manifest(integrity_hash_algorithm = nil)
       Propshaft::Manifest.new(integrity_hash_algorithm:).tap do |manifest|
