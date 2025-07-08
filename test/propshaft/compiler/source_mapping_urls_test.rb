@@ -58,6 +58,8 @@ class Propshaft::Compiler::SourceMappingUrlsTest < ActiveSupport::TestCase
                  compile_asset(find_asset("sourceMappingURL-already-prefixed.js", fixture_path: "mapped"))
     assert_match %r{//# sourceMappingURL=/assets/nested/sourceMappingURL-already-prefixed-nested-[a-z0-9]{8}\.js\.map},
                  compile_asset(find_asset("nested/sourceMappingURL-already-prefixed-nested.js", fixture_path: "mapped"))
+    assert_match %r{//# sourceMappingURL=/assets/nested/sourceMappingURL-already-prefixed-nested-with-subdirectory-[a-z0-9]{8}\.js\.map},
+                 compile_asset(find_asset("nested/sourceMappingURL-already-prefixed-nested-with-subdirectory.js", fixture_path: "mapped"))
   end
 
   test "sourceMapURL is already prefixed with an incorrect url_prefix" do
