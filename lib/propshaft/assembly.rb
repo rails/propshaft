@@ -1,3 +1,4 @@
+require "propshaft/manifest"
 require "propshaft/load_path"
 require "propshaft/resolver/dynamic"
 require "propshaft/resolver/static"
@@ -16,7 +17,13 @@ class Propshaft::Assembly
   end
 
   def load_path
-    @load_path ||= Propshaft::LoadPath.new(config.paths, compilers: compilers, version: config.version, file_watcher: config.file_watcher)
+    @load_path ||= Propshaft::LoadPath.new(
+      config.paths,
+      compilers: compilers,
+      version: config.version,
+      file_watcher: config.file_watcher,
+      integrity_hash_algorithm: config.integrity_hash_algorithm
+    )
   end
 
   def resolver
