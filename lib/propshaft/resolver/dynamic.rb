@@ -16,7 +16,7 @@ module Propshaft::Resolver
       hash_algorithm = load_path.integrity_hash_algorithm
 
       if hash_algorithm && (asset = find_asset(logical_path))
-        asset.integrity(hash_algorithm:)
+        asset.integrity(hash_algorithm: hash_algorithm)
       end
     end
 

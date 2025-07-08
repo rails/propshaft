@@ -18,6 +18,10 @@ class Propshaft::Asset
     @path, @logical_path, @load_path = path, Pathname.new(logical_path), load_path
   end
 
+  def compiled_content
+    @compiled_content ||= load_path.compilers.compile(self)
+  end
+
   def content(encoding: "ASCII-8BIT")
     File.read(path, encoding: encoding, mode: "rb")
   end
@@ -49,7 +53,7 @@ class Propshaft::Asset
         raise(StandardError.new("Subresource Integrity hash algorithm must be one of SHA2 family (sha256, sha384, sha512)"))
       end
 
-    [hash_algorithm, Digest::SHA2.new(bitlen).base64digest(content)].join("-")
+    [hash_algorithm, Digest::SHA2.new(bitlen).base64digest(compiled_content)].join("-")
   end
 
   def digested_path

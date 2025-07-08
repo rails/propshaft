@@ -71,6 +71,21 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
     assert_equal find_asset("one.txt"), find_asset("one.txt")
   end
 
+  test "compiled content for non-compilable asset" do
+    asset = find_asset("one.txt")
+    assert_equal "One from first path", asset.compiled_content
+    assert_equal asset.content, asset.compiled_content
+  end
+
+  test "compiled content for css asset with url transformation" do
+    asset = find_asset("another.css")
+    compiled = asset.compiled_content
+
+    assert_match(/url\("\/archive-[a-f0-9]+\.svg"\)/, compiled)
+    assert_not_equal asset.content, asset.compiled_content
+  end
+
+
   test "costly methods are memoized" do
     asset = find_asset("one.txt")
     assert_equal asset.digest.object_id, asset.digest.object_id

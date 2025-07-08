@@ -12,7 +12,7 @@ class Propshaft::ManifestTest < ActiveSupport::TestCase
 
     manifest_entry = parsed_manifest["another.css"]
     assert_equal "another-c464b1ee.css", manifest_entry["digested_path"]
-    assert_equal "sha384-RZLbo+FZ8rnE9ct6dNqDcgIYo7DBk/GaB4nCMnNsj6HWp0ePV8q8qky9Qemdpuwl", manifest_entry["integrity"]
+    assert_equal "sha384-jUiHGq2aPNACr4g68crM1I28TitXJKYhEgokcX6W5VYGwufEKQxfLpe4GakM84ex", manifest_entry["integrity"]
   end
 
   test "serializes to the extensible manifest format without integrity hash algorithm" do

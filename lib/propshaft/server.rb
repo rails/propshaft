@@ -11,7 +11,7 @@ class Propshaft::Server
     path, digest = extract_path_and_digest(env)
 
     if (asset = @assembly.load_path.find(path)) && asset.fresh?(digest)
-      compiled_content = @assembly.compilers.compile(asset)
+      compiled_content = asset.compiled_content
 
       [
         200,
