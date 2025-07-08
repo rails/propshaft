@@ -116,6 +116,42 @@ class Propshaft::ManifestTest < ActiveSupport::TestCase
     assert_nil entry.integrity
   end
 
+  test "transform_values applies block to all entries" do
+    manifest = Propshaft::Manifest.new
+
+    entry1 = Propshaft::Manifest::ManifestEntry.new(
+      logical_path: "app.js",
+      digested_path: "app-abc123.js",
+      integrity: "sha384-test1"
+    )
+
+    entry2 = Propshaft::Manifest::ManifestEntry.new(
+      logical_path: "style.css",
+      digested_path: "style-def456.css",
+      integrity: nil
+    )
+
+    manifest.push(entry1)
+    manifest.push(entry2)
+
+    # Transform to get digested_path
+    hash = manifest.transform_values { |entry| entry.digested_path }
+    assert_equal({ "app.js" => "app-abc123.js", "style.css" => "style-def456.css" }, hash)
+
+    # Transform to get integrity
+    hash = manifest.transform_values { |entry| entry.integrity }
+    assert_equal({ "app.js" => "sha384-test1", "style.css" => nil }, hash)
+
+    # Transform to get logical_path (for demonstration)
+    hash = manifest.transform_values { |entry| entry.logical_path }
+    assert_equal({ "app.js" => "app.js", "style.css" => "style.css" }, hash)
+  end
+
+  test "transform_values returns empty hash for empty manifest" do
+    manifest = Propshaft::Manifest.new
+    assert_equal({}, manifest.transform_values { |entry| entry.digested_path })
+  end
+
   private
     def create_manifest(integrity_hash_algorithm = nil)
       Propshaft::Manifest.new(integrity_hash_algorithm:).tap do |manifest|

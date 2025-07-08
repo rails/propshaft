@@ -70,6 +70,10 @@ module Propshaft
       end.to_json
     end
 
+    def transform_values(&block)
+      @entries.transform_values(&block)
+    end
+
     private
       attr_reader :integrity_hash_algorithm
   end
