@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    propshaft (1.1.0)
+    propshaft (1.2.0)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
       rack
