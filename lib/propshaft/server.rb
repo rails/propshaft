@@ -47,6 +47,8 @@ class Propshaft::Server
     end
 
     def execute_cache_sweeper_if_updated
-      @assembly.load_path.cache_sweeper.execute_if_updated
+      if @assembly.config.sweep_cache
+        @assembly.load_path.cache_sweeper.execute_if_updated
+      end
     end
 end
