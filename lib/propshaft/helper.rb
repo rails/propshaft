@@ -70,7 +70,9 @@ module Propshaft
     #
     #   stylesheet_link_tag :all    # All stylesheets in load path
     #   stylesheet_link_tag :app    # Only app/assets stylesheets
-    def stylesheet_link_tag(*sources, **options)
+    def stylesheet_link_tag(*sources)
+      options = sources.extract_options!
+
       case sources.first
       when :all
         sources = all_stylesheets_paths
@@ -95,7 +97,9 @@ module Propshaft
     #   javascript_include_tag "application", integrity: true
     #   # => <script src="/assets/application-abc123.js"
     #   #           integrity="sha256-xyz789..."></script>
-    def javascript_include_tag(*sources, **options)
+    def javascript_include_tag(*sources)
+      options = sources.extract_options!
+
       _build_asset_tags(sources, options, :javascript) { |source, opts| super(source, opts) }
     end
 

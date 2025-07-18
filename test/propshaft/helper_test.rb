@@ -131,6 +131,25 @@ class Propshaft::HelperTest < ActionView::TestCase
     HTML
   end
 
+  test "stylesheet_link_tag should extract options from the sources" do
+    result = stylesheet_link_tag(
+      "hello_world",
+      {
+        media: "print",
+        data: { turbo_track: "reload" }
+      }
+    )
+
+    assert_dom_equal(<<~HTML, result)
+      <link
+        rel="stylesheet"
+        href="/assets/hello_world-4137140a.css"
+        media="print"
+        data-turbo-track="reload"
+      />
+    HTML
+  end
+
   test "javascript_include_tag with integrity in secure context" do
     request.headers["HTTPS"] = "on"
 
@@ -189,6 +208,24 @@ class Propshaft::HelperTest < ActionView::TestCase
       "hello_world",
       defer: true,
       data: { turbo_track: "reload" }
+    )
+
+    assert_dom_equal(<<~HTML, result)
+      <script
+        src="/assets/hello_world-888761f8.js"
+        defer="defer"
+        data-turbo-track="reload"
+      ></script>
+    HTML
+  end
+
+  test "javascript_include_tag should extract options from the sources" do
+    result = javascript_include_tag(
+      "hello_world",
+      {
+        defer: true,
+        data: { turbo_track: "reload" }
+      }
     )
 
     assert_dom_equal(<<~HTML, result)
