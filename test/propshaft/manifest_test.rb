@@ -89,6 +89,54 @@ class Propshaft::ManifestTest < ActiveSupport::TestCase
     assert_nil manifest["nonexistent.js"]
   end
 
+  test "delete method removes entry and returns it" do
+    manifest = Propshaft::Manifest.new
+    entry = Propshaft::Manifest::ManifestEntry.new(
+      logical_path: "test.js",
+      digested_path: "test-abc123.js",
+      integrity: "sha384-test"
+    )
+
+    manifest.push(entry)
+    assert_equal entry, manifest["test.js"]
+
+    deleted_entry = manifest.delete("test.js")
+    assert_equal entry, deleted_entry
+    assert_nil manifest["test.js"]
+  end
+
+  test "delete method returns nil for missing entries" do
+    manifest = Propshaft::Manifest.new
+    assert_nil manifest.delete("nonexistent.js")
+  end
+
+  test "delete method with multiple entries" do
+    manifest = Propshaft::Manifest.new
+
+    entry1 = Propshaft::Manifest::ManifestEntry.new(
+      logical_path: "app.js",
+      digested_path: "app-abc123.js",
+      integrity: "sha384-test1"
+    )
+
+    entry2 = Propshaft::Manifest::ManifestEntry.new(
+      logical_path: "style.css",
+      digested_path: "style-def456.css",
+      integrity: "sha384-test2"
+    )
+
+    manifest.push(entry1)
+    manifest.push(entry2)
+
+    assert_equal entry1, manifest["app.js"]
+    assert_equal entry2, manifest["style.css"]
+
+    deleted_entry = manifest.delete("app.js")
+    assert_equal entry1, deleted_entry
+    assert_nil manifest["app.js"]
+    assert_equal entry2, manifest["style.css"]
+  end
+
   test "push_asset method creates entry from asset" do
     manifest = Propshaft::Manifest.new(integrity_hash_algorithm: "sha384")
     asset = find_asset("one.txt")

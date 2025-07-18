@@ -134,6 +134,19 @@ module Propshaft
       @entries[logical_path]
     end
 
+    # Removes a manifest entry by its logical path.
+    #
+    # ==== Parameters
+    #
+    # * +logical_path+ - The logical path of the asset to remove
+    #
+    # ==== Returns
+    #
+    # The removed manifest entry, or +nil+ if not found.
+    def delete(logical_path)
+      @entries.delete(logical_path)
+    end
+
     # Converts the manifest to JSON format.
     #
     # The JSON representation maps logical paths to hash representations of
