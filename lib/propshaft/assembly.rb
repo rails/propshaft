@@ -34,8 +34,11 @@ class Propshaft::Assembly
     end
   end
 
-  def server
-    Propshaft::Server.new(self)
+  def prefix
+    @prefix ||= begin
+      prefix = config.prefix || "/"
+      prefix.end_with?("/") ? prefix : "#{prefix}/"
+    end
   end
 
   def processor
