@@ -42,14 +42,6 @@ module Propshaft
         Pathname.new(File.join(app.config.paths["public"].first, app.config.assets.prefix))
       config.assets.manifest_path ||= config.assets.output_path.join(".manifest.json")
 
-      app.assets = Propshaft::Assembly.new(app.config.assets)
-
-      if config.assets.server
-        app.routes.prepend do
-          mount app.assets.server, at: app.assets.config.prefix
-        end
-      end
-
       ActiveSupport.on_load(:action_view) do
         include Propshaft::Helper
       end
@@ -68,6 +60,13 @@ module Propshaft
     initializer :quiet_assets do |app|
       if app.config.assets.quiet
         app.middleware.insert_before ::Rails::Rack::Logger, Propshaft::QuietAssets
+      end
+    end
+
+    initializer "propshaft.assets_middleware", group: :all do |app|
+      app.assets = Propshaft::Assembly.new(app.config.assets)
+      if config.assets.server
+        app.middleware.insert_after ::ActionDispatch::Static, Propshaft::Server, app.assets
       end
     end
 
