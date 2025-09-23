@@ -66,7 +66,7 @@ module Propshaft
     initializer "propshaft.assets_middleware", group: :all do |app|
       app.assets = Propshaft::Assembly.new(app.config.assets)
       if config.assets.server
-        app.middleware.insert_after ::ActionDispatch::Static, Propshaft::Server, app.assets
+        app.middleware.insert_before ::ActionDispatch::Executor, Propshaft::Server, app.assets
       end
     end
 
