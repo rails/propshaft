@@ -37,8 +37,14 @@ class Propshaft::Compiler::CssAssetUrls < Propshaft::Compiler
       if asset = load_path.find(resolved_path)
         %[url("#{url_prefix}/#{asset.digested_path}#{fingerprint}")]
       else
-        Propshaft.logger.warn "Unable to resolve '#{pattern}' for missing asset '#{resolved_path}' in #{logical_path}"
+        unless public_file?(resolved_path)
+          warn "Unable to resolve '#{pattern}' for missing asset '#{resolved_path}' in #{logical_path}"
+        end
         %[url("#{pattern}")]
       end
+    end
+
+    def public_file?(filename)
+      config.public_path && File.exist?(File.join(config.public_path, filename))
     end
 end

@@ -38,8 +38,9 @@ module Propshaft
       config.assets.file_watcher ||= app.config.file_watcher
 
       config.assets.relative_url_root ||= app.config.relative_url_root
+      config.assets.public_path ||= app.config.paths["public"].first
       config.assets.output_path ||=
-        Pathname.new(File.join(app.config.paths["public"].first, app.config.assets.prefix))
+        Pathname.new(File.join(config.assets.public_path, app.config.assets.prefix))
       config.assets.manifest_path ||= config.assets.output_path.join(".manifest.json")
 
       ActiveSupport.on_load(:action_view) do

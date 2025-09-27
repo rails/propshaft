@@ -13,6 +13,13 @@ class Propshaft::Compiler::CssAssetUrlsTest < ActiveSupport::TestCase
     }
   end
 
+  def capture_err
+    _, err = capture_io do
+      yield
+    end
+    err.strip
+  end
+
   test "basic" do
     compiled = compile_asset_with_content(%({ background: url(file.jpg); }))
     assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
@@ -120,8 +127,11 @@ class Propshaft::Compiler::CssAssetUrlsTest < ActiveSupport::TestCase
   end
 
   test "missing asset" do
-    compiled = compile_asset_with_content(%({ background: url("file-not-found.jpg"); }))
-    assert_match(/{ background: url\("file-not-found.jpg"\); }/, compiled)
+    err = capture_err do
+      compiled = compile_asset_with_content(%({ background: url("file-not-found.jpg"); }))
+      assert_match(/{ background: url\("file-not-found.jpg"\); }/, compiled)
+    end
+    assert_equal "Unable to resolve 'file-not-found.jpg' for missing asset 'foobar/source/file-not-found.jpg' in foobar/source/test.css", err.strip
   end
 
   test "relative url root" do
@@ -129,6 +139,15 @@ class Propshaft::Compiler::CssAssetUrlsTest < ActiveSupport::TestCase
 
     compiled = compile_asset_with_content(%({ background: url(file.jpg); }))
     assert_match(/{ background: url\("\/url-root\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
+  end
+
+  test "skips warnings for files already present in public folder" do
+    @options.public_path = Pathname.new("#{__dir__}/../../fixtures/public").to_s
+    err = capture_err do
+      compiled = compile_asset_with_content(%({ background: url(/public-file.jpg); }))
+      assert_match(/{ background: url\("\/public-file.jpg"\); }/, compiled)
+    end
+    assert_equal "", err
   end
 
   private
