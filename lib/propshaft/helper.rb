@@ -81,8 +81,8 @@ module Propshaft
       when :app
         sources = app_stylesheets_paths
       when :all_app_last
-        app_stylesheets_paths = app_stylesheets_paths
-        sources = (all_stylesheets_paths - app_stylesheets_paths) + app_stylesheets_paths
+        app_paths = app_stylesheets_paths
+        sources = (all_stylesheets_paths - app_paths) + app_paths
       end
 
       _build_asset_tags(sources, options, :stylesheet) { |source, opts| super(source, opts) }
