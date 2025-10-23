@@ -68,8 +68,10 @@ module Propshaft
     #   # => <link rel="stylesheet" href="/assets/application-abc123.css"
     #   #          integrity="sha256-xyz789...">
     #
-    #   stylesheet_link_tag :all    # All stylesheets in load path
-    #   stylesheet_link_tag :app    # Only app/assets stylesheets
+    #   stylesheet_link_tag :all          # All stylesheets in load path
+    #   stylesheet_link_tag :app          # Only app/assets stylesheets
+    #   stylesheet_link_tag :all_app_last # All stylesheets in load path ensuring app/assets last,
+    #                                       so vendor and gem styles can safely be overwritten
     def stylesheet_link_tag(*sources)
       options = sources.extract_options!
 
@@ -78,6 +80,9 @@ module Propshaft
         sources = all_stylesheets_paths
       when :app
         sources = app_stylesheets_paths
+      when :all_app_last
+        app_paths = app_stylesheets_paths
+        sources = (all_stylesheets_paths - app_paths) + app_paths
       end
 
       _build_asset_tags(sources, options, :stylesheet) { |source, opts| super(source, opts) }
