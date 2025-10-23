@@ -105,6 +105,16 @@ class Propshaft::HelperTest < ActionView::TestCase
     HTML
   end
 
+  test "stylesheet_link_tag with :all_app_last option" do
+    result = stylesheet_link_tag(:all_app_last)
+
+    assert_dom_equal(<<~HTML, result)
+      <link rel="stylesheet" href="/assets/library-86a3b7a9.css" />
+      <link rel="stylesheet" href="/assets/goodbye-b1dc9940.css" />
+      <link rel="stylesheet" href="/assets/hello_world-4137140a.css" />
+    HTML
+  end
+
   test "stylesheet_link_tag with :app option" do
     result = stylesheet_link_tag(:app)
 
