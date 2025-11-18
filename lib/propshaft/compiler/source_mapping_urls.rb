@@ -9,6 +9,14 @@ class Propshaft::Compiler::SourceMappingUrls < Propshaft::Compiler
     input.gsub(SOURCE_MAPPING_PATTERN) { source_mapping_url(asset.logical_path, asset_path($2, asset.logical_path), $1, $3) }
   end
 
+  def referenced_by(asset, references: Set.new)
+    asset.content.scan(SOURCE_MAPPING_PATTERN).each do |_, source_mapping_url, _|
+      sourcemap_asset = load_path.find(asset_path(source_mapping_url, asset.logical_path))
+      references << sourcemap_asset if sourcemap_asset
+    end
+    references
+  end
+
   private
     def asset_path(source_mapping_url, logical_path)
       source_mapping_url.gsub!(/^(.+\/)?#{url_prefix}\//, "")

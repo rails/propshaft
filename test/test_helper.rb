@@ -11,10 +11,10 @@ Rails::TestUnitReporter.executable = "bin/test"
 
 class ActiveSupport::TestCase
   private
-    def find_asset(logical_path, fixture_path:)
+    def find_asset(logical_path, fixture_path:, load_path: nil)
       root_path = Pathname.new("#{__dir__}/fixtures/assets/#{fixture_path}")
       path = root_path.join(logical_path)
-      load_path = Propshaft::LoadPath.new([ root_path ], compilers: Propshaft::Compilers.new(nil))
+      load_path ||= Propshaft::LoadPath.new([ root_path ], compilers: Propshaft::Compilers.new(nil))
 
       Propshaft::Asset.new(path, logical_path: logical_path, load_path: load_path)
     end
