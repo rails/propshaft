@@ -19,16 +19,11 @@ class Propshaft::Server
       if (asset = @assembly.load_path.find(path)) && asset.fresh?(digest)
         compiled_content = asset.compiled_content
 
-        content_type = asset.content_type.to_s
-        if DEFAULT_UTF8_CONTENT_TYPES.include?(content_type)
-          content_type = "#{content_type}; charset=utf-8"
-        end
-
         [
           200,
           {
             Rack::CONTENT_LENGTH  => compiled_content.length.to_s,
-            Rack::CONTENT_TYPE    => content_type,
+            Rack::CONTENT_TYPE    => asset.content_type_with_charset.to_s,
             VARY                  => "Accept-Encoding",
             Rack::ETAG            => "\"#{asset.digest}\"",
             Rack::CACHE_CONTROL   => "public, max-age=31536000, immutable"
@@ -48,12 +43,6 @@ class Propshaft::Server
   end
 
   private
-    DEFAULT_UTF8_CONTENT_TYPES = [
-      Rack::Mime::MIME_TYPES[".css"],
-      Rack::Mime::MIME_TYPES[".html"],
-    ]
-    private_constant :DEFAULT_UTF8_CONTENT_TYPES
-
     def extract_path_and_digest(path)
       path = path.delete_prefix(@assembly.prefix)
       path = Rack::Utils.unescape(path)

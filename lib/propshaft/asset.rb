@@ -5,6 +5,8 @@ require "action_dispatch/http/mime_type"
 class Propshaft::Asset
   attr_reader :path, :logical_path, :load_path
 
+  UTF8_CONTENT_TYPES = [ Mime::Type.lookup("text/html"), Mime::Type.lookup("text/css") ]
+
   class << self
     def extract_path_and_digest(digested_path)
       digest = digested_path[/-([0-9a-zA-Z]{7,128})\.(?!digested)([^.]|.map)+\z/, 1]
@@ -27,7 +29,15 @@ class Propshaft::Asset
   end
 
   def content_type
-    Mime::Type.lookup_by_extension(logical_path.extname.from(1))
+    @content_type ||= Mime::Type.lookup_by_extension(logical_path.extname.from(1))
+  end
+
+  def content_type_with_charset
+    if content_type.in? UTF8_CONTENT_TYPES
+      "#{content_type}; charset=utf-8"
+    else
+      content_type
+    end
   end
 
   def length
