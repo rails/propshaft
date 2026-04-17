@@ -23,7 +23,7 @@ class Propshaft::Server
           200,
           {
             Rack::CONTENT_LENGTH  => compiled_content.length.to_s,
-            Rack::CONTENT_TYPE    => asset.content_type.to_s,
+            Rack::CONTENT_TYPE    => asset.content_type_with_charset.to_s,
             VARY                  => "Accept-Encoding",
             Rack::ETAG            => "\"#{asset.digest}\"",
             Rack::CACHE_CONTROL   => "public, max-age=31536000, immutable"

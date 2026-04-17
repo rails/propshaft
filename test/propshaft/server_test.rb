@@ -47,7 +47,7 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
 
     assert_equal 200, last_response.status
     assert_equal last_response.body.bytesize.to_s, last_response.headers['content-length']
-    assert_equal "text/css", last_response.headers['content-type']
+    assert_equal "text/css; charset=utf-8", last_response.headers['content-type']
     assert_equal "Accept-Encoding", last_response.headers['vary']
     assert_equal "\"#{asset.digest}\"", last_response.headers['etag']
     assert_equal "public, max-age=31536000, immutable", last_response.headers['cache-control']
@@ -65,6 +65,22 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
     asset = @assembly.load_path.find("file-is-a-sourcemap.js.map")
     get "/assets/#{asset.digested_path}"
     assert_equal 200, last_response.status
+  end
+
+  test "serve an HTML file with charset" do
+    asset = @assembly.load_path.find("test.html")
+    get "/assets/#{asset.digested_path}"
+
+    assert_equal 200, last_response.status
+    assert_equal "text/html; charset=utf-8", last_response.headers['content-type']
+  end
+
+  test "serve a JS file without charset" do
+    asset = @assembly.load_path.find("again.js")
+    get "/assets/#{asset.digested_path}"
+
+    assert_equal 200, last_response.status
+    assert_equal "text/javascript", last_response.headers['content-type']
   end
 
   test "not found" do

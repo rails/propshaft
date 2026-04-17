@@ -19,6 +19,13 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
     assert_equal "text/css", find_asset("another.css").content_type.to_s
   end
 
+  test "content type with charset" do
+    assert_equal "text/plain", find_asset("one.txt").content_type_with_charset.to_s
+    assert_equal "text/javascript", find_asset("again.js").content_type_with_charset.to_s
+    assert_equal "text/css; charset=utf-8", find_asset("another.css").content_type_with_charset.to_s
+    assert_equal "text/html; charset=utf-8", find_asset("test.html").content_type_with_charset.to_s
+  end
+
   test "length" do
     assert_equal 19, find_asset("one.txt").length
   end
