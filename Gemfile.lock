@@ -116,6 +116,7 @@ GEM
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
     minitest (5.27.0)
+    minitest-mock (5.27.0)
     net-imap (0.5.9)
       date
       net-protocol
@@ -207,7 +208,7 @@ PLATFORMS
 
 DEPENDENCIES
   debug
-  minitest (< 6)
+  minitest-mock
   propshaft!
   rails (>= 7.0.1)
   rake
