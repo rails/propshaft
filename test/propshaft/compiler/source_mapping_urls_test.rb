@@ -72,6 +72,24 @@ class Propshaft::Compiler::SourceMappingUrlsTest < ActiveSupport::TestCase
                   compile_asset(find_asset("source.js", fixture_path: "mapped"))
   end
 
+  test "changes to sourcemap are reflected in parent digest" do
+    root_path = Pathname.new("#{__dir__}/../../fixtures/assets/mapped")
+    assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config|
+      config.paths = [ root_path ]
+      config.compilers = [[ "text/javascript", Propshaft::Compiler::SourceMappingUrls ]]
+    })
+
+    digest = find_asset("source.js", fixture_path: "mapped", load_path: assembly.load_path).digest
+
+    open_asset_with_reset("mapped/source.js.map") do |sourcemap_file|
+      sourcemap_file.write "changes!"
+      sourcemap_file.flush
+
+      new_digest = find_asset("source.js", fixture_path: "mapped", load_path: assembly.load_path).digest
+      assert_not_equal digest, new_digest
+    end
+  end
+
   private
     def compile_asset(asset)
 
@@ -80,6 +98,15 @@ class Propshaft::Compiler::SourceMappingUrlsTest < ActiveSupport::TestCase
       assembly.compilers.register "text/css", Propshaft::Compiler::SourceMappingUrls
 
       assembly.compilers.compile(asset)
+    end
+
+    def open_asset_with_reset(logical_path)
+      dependency_path = Pathname.new("#{__dir__}/../../fixtures/assets/#{logical_path}")
+      existing_dependency_content = File.read(dependency_path)
+
+      File.open(dependency_path, "a") { |f| yield f }
+    ensure
+      File.write(dependency_path, existing_dependency_content)
     end
 end
 
