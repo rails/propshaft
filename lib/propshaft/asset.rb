@@ -5,7 +5,7 @@ require "action_dispatch/http/mime_type"
 class Propshaft::Asset
   attr_reader :path, :logical_path, :load_path
 
-  UTF8_CONTENT_TYPES = [ Mime::Type.lookup("text/html"), Mime::Type.lookup("text/css") ]
+  CONTENT_TYPES_WITH_UTF8_CHARSET = [ Mime::Type.lookup("text/html"), Mime::Type.lookup("text/css") ]
 
   class << self
     def extract_path_and_digest(digested_path)
@@ -33,7 +33,7 @@ class Propshaft::Asset
   end
 
   def content_type_with_charset
-    if content_type.in? UTF8_CONTENT_TYPES
+    if content_type.in? CONTENT_TYPES_WITH_UTF8_CHARSET
       "#{content_type}; charset=utf-8"
     else
       content_type
