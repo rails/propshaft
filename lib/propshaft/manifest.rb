@@ -29,7 +29,7 @@ module Propshaft
       #
       # Returns a hash containing the +digested_path+ and +integrity+ keys.
       def to_h
-        { digested_path: digested_path, integrity: integrity}
+        { digested_path: digested_path, integrity: integrity }
       end
     end
 
@@ -56,9 +56,9 @@ module Propshaft
           # Compatibility mode to be able to
           # read the old "simple manifest" format
           digested_path, integrity = if value.is_a?(String)
-            [value, nil]
+            [ value, nil ]
           else
-            [value["digested_path"], value["integrity"]]
+            [ value["digested_path"], value["integrity"] ]
           end
 
           entry = ManifestEntry.new(

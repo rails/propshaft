@@ -14,13 +14,13 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
 
     def call(env)
       @calls << env
-      [200, {}, ["OK"]]
+      [ 200, {}, [ "OK" ] ]
     end
   end
 
   setup do
     @assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config|
-      config.paths = [Pathname.new("#{__dir__}/../fixtures/assets/vendor"), Pathname.new("#{__dir__}/../fixtures/assets/first_path")]
+      config.paths = [ Pathname.new("#{__dir__}/../fixtures/assets/vendor"), Pathname.new("#{__dir__}/../fixtures/assets/first_path") ]
       config.output_path = Pathname.new("#{__dir__}../fixtures/output")
       config.prefix = "/assets"
     })
@@ -46,11 +46,11 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
     get "/assets/#{asset.digested_path}"
 
     assert_equal 200, last_response.status
-    assert_equal last_response.body.bytesize.to_s, last_response.headers['content-length']
-    assert_equal "text/css; charset=utf-8", last_response.headers['content-type']
-    assert_equal "Accept-Encoding", last_response.headers['vary']
-    assert_equal "\"#{asset.digest}\"", last_response.headers['etag']
-    assert_equal "public, max-age=31536000, immutable", last_response.headers['cache-control']
+    assert_equal last_response.body.bytesize.to_s, last_response.headers["content-length"]
+    assert_equal "text/css; charset=utf-8", last_response.headers["content-type"]
+    assert_equal "Accept-Encoding", last_response.headers["vary"]
+    assert_equal "\"#{asset.digest}\"", last_response.headers["etag"]
+    assert_equal "public, max-age=31536000, immutable", last_response.headers["cache-control"]
     assert_equal ".hero { background: url(\"/assets/foobar/source/file-3e6a1297.jpg\") }\n",
                  last_response.body
   end
@@ -72,7 +72,7 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
     get "/assets/#{asset.digested_path}"
 
     assert_equal 200, last_response.status
-    assert_equal "text/html; charset=utf-8", last_response.headers['content-type']
+    assert_equal "text/html; charset=utf-8", last_response.headers["content-type"]
   end
 
   test "serve a JS file without charset" do
@@ -80,19 +80,19 @@ class Propshaft::ServerTest < ActiveSupport::TestCase
     get "/assets/#{asset.digested_path}"
 
     assert_equal 200, last_response.status
-    assert_equal "text/javascript", last_response.headers['content-type']
+    assert_equal "text/javascript", last_response.headers["content-type"]
   end
 
   test "not found" do
     get "/assets/not-found.js"
 
     assert_equal 404, last_response.status
-    assert_equal "9", last_response.headers['content-length']
-    assert_equal "text/plain", last_response.headers['content-type']
+    assert_equal "9", last_response.headers["content-length"]
+    assert_equal "text/plain", last_response.headers["content-type"]
     assert_equal "Not found", last_response.body
-    assert_not last_response.headers.key?('cache-control')
-    assert_not last_response.headers.key?('etag')
-    assert_not last_response.headers.key?('accept-encoding')
+    assert_not last_response.headers.key?("cache-control")
+    assert_not last_response.headers.key?("etag")
+    assert_not last_response.headers.key?("accept-encoding")
   end
 
   test "not found if digest does not match" do

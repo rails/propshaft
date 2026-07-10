@@ -11,7 +11,7 @@ module Propshaft
     class JsAssetUrlsTest < ActiveSupport::TestCase
       setup do
         @options = ActiveSupport::OrderedOptions.new.tap do |config|
-          config.paths = [Pathname.new("#{__dir__}/../../fixtures/assets/vendor")]
+          config.paths = [ Pathname.new("#{__dir__}/../../fixtures/assets/vendor") ]
           config.output_path = Pathname.new("#{__dir__}/../../fixtures/output")
           config.prefix = "/assets"
         end

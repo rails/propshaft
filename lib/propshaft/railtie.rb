@@ -14,7 +14,7 @@ module Propshaft
       [ "text/css", Propshaft::Compiler::CssAssetUrls ],
       [ "text/css", Propshaft::Compiler::SourceMappingUrls ],
       [ "text/javascript", Propshaft::Compiler::JsAssetUrls ],
-      [ "text/javascript", Propshaft::Compiler::SourceMappingUrls ],
+      [ "text/javascript", Propshaft::Compiler::SourceMappingUrls ]
     ]
     config.assets.sweep_cache = Rails.env.development?
     config.assets.server = Rails.env.development? || Rails.env.test?
@@ -33,7 +33,7 @@ module Propshaft
 
     config.after_initialize do |app|
       # Prioritize assets from within the application over assets of the same path from engines/gems.
-      config.assets.paths.sort_by!.with_index { |path, i| [path.to_s.start_with?(Rails.root.to_s) ? 0 : 1, i] }
+      config.assets.paths.sort_by!.with_index { |path, i| [ path.to_s.start_with?(Rails.root.to_s) ? 0 : 1, i ] }
 
       config.assets.file_watcher ||= app.config.file_watcher
 

@@ -12,7 +12,7 @@ class Propshaft::Asset
       digest = digested_path[/-([0-9a-zA-Z]{7,128})\.(?!digested)([^.]|.map)+\z/, 1]
       path   = digest ? digested_path.sub("-#{digest}", "") : digested_path
 
-      [path, digest]
+      [ path, digest ]
     end
   end
 
@@ -53,17 +53,17 @@ class Propshaft::Asset
     # https://w3c.github.io/webappsec-subresource-integrity/
     # allowing only sha256, sha384, and sha512
     bitlen = case hash_algorithm
-      when "sha256"
+    when "sha256"
         256
-      when "sha384"
+    when "sha384"
         384
-      when "sha512"
+    when "sha512"
         512
-      else
+    else
         raise(StandardError.new("Subresource Integrity hash algorithm must be one of SHA2 family (sha256, sha384, sha512)"))
-      end
+    end
 
-    [hash_algorithm, Digest::SHA2.new(bitlen).base64digest(compiled_content)].join("-")
+    [ hash_algorithm, Digest::SHA2.new(bitlen).base64digest(compiled_content) ].join("-")
   end
 
   def digested_path

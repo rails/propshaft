@@ -123,7 +123,7 @@ module Propshaft
         integrity = _compute_integrity?(options)
 
         sources.map { |source|
-          opts = integrity ? options.merge!('integrity' => asset_integrity(source, type: asset_type)) : options
+          opts = integrity ? options.merge!("integrity" => asset_integrity(source, type: asset_type)) : options
           yield(source, opts)
         }.join("\n").html_safe
       end
@@ -134,12 +134,12 @@ module Propshaft
       # and when explicitly requested via the +integrity+ option.
       def _compute_integrity?(options)
         if _secure_subresource_integrity_context?
-          case options['integrity']
+          case options["integrity"]
           when nil, false, true
-            options.delete('integrity') == true
+            options.delete("integrity") == true
           end
         else
-          options.delete 'integrity'
+          options.delete "integrity"
           false
         end
       end

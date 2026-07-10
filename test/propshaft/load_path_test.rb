@@ -65,13 +65,13 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
 
   test "asset paths by type" do
     assert_equal \
-      ["another.css", "dependent/a.css", "dependent/b.css", "dependent/c.css", "file-already-abcdefVWXYZ0123456789_-.digested.css", "file-already-abcdefVWXYZ0123456789_-.digested.debug.css", "file-not.digested.css"],
+      [ "another.css", "dependent/a.css", "dependent/b.css", "dependent/c.css", "file-already-abcdefVWXYZ0123456789_-.digested.css", "file-already-abcdefVWXYZ0123456789_-.digested.debug.css", "file-not.digested.css" ],
       @load_path.asset_paths_by_type("css")
   end
 
   test "asset paths by glob" do
     assert_equal \
-      ["dependent/a.css", "dependent/b.css", "dependent/c.css"],
+      [ "dependent/a.css", "dependent/b.css", "dependent/c.css" ],
       @load_path.asset_paths_by_glob("**/dependent/*.css")
   end
 
