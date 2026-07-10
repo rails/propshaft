@@ -33,7 +33,7 @@ class Propshaft::LoadPath
 
   def asset_paths_by_type(content_type)
     (@cached_asset_paths_by_type ||= Hash.new)[content_type] ||=
-      extract_logical_paths_from(assets.select { |a| a.content_type == Mime::EXTENSION_LOOKUP[content_type] })
+      extract_logical_paths_from(assets.select { |a| a.content_type == Mime::Type.lookup_by_extension(content_type) })
   end
 
   def asset_paths_by_glob(glob)
@@ -52,7 +52,7 @@ class Propshaft::LoadPath
   # and test to ensure the map caches are reset when javascript files are changed.
   def cache_sweeper
     @cache_sweeper ||= begin
-      exts_to_watch  = Mime::EXTENSION_LOOKUP.map(&:first)
+      exts_to_watch  = Mime.respond_to?(:extensions) ? Mime.extensions : Mime::EXTENSION_LOOKUP.map(&:first)
       files_to_watch = Array(paths).collect { |dir| [ dir.to_s, exts_to_watch ] }.to_h
       mutex = Mutex.new
 
