@@ -5,7 +5,9 @@ module Propshaft::Resolver
     attr_reader :manifest_path, :prefix
 
     def initialize(manifest_path:, prefix:)
-      @manifest_path, @prefix = manifest_path, prefix
+      @manifest_path = manifest_path
+      @prefix = prefix
+      @manifest = Propshaft::Manifest.from_path(manifest_path)
     end
 
     def resolve(logical_path)
@@ -15,7 +17,7 @@ module Propshaft::Resolver
     end
 
     def integrity(logical_path)
-      entry = manifest[logical_path]
+      entry = @manifest[logical_path]
 
       entry&.integrity
     end
@@ -27,12 +29,8 @@ module Propshaft::Resolver
     end
 
     private
-      def manifest
-        @manifest ||= Propshaft::Manifest.from_path(manifest_path)
-      end
-
       def digested_path(logical_path)
-        entry = manifest[logical_path]
+        entry = @manifest[logical_path]
 
         entry&.digested_path
       end
