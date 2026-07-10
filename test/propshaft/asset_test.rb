@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 require "propshaft/asset"
 require "propshaft/load_path"

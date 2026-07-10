@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Propshaft
   # Manages the manifest file that maps logical asset paths to their digested counterparts.
   #

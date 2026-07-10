@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails"
 require "active_support/ordered_options"
 require "propshaft/quiet_assets"

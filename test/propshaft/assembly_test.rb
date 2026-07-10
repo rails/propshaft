@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 require "propshaft/assembly"
 require "active_support/ordered_options"

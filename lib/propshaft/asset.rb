@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "digest/sha1"
 require "digest/sha2"
 require "action_dispatch/http/mime_type"

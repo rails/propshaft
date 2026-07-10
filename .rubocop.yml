@@ -1,2 +1,6 @@
 inherit_gem:
   rubocop-rails-omakase: rubocop.yml
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always_true

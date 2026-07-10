@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "propshaft/manifest"
 require "propshaft/load_path"
 require "propshaft/resolver/dynamic"

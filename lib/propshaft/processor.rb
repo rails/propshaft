@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "propshaft/output_path"
 
 class Propshaft::Processor

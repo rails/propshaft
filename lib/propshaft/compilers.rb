@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Propshaft::Compilers
   attr_reader :registrations, :assembly
 

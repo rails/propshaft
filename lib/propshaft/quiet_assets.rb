@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Propshaft::QuietAssets
   def initialize(app)
     @app = app

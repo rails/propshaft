@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Propshaft::Resolver
   class Dynamic
     attr_reader :load_path, :prefix

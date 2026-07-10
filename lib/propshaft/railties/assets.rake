@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :assets do
   desc "Compile all the assets from config.assets.paths"
   task precompile: :environment do

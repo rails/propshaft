@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Propshaft
   # Helper module that provides asset path resolution and integrity support for Rails applications.
   #
