@@ -36,10 +36,10 @@ class Propshaft::Compiler::JsAssetUrls < Propshaft::Compiler
     def asset_url(resolved_path, logical_path, fingerprint, pattern)
       asset = load_path.find(resolved_path)
       if asset
-        %["#{url_prefix}/#{asset.digested_path}#{fingerprint}"]
+        %("#{url_prefix}/#{asset.digested_path}#{fingerprint}")
       else
         Propshaft.logger.warn("Unable to resolve '#{pattern}' for missing asset '#{resolved_path}' in #{logical_path}")
-        %["#{pattern}"]
+        %("#{pattern}")
       end
     end
 end

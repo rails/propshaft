@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SampleController < ApplicationController
   def load_real_assets
   end

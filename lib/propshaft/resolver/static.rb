@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Propshaft::Resolver
   class Static
     attr_reader :manifest_path, :prefix

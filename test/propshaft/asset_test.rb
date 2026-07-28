@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 require "propshaft/asset"
 require "propshaft/load_path"
@@ -131,7 +133,7 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
 
       assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config|
         config.paths = [ root_path ]
-        config.compilers = [[ "text/css", Propshaft::Compiler::CssAssetUrls ]]
+        config.compilers = [ [ "text/css", Propshaft::Compiler::CssAssetUrls ] ]
       })
 
       Propshaft::Asset.new(path, logical_path: logical_path, load_path: assembly.load_path)

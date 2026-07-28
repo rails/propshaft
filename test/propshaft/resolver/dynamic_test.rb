@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 require "propshaft/resolver/dynamic"
 
@@ -31,7 +33,7 @@ class Propshaft::Resolver::DynamicTest < ActiveSupport::TestCase
   end
 
   test "integrity for asset return the value for the compiled content instead of the source" do
-    compilers = [["text/css", Propshaft::Compiler::CssAssetUrls ]]
+    compilers = [ [ "text/css", Propshaft::Compiler::CssAssetUrls ] ]
     resolver = create_resolver(integrity_hash_algorithm: "sha384", compilers: compilers)
     assert_equal "sha384-jUiHGq2aPNACr4g68crM1I28TitXJKYhEgokcX6W5VYGwufEKQxfLpe4GakM84ex", resolver.integrity("another.css")
   end
@@ -49,7 +51,7 @@ class Propshaft::Resolver::DynamicTest < ActiveSupport::TestCase
     def create_resolver(integrity_hash_algorithm: nil, compilers: [])
       assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config|
         config.paths = [
-          Pathname.new("#{__dir__}/../../fixtures/assets/first_path"),
+          Pathname.new("#{__dir__}/../../fixtures/assets/first_path")
         ]
         config.compilers = compilers
         config.integrity_hash_algorithm = integrity_hash_algorithm

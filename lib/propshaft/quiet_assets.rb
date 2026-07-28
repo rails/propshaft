@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Propshaft::QuietAssets
   def initialize(app)
     @app = app
@@ -5,7 +7,7 @@ class Propshaft::QuietAssets
   end
 
   def call(env)
-    if env['PATH_INFO'] =~ @assets_regex
+    if env["PATH_INFO"] =~ @assets_regex
       ::Rails.logger.silence { @app.call(env) }
     else
       @app.call(env)

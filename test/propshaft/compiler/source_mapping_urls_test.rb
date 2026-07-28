@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 require "minitest/mock"
 require "propshaft/asset"
@@ -74,7 +76,6 @@ class Propshaft::Compiler::SourceMappingUrlsTest < ActiveSupport::TestCase
 
   private
     def compile_asset(asset)
-
       assembly = Propshaft::Assembly.new(@options)
       assembly.compilers.register "text/javascript", Propshaft::Compiler::SourceMappingUrls
       assembly.compilers.register "text/css", Propshaft::Compiler::SourceMappingUrls
