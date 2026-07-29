@@ -86,6 +86,36 @@ class Propshaft::ManifestTest < ActiveSupport::TestCase
     assert_nil retrieved_entry.integrity
   end
 
+  test "logical_paths_by_content_type groups sorted logical paths" do
+    manifest = create_manifest
+    manifest << css_entry("z.css")
+    manifest << css_entry("a.css")
+    manifest << css_entry("nested/m.css")
+
+    grouped = manifest.logical_paths_by_content_type
+
+    assert_equal [ "a.css", "another.css", "nested/m.css", "z.css" ], grouped[Mime::Type.lookup("text/css")]
+    assert_equal [ "one.txt" ], grouped[Mime::Type.lookup("text/plain")]
+    assert_nil grouped[Mime::Type.lookup("image/png")]
+  end
+
+  test "logical_paths_by_content_type groups unrecognized extensions under nil" do
+    manifest = create_manifest
+    manifest << Propshaft::Manifest::ManifestEntry.new(
+      logical_path: "source.js.map", digested_path: "source-abc123.js.map", integrity: nil
+    )
+
+    assert_equal [ "source.js.map" ], manifest.logical_paths_by_content_type[nil]
+  end
+
+  test "logical_paths_by_content_type reflects entries at the time it is called" do
+    manifest = create_manifest
+    assert_equal [ "another.css" ], manifest.logical_paths_by_content_type[Mime::Type.lookup("text/css")]
+
+    manifest.delete("another.css")
+    assert_nil manifest.logical_paths_by_content_type[Mime::Type.lookup("text/css")]
+  end
+
   test "[] accessor returns nil for missing entries" do
     manifest = Propshaft::Manifest.new
     assert_nil manifest["nonexistent.js"]
@@ -208,6 +238,12 @@ class Propshaft::ManifestTest < ActiveSupport::TestCase
         manifest.push_asset(find_asset("one.txt"))
         manifest.push_asset(find_asset("another.css"))
       end
+    end
+
+    def css_entry(logical_path, digested_path: "#{logical_path}-abc123.css")
+      Propshaft::Manifest::ManifestEntry.new(
+        logical_path: logical_path, digested_path: digested_path, integrity: nil
+      )
     end
 
     def find_asset(logical_path)

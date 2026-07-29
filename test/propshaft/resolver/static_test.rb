@@ -28,6 +28,10 @@ module Propshaft::Resolver::StaticTests
       assert_nil resolver.resolve("nowhere.txt")
     end
 
+    test "asset paths by type returns empty array when no asset matches" do
+      assert_equal [], resolver.asset_paths_by_type("png")
+    end
+
     test "integrity for missing asset returns nil" do
       assert_nil resolver.integrity("nowhere.txt")
     end
@@ -52,6 +56,11 @@ end
 
 class Propshaft::Resolver::StaticTest < ActiveSupport::TestCase
   include Propshaft::Resolver::StaticTests
+
+  test "asset paths by type returns the paths for the extension's content type" do
+    assert_equal [ "hello_world.css", "styles/print.css" ], resolver.asset_paths_by_type("css")
+    assert_equal [ "hello_world.js" ], resolver.asset_paths_by_type("js")
+  end
 
   test "integrity for asset returns nil for simple manifest" do
     assert_nil resolver.integrity("one.txt")
