@@ -34,6 +34,10 @@ class Propshaft::Asset
     @content_type ||= Mime::Type.lookup_by_extension(logical_path.extname.from(1))
   end
 
+  def app?
+    path.to_s.start_with?(*load_path.app_paths)
+  end
+
   def content_type_with_charset
     if content_type.in? CONTENT_TYPES_WITH_UTF8_CHARSET
       "#{content_type}; charset=utf-8"

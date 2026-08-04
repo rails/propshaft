@@ -28,6 +28,14 @@ class Propshaft::AssetTest < ActiveSupport::TestCase
     assert_equal "text/html; charset=utf-8", find_asset("test.html").content_type_with_charset.to_s
   end
 
+  test "app" do
+    root_path = Pathname.new("#{__dir__}/../fixtures/assets/first_path")
+    load_path = Propshaft::LoadPath.new([ root_path ], app_paths: [ root_path ], compilers: Propshaft::Compilers.new(nil))
+
+    assert_predicate Propshaft::Asset.new(root_path.join("one.txt"), logical_path: "one.txt", load_path: load_path), :app?
+    assert_not_predicate find_asset("one.txt"), :app?
+  end
+
   test "length" do
     assert_equal 19, find_asset("one.txt").length
   end

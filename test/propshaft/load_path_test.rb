@@ -71,10 +71,19 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
       @load_path.asset_paths_by_type("css")
   end
 
-  test "asset paths by glob" do
+  test "app asset paths by type" do
+    load_path = Propshaft::LoadPath.new [
+      Pathname.new("#{__dir__}/../fixtures/assets/first_path"),
+      Pathname.new("#{__dir__}/../fixtures/assets/mapped")
+    ], app_paths: [ Pathname.new("#{__dir__}/../fixtures/assets/mapped") ], compilers: Propshaft::Compilers.new(nil)
+
     assert_equal \
-      [ "dependent/a.css", "dependent/b.css", "dependent/c.css" ],
-      @load_path.asset_paths_by_glob("**/dependent/*.css")
+      [ "source.css", "sourceMappingURL-not-at-end.css", "sourceMappingURL-not-at-start.css", "sourceMappingURL-outside-comment.css", "sourceless.css" ],
+      load_path.app_asset_paths_by_type("css")
+  end
+
+  test "app asset paths by type is empty without app paths" do
+    assert_equal [], @load_path.app_asset_paths_by_type("css")
   end
 
   private

@@ -14,10 +14,11 @@ class Propshaft::LoadPath
     end
   end
 
-  attr_reader :paths, :compilers, :version, :integrity_hash_algorithm
+  attr_reader :paths, :app_paths, :compilers, :version, :integrity_hash_algorithm
 
-  def initialize(paths = [], compilers:, version: nil, file_watcher: nil, integrity_hash_algorithm: nil)
+  def initialize(paths = [], compilers:, app_paths: [], version: nil, file_watcher: nil, integrity_hash_algorithm: nil)
     @paths, @compilers, @version, @integrity_hash_algorithm = dedup(paths), compilers, version, integrity_hash_algorithm
+    @app_paths = Array(app_paths).collect(&:to_s)
     @file_watcher = file_watcher || NullFileWatcher
   end
 
@@ -38,9 +39,9 @@ class Propshaft::LoadPath
       extract_logical_paths_from(assets.select { |a| a.content_type == Mime::Type.lookup_by_extension(content_type) })
   end
 
-  def asset_paths_by_glob(glob)
-    (@cached_asset_paths_by_glob ||= Hash.new)[glob] ||=
-      extract_logical_paths_from(assets.select { |a| a.path.fnmatch?(glob) })
+  def app_asset_paths_by_type(extension)
+    (@cached_app_asset_paths_by_type ||= Hash.new)[extension] ||=
+      extract_logical_paths_from(assets.select { |a| a.app? && a.content_type == Mime::Type.lookup_by_extension(extension) })
   end
 
   def manifest
@@ -94,7 +95,7 @@ class Propshaft::LoadPath
     def clear_cache
       @cached_assets_by_path = nil
       @cached_asset_paths_by_type = nil
-      @cached_asset_paths_by_glob = nil
+      @cached_app_asset_paths_by_type = nil
     end
 
     def seed_cache

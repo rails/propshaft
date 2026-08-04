@@ -32,6 +32,10 @@ module Propshaft::Resolver
       load_path.asset_paths_by_type(extension)
     end
 
+    def app_asset_paths_by_type(extension)
+      load_path.app_asset_paths_by_type(extension)
+    end
+
     private
       def find_asset(logical_path)
         load_path.find(logical_path)

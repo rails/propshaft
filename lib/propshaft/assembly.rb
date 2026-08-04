@@ -27,6 +27,7 @@ class Propshaft::Assembly
     @load_path ||= Propshaft::LoadPath.new(
       config.paths,
       compilers: compilers,
+      app_paths: config.app_paths,
       version: config.version,
       file_watcher: config.file_watcher,
       integrity_hash_algorithm: config.integrity_hash_algorithm

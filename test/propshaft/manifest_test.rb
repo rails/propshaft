@@ -39,6 +39,32 @@ class Propshaft::ManifestTest < ActiveSupport::TestCase
     assert_equal "one.txt", entry.logical_path
     assert_equal "one-f2e1ec14.txt", entry.digested_path
     assert_equal "sha384-LdS8l2QTAF8bD8WPb8QSQv0skTWHhmcnS2XU5LBkVQneGzqIqnDRskQtJvi7ADMe", entry.integrity
+    assert_equal true, entry.app
+    assert_equal false, manifest["another.css"].app
+  end
+
+  test "logical paths by content type only groups app assets when asked" do
+    manifest_path = Pathname.new("#{__dir__}/../fixtures/new_manifest_format/.manifest.json")
+    manifest = Propshaft::Manifest.from_path(manifest_path)
+
+    assert_equal [ "another.css", "hello_world.css" ], manifest.logical_paths_by_content_type[Mime[:css]]
+    assert_equal [ "hello_world.css" ], manifest.logical_paths_by_content_type(app: true)[Mime[:css]]
+  end
+
+  test "knows app assets when the manifest records them" do
+    manifest_path = Pathname.new("#{__dir__}/../fixtures/new_manifest_format/.manifest.json")
+
+    assert_predicate Propshaft::Manifest.from_path(manifest_path), :knows_app_assets?
+  end
+
+  test "does not know app assets for manifests written before they were recorded" do
+    manifest_path = Pathname.new("#{__dir__}/../fixtures/output/.manifest.json")
+
+    assert_not_predicate Propshaft::Manifest.from_path(manifest_path), :knows_app_assets?
+  end
+
+  test "does not know app assets when the manifest is empty" do
+    assert_not_predicate Propshaft::Manifest.new, :knows_app_assets?
   end
 
   test "loads from old simple manifest format" do
@@ -181,6 +207,15 @@ class Propshaft::ManifestTest < ActiveSupport::TestCase
     assert_equal "one-f2e1ec14.txt", entry.digested_path
     assert_not_nil entry.integrity
     assert entry.integrity.start_with?("sha384-")
+    assert_equal false, entry.app
+  end
+
+  test "push_asset records assets from app paths" do
+    manifest = Propshaft::Manifest.new
+    manifest.push_asset(find_asset("one.txt", app: true))
+
+    assert_equal true, manifest["one.txt"].app
+    assert_predicate manifest, :knows_app_assets?
   end
 
   test "push_asset without integrity algorithm" do
@@ -246,12 +281,13 @@ class Propshaft::ManifestTest < ActiveSupport::TestCase
       )
     end
 
-    def find_asset(logical_path)
+    def find_asset(logical_path, app: false)
       root_path = Pathname.new("#{__dir__}/../fixtures/assets/first_path")
       path = root_path.join(logical_path)
 
       assembly = Propshaft::Assembly.new(ActiveSupport::OrderedOptions.new.tap { |config|
         config.paths = [ root_path ]
+        config.app_paths = app ? [ root_path ] : []
         config.compilers = [ [ "text/css", Propshaft::Compiler::CssAssetUrls ] ]
       })
 
