@@ -8,6 +8,7 @@ module Propshaft
   class Railtie < ::Rails::Railtie
     config.assets = ActiveSupport::OrderedOptions.new
     config.assets.paths          = []
+    config.assets.app_paths      = []
     config.assets.excluded_paths = []
     config.assets.version        = "1"
     config.assets.prefix         = "/assets"
@@ -36,6 +37,8 @@ module Propshaft
     config.after_initialize do |app|
       # Prioritize assets from within the application over assets of the same path from engines/gems.
       config.assets.paths.sort_by!.with_index { |path, i| [ path.to_s.start_with?(Rails.root.to_s) ? 0 : 1, i ] }
+
+      config.assets.app_paths = app.paths["app/assets"].existent_directories
 
       config.assets.file_watcher ||= app.config.file_watcher
 
