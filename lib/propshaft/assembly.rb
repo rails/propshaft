@@ -18,6 +18,11 @@ class Propshaft::Assembly
     @config = config
   end
 
+  def freeze
+    resolver
+    super
+  end
+
   def load_path
     @load_path ||= Propshaft::LoadPath.new(
       config.paths,
