@@ -43,6 +43,14 @@ class Propshaft::ManifestTest < ActiveSupport::TestCase
     assert_equal false, manifest["another.css"].app
   end
 
+  test "logical paths by content type only groups app assets when asked" do
+    manifest_path = Pathname.new("#{__dir__}/../fixtures/new_manifest_format/.manifest.json")
+    manifest = Propshaft::Manifest.from_path(manifest_path)
+
+    assert_equal [ "another.css", "hello_world.css" ], manifest.logical_paths_by_content_type[Mime[:css]]
+    assert_equal [ "hello_world.css" ], manifest.logical_paths_by_content_type(app: true)[Mime[:css]]
+  end
+
   test "knows app assets when the manifest records them" do
     manifest_path = Pathname.new("#{__dir__}/../fixtures/new_manifest_format/.manifest.json")
 

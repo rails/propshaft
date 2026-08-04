@@ -144,11 +144,17 @@ module Propshaft
     #
     # Entries with an unrecognized extension are grouped under +nil+.
     #
+    # ==== Parameters
+    #
+    # * +app+ - Only group entries for assets from the application's app/assets
+    #
     # ==== Returns
     #
     # A hash of <tt>Mime::Type => [ logical_path ]</tt>, with each array sorted.
-    def logical_paths_by_content_type
-      @entries.keys.sort.group_by { |logical_path| content_type_for(logical_path) }
+    def logical_paths_by_content_type(app: false)
+      logical_paths = app ? @entries.filter_map { |logical_path, entry| logical_path if entry.app } : @entries.keys
+
+      logical_paths.sort.group_by { |logical_path| content_type_for(logical_path) }
     end
 
     # Removes a manifest entry by its logical path.

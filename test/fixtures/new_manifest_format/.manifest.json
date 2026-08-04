@@ -1,1 +1,1 @@
-{"one.txt": {"digested_path": "one-f2e1ec14.txt","integrity": "sha384-LdS8l2QTAF8bD8WPb8QSQv0skTWHhmcnS2XU5LBkVQneGzqIqnDRskQtJvi7ADMe","app": true},"another.css": {"digested_path": "another-c464b1ee.css","integrity": null,"app": false}}
+{"one.txt": {"digested_path": "one-f2e1ec14.txt","integrity": "sha384-LdS8l2QTAF8bD8WPb8QSQv0skTWHhmcnS2XU5LBkVQneGzqIqnDRskQtJvi7ADMe","app": true},"hello_world.css": {"digested_path": "hello_world-4137140a.css","integrity": null,"app": true},"another.css": {"digested_path": "another-c464b1ee.css","integrity": null,"app": false}}

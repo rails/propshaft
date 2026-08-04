@@ -112,7 +112,9 @@ module Propshaft
 
     # Returns a sorted and unique array of logical paths for all stylesheets in the application's app/assets.
     def app_stylesheets_paths
-      Rails.application.assets.load_path.app_asset_paths_by_type("css")
+      assets = Rails.application.assets
+
+      assets.resolver.app_asset_paths_by_type("css") || assets.load_path.app_asset_paths_by_type("css")
     end
 
     private
