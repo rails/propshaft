@@ -29,7 +29,7 @@ module Propshaft
   # == Bulk Stylesheet Inclusion
   #
   # The stylesheet_link_tag helper supports special symbols for bulk inclusion:
-  # - :all - includes all CSS files found in the load path
+  # - :all - includes all CSS files known to the asset resolver
   # - :app - includes only CSS files from app/assets/**/*.css
   #
   #   <%= stylesheet_link_tag :all %>  # All stylesheets
@@ -57,7 +57,7 @@ module Propshaft
     # In addition to the standard Rails functionality, this method supports:
     # * Automatic SRI (Subresource Integrity) hash generation in secure contexts
     # * Add an option to call +stylesheet_link_tag+ with +:all+ to include every css
-    #   file found on the load path or +:app+ to include css files found in
+    #   file known to the asset resolver or +:app+ to include css files found in
     #   <tt>Rails.root("app/assets/**/*.css")</tt>, which will exclude lib/ and plugins.
     #
     # ==== Options
@@ -70,7 +70,7 @@ module Propshaft
     #   # => <link rel="stylesheet" href="/assets/application-abc123.css"
     #   #          integrity="sha256-xyz789...">
     #
-    #   stylesheet_link_tag :all    # All stylesheets in load path
+    #   stylesheet_link_tag :all    # All stylesheets known to the resolver
     #   stylesheet_link_tag :app    # Only app/assets stylesheets
     def stylesheet_link_tag(*sources)
       options = sources.extract_options!
@@ -105,9 +105,9 @@ module Propshaft
       _build_asset_tags(sources, options, :javascript) { |source, opts| super(source, opts) }
     end
 
-    # Returns a sorted and unique array of logical paths for all stylesheets in the load path.
+    # Returns a sorted and unique array of logical paths for all stylesheets known to the resolver.
     def all_stylesheets_paths
-      Rails.application.assets.load_path.asset_paths_by_type("css")
+      Rails.application.assets.resolver.asset_paths_by_type("css")
     end
 
     # Returns a sorted and unique array of logical paths for all stylesheets in app/assets/**/*.css.

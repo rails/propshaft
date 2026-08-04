@@ -136,6 +136,17 @@ module Propshaft
       @entries[logical_path]
     end
 
+    # Groups the logical paths of every entry in the manifest by content type.
+    #
+    # Entries with an unrecognized extension are grouped under +nil+.
+    #
+    # ==== Returns
+    #
+    # A hash of <tt>Mime::Type => [ logical_path ]</tt>, with each array sorted.
+    def logical_paths_by_content_type
+      @entries.keys.sort.group_by { |logical_path| content_type_for(logical_path) }
+    end
+
     # Removes a manifest entry by its logical path.
     #
     # ==== Parameters
@@ -181,5 +192,9 @@ module Propshaft
 
     private
       attr_reader :integrity_hash_algorithm
+
+      def content_type_for(logical_path)
+        Mime::Type.lookup_by_extension(File.extname(logical_path).delete_prefix("."))
+      end
   end
 end

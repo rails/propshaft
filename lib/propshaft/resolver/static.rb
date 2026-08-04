@@ -8,6 +8,7 @@ module Propshaft::Resolver
       @manifest_path = manifest_path
       @prefix = prefix
       @manifest = Propshaft::Manifest.from_path(manifest_path)
+      @logical_paths_by_content_type = @manifest.logical_paths_by_content_type
     end
 
     def resolve(logical_path)
@@ -26,6 +27,10 @@ module Propshaft::Resolver
       if asset_path = digested_path(logical_path)
         File.read(manifest_path.dirname.join(asset_path), encoding: encoding)
       end
+    end
+
+    def asset_paths_by_type(extension)
+      @logical_paths_by_content_type[Mime::Type.lookup_by_extension(extension)] || []
     end
 
     private
