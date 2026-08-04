@@ -12,7 +12,7 @@ module Propshaft
     # (the original path), digested path (the path with content hash), and
     # optional integrity hash for security verification.
     class ManifestEntry
-      attr_reader :logical_path, :digested_path, :integrity
+      attr_reader :logical_path, :digested_path, :integrity, :app
 
       # Creates a new manifest entry.
       #
@@ -21,17 +21,16 @@ module Propshaft
       # * +logical_path+ - The logical path of the asset
       # * +digested_path+ - The digested path of the asset
       # * +integrity+ - The integrity hash of the asset (optional)
-      def initialize(logical_path:, digested_path:, integrity:) # :nodoc:
+      def initialize(logical_path:, digested_path:, integrity:, app: nil) # :nodoc:
         @logical_path = logical_path
         @digested_path = digested_path
         @integrity = integrity
+        @app = app
       end
 
       # Converts the manifest entry to a hash representation.
-      #
-      # Returns a hash containing the +digested_path+ and +integrity+ keys.
       def to_h
-        { digested_path: digested_path, integrity: integrity }
+        { digested_path: digested_path, integrity: integrity, app: app }
       end
     end
 
@@ -57,14 +56,14 @@ module Propshaft
         serialized_manifest.each_pair do |key, value|
           # Compatibility mode to be able to
           # read the old "simple manifest" format
-          digested_path, integrity = if value.is_a?(String)
-            [ value, nil ]
+          digested_path, integrity, app = if value.is_a?(String)
+            [ value, nil, nil ]
           else
-            [ value["digested_path"], value["integrity"] ]
+            [ value["digested_path"], value["integrity"], value["app"] ]
           end
 
           entry = ManifestEntry.new(
-            logical_path: key, digested_path: digested_path, integrity: integrity
+            logical_path: key, digested_path: digested_path, integrity: integrity, app: app
           )
 
           manifest.push(entry)
@@ -103,7 +102,8 @@ module Propshaft
       entry = ManifestEntry.new(
         logical_path: asset.logical_path.to_s,
         digested_path: asset.digested_path.to_s,
-        integrity: integrity_hash_algorithm && asset.integrity(hash_algorithm: integrity_hash_algorithm)
+        integrity: integrity_hash_algorithm && asset.integrity(hash_algorithm: integrity_hash_algorithm),
+        app: asset.app?
       )
 
       push(entry)
@@ -134,6 +134,10 @@ module Propshaft
     # The manifest entry, or +nil+ if not found.
     def [](logical_path)
       @entries[logical_path]
+    end
+
+    def knows_app_assets? # :nodoc:
+      @entries.each_value.any? { |entry| !entry.app.nil? }
     end
 
     # Groups the logical paths of every entry in the manifest by content type.
