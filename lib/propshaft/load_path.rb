@@ -55,6 +55,7 @@ class Propshaft::LoadPath
   # and test to ensure the map caches are reset when javascript files are changed.
   def cache_sweeper
     @cache_sweeper ||= begin
+      # TODO: Remove respond_to? after Rails 8.1 support is dropped
       exts_to_watch  = Mime.respond_to?(:extensions) ? Mime.extensions : Mime::EXTENSION_LOOKUP.map(&:first)
       files_to_watch = Array(paths).collect { |dir| [ dir.to_s, exts_to_watch ] }.to_h
       mutex = Mutex.new
