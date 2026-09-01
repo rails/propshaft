@@ -43,6 +43,22 @@ class Propshaft::ProcessorTest < ActiveSupport::TestCase
     end
   end
 
+  test "process picks up assets written after the load path cache was warmed" do
+    Dir.mktmpdir do |assets_path|
+      assets_path = Pathname.new(assets_path)
+      assembly = create_assembly { |config| config.paths = [ assets_path ] }
+
+      assembly.load_path.assets
+
+      File.write(assets_path.join("application.css"), "body{color:red}")
+
+      processed(assembly) do |processor|
+        manifest = JSON.load_file(processor.output_path.join(".manifest.json"))
+        assert manifest.key?("application.css"), "expected application.css in #{manifest.keys.inspect}"
+      end
+    end
+  end
+
   test "assets are clobbered" do
     processed do |processor|
       processor.clobber

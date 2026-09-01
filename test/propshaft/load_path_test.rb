@@ -31,6 +31,20 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
     assert_not_includes @load_path.assets, find_asset(".stuff")
   end
 
+  test "clear_cache exposes assets added after the cache was warmed" do
+    Dir.mktmpdir do |dir|
+      dir = Pathname.new(dir)
+      load_path = Propshaft::LoadPath.new [ dir ], compilers: Propshaft::Compilers.new(nil)
+
+      assert_empty load_path.assets
+
+      File.write(dir.join("late.txt"), "Written after the cache was warmed")
+      load_path.clear_cache
+
+      assert_equal [ "late.txt" ], load_path.assets.collect { |asset| asset.logical_path.to_s }
+    end
+  end
+
   test "manifest" do
     @load_path.manifest.tap do |manifest|
       assert_equal "one-f2e1ec14.txt", manifest["one.txt"].digested_path.to_s
