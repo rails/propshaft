@@ -69,6 +69,12 @@ class Propshaft::LoadPath
     end
   end
 
+  def clear_cache
+    @cached_assets_by_path = nil
+    @cached_asset_paths_by_type = nil
+    @cached_app_asset_paths_by_type = nil
+  end
+
   private
     def assets_by_path
       @cached_assets_by_path ||= Hash.new.tap do |mapped|
@@ -91,12 +97,6 @@ class Propshaft::LoadPath
 
     def without_dotfiles(files)
       files.reject { |file| file.basename.to_s.starts_with?(".") }
-    end
-
-    def clear_cache
-      @cached_assets_by_path = nil
-      @cached_asset_paths_by_type = nil
-      @cached_app_asset_paths_by_type = nil
     end
 
     def seed_cache
