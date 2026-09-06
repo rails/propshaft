@@ -50,6 +50,17 @@ export default class extends Controller {
 
 If you need to put multiple files that refer to each other through Propshaft, like a JavaScript file and its source map, you have to digest these files in advance to retain stable file names. Propshaft looks for the specific pattern of `-[digest].digested.js` as the postfix to any asset file as an indication that the file has already been digested.
 
+## Expiring all assets with a version
+
+Every digest is computed from the asset's content combined with `config.assets.version`. Changing this version string therefore regenerates the fingerprint of every asset on the next precompile, even when the file contents haven't changed. Newly generated Rails applications set it in `config/initializers/assets.rb`:
+
+```ruby
+# Version of your assets, change this if you want to expire all your assets.
+Rails.application.config.assets.version = "1.0"
+```
+
+You rarely need to touch it — because digests are content-based, any change to a file already produces a new fingerprint. Bump the version when you want to force every asset to be re-fetched without changing its content, for example to invalidate a downstream cache or CDN.
+
 ## Subresource Integrity (SRI)
 
 Propshaft supports Subresource Integrity (SRI) to help protect against malicious modifications of assets. SRI allows browsers to verify that resources fetched from CDNs or other sources haven't been tampered with by checking cryptographic hashes.
