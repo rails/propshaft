@@ -12,7 +12,7 @@ class Propshaft::OutputPath
   def clean(count, age)
     asset_versions = files.group_by { |_, attrs| attrs[:logical_path] }
     asset_versions.each do |logical_path, versions|
-      current = manifest[logical_path]
+      current = manifest[logical_path]&.digested_path
 
       versions
         .reject { |path, _| current && path == current }
