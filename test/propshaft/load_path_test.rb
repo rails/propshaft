@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "tmpdir"
+require "fileutils"
 require "propshaft/load_path"
 
 class Propshaft::LoadPathTest < ActiveSupport::TestCase
@@ -48,6 +50,23 @@ class Propshaft::LoadPathTest < ActiveSupport::TestCase
 
   test "missing load path directory" do
     assert_nil Propshaft::LoadPath.new(Pathname.new("#{__dir__}/../fixtures/assets/nowhere"), compilers: Propshaft::Compilers.new(nil)).find("missing")
+  end
+
+  test "does not drop a sibling directory that shares a path prefix" do
+    Dir.mktmpdir do |root|
+      javascript = Pathname.new(root).join("app/javascript")
+      javascripts = Pathname.new(root).join("app/javascripts")
+      FileUtils.mkdir_p(javascript)
+      FileUtils.mkdir_p(javascripts)
+      File.write(javascript.join("app.js"), "app")
+      File.write(javascripts.join("extra.js"), "extra")
+
+      load_path = Propshaft::LoadPath.new([ javascripts, javascript ], compilers: Propshaft::Compilers.new(nil))
+
+      assert_equal [ javascripts, javascript ], load_path.paths
+      assert_equal "extra", load_path.find("extra.js").content
+      assert_equal "app", load_path.find("app.js").content
+    end
   end
 
   test "deduplicate paths" do
