@@ -106,9 +106,21 @@ class Propshaft::LoadPath
     def dedup(paths)
       paths   = Array(paths).map { |path| Pathname.new(path) }
       deduped = [].tap do |deduped|
-        paths.sort.each { |path| deduped << path if deduped.blank? || !path.to_s.start_with?(deduped.last.to_s) }
+        paths.sort.each { |path| deduped << path unless nested_path?(deduped.last, path) }
       end
 
       paths & deduped
+    end
+
+    # Nested only when the child is the parent path or lives under parent + "/".
+    # A bare prefix match drops a sibling such as app/javascripts when
+    # app/javascript is also on the load path.
+    def nested_path?(parent, path)
+      return false if parent.nil?
+
+      parent_path = parent.to_s.delete_suffix("/")
+      child_path = path.to_s.delete_suffix("/")
+
+      child_path == parent_path || child_path.start_with?("#{parent_path}/")
     end
 end
