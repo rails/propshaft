@@ -18,4 +18,14 @@ class Propshaft::RailtieTest < ActiveSupport::TestCase
 
     assert_includes Rails.application.assets.load_path.asset_paths_by_type("css"), "library.css"
   end
+
+  test "excluded paths are removed from the load path when the load path entry is a Pathname" do
+    # Pathname load path entry, Pathname excluded path
+    assert_not_includes Rails.application.config.assets.paths.map(&:to_s), Rails.root.join("app/javascript").to_s
+    assert_not_includes Rails.application.assets.load_path.asset_paths_by_type("js"), "excluded.js"
+
+    # Pathname load path entry, String excluded path
+    assert_not_includes Rails.application.config.assets.paths.map(&:to_s), Rails.root.join("app/javascript_string").to_s
+    assert_not_includes Rails.application.assets.load_path.asset_paths_by_type("js"), "excluded_by_string.js"
+  end
 end
