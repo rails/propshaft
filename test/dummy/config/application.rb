@@ -35,5 +35,11 @@ module Dummy
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.assets.integrity_hash_algorithm = "sha384"
+
+    # Mimic importmap-rails, which registers Pathname objects (not Strings) in the load path.
+    config.assets.paths << Rails.root.join("app/javascript")
+    config.assets.paths << Rails.root.join("app/javascript_string")
+    config.assets.excluded_paths << Rails.root.join("app/javascript")
+    config.assets.excluded_paths << Rails.root.join("app/javascript_string").to_s
   end
 end
