@@ -31,7 +31,8 @@ module Propshaft
       app.config.assets.paths.unshift(*paths["lib/assets"].existent_directories)
       app.config.assets.paths.unshift(*paths["app/assets"].existent_directories)
 
-      app.config.assets.paths = app.config.assets.paths.without(Array(app.config.assets.excluded_paths).collect(&:to_s))
+      excluded_paths = Array(app.config.assets.excluded_paths).collect(&:to_s)
+      app.config.assets.paths = app.config.assets.paths.reject { |path| excluded_paths.include?(path.to_s) }
     end
 
     config.after_initialize do |app|
