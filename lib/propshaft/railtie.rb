@@ -36,7 +36,7 @@ module Propshaft
 
     config.after_initialize do |app|
       # Prioritize assets from within the application over assets of the same path from engines/gems.
-      config.assets.paths.sort_by!.with_index { |path, i| [ path.to_s.start_with?(Rails.root.to_s) ? 0 : 1, i ] }
+      config.assets.paths.sort_by!.with_index { |path, i| [ Propshaft::Railtie.app_path?(path) ? 0 : 1, i ] }
 
       config.assets.app_paths = app.paths["app/assets"].existent_directories
 
@@ -77,6 +77,13 @@ module Propshaft
 
     rake_tasks do
       load "propshaft/railties/assets.rake"
+    end
+
+    # Gems installed inside the application (e.g. with `bundle config set path vendor/bundle`)
+    # don't count as part of the application.
+    def self.app_path?(path)
+      path = path.to_s
+      path.start_with?(Rails.root.to_s) && !(defined?(Bundler) && path.start_with?(Bundler.bundle_path.to_s))
     end
 
     # Compatibility shiming (need to provide log warnings when used)
