@@ -21,6 +21,8 @@ class Propshaft::Server
       if (asset = @assembly.load_path.find(path)) && asset.fresh?(digest)
         compiled_content = asset.compiled_content
 
+        Propshaft.logger.info "Served asset #{env["PATH_INFO"]}" unless @assembly.config.quiet
+
         [
           200,
           {
