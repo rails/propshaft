@@ -47,6 +47,34 @@ module Propshaft
         assert_match(/this\.img = "missing.svg"\;/, compiled)
       end
 
+      test "resolves a parent segment that is not at the start" do
+        js_content = <<~JS
+          export default class extends Controller {
+            init() {
+              this.img = RAILS_ASSET_URL("images/../file.svg");
+            }
+          }
+        JS
+
+        compiled = compile_asset_with_content(js_content)
+
+        assert_match(%r{this\.img = "/assets/foobar/source/file-[a-z0-9]{8}.svg"\;}, compiled)
+      end
+
+      test "leaves a path that escapes the load path unresolved" do
+        js_content = <<~JS
+          export default class extends Controller {
+            init() {
+              this.img = RAILS_ASSET_URL("../../../missing.svg");
+            }
+          }
+        JS
+
+        compiled = compile_asset_with_content(js_content)
+
+        assert_match(/this\.img = "\.\.\/\.\.\/\.\.\/missing\.svg"\;/, compiled)
+      end
+
       private
 
       def compile_asset_with_content(content)

@@ -24,12 +24,14 @@ class Propshaft::Compiler::JsAssetUrls < Propshaft::Compiler
 
   private
     def resolve_path(directory, filename)
-      if filename.start_with?("../")
-        Pathname.new(directory + filename).relative_path_from("").to_s
-      elsif filename.start_with?("/")
-        filename.delete_prefix("/").to_s
+      relative = filename.start_with?("/") ? filename.delete_prefix("/") : (directory + filename).to_s
+      normalized = Pathname.new(relative).cleanpath
+
+      # A reference that climbs out of the load path cannot be fingerprinted.
+      if normalized.absolute? || normalized.to_s == ".." || normalized.to_s.start_with?("../")
+        filename
       else
-        (directory + filename.delete_prefix("./")).to_s
+        normalized.to_s
       end
     end
 

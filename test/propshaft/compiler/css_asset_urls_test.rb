@@ -121,6 +121,16 @@ class Propshaft::Compiler::CssAssetUrlsTest < ActiveSupport::TestCase
     assert_match(/{ content: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.svg#demo"\) url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.svg#demo"\); }/, compiled)
   end
 
+  test "parent segment later in the path" do
+    compiled = compile_asset_with_content(%({ background: url(images/../file.jpg); }))
+    assert_match(/{ background: url\("\/assets\/foobar\/source\/file-[a-z0-9]{8}.jpg"\); }/, compiled)
+  end
+
+  test "path that escapes the load path is left unresolved" do
+    compiled = compile_asset_with_content(%({ background: url(../../../file.jpg); }))
+    assert_equal %({ background: url("../../../file.jpg"); }), compiled
+  end
+
   test "missing asset" do
     compiled = compile_asset_with_content(%({ background: url("file-not-found.jpg"); }))
     assert_match(/{ background: url\("file-not-found.jpg"\); }/, compiled)
