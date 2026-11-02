@@ -12,6 +12,7 @@ class Propshaft::Processor
   end
 
   def process
+    load_path.clear_cache
     ensure_output_path_exists
     write_manifest
     output_assets
