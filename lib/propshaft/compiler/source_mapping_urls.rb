@@ -11,10 +11,11 @@ class Propshaft::Compiler::SourceMappingUrls < Propshaft::Compiler
 
   private
     def asset_path(source_mapping_url, logical_path)
-      source_mapping_url.gsub!(/^(.+\/)?#{url_prefix}\//, "")
+      source_mapping_url.gsub!(/^(.+\/)?#{url_prefix}\//, "/")
+      source_mapping_path = Pathname.new(source_mapping_url)
 
-      if logical_path.dirname.to_s == "."
-        source_mapping_url
+      if source_mapping_path.absolute?
+        source_mapping_url.sub(/^\//, "")
       else
         logical_path.dirname.join(source_mapping_url).to_s
       end

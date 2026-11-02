@@ -1,1 +1,1 @@
-var fun; //# sourceMappingURL=/assets/sourceMappingURL-already-prefixed-nested.js.map
+var fun; //# sourceMappingURL=/assets/nested/sourceMappingURL-already-prefixed-nested.js.map
