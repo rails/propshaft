@@ -18,4 +18,13 @@ class Propshaft::RailtieTest < ActiveSupport::TestCase
 
     assert_includes Rails.application.assets.load_path.asset_paths_by_type("css"), "library.css"
   end
+
+  test "gems installed inside the application are not app paths" do
+    bundle_path = Rails.root.join("vendor/bundle/ruby/3.4.0")
+
+    Bundler.stub(:bundle_path, bundle_path) do
+      assert Propshaft::Railtie.app_path?(Rails.root.join("vendor/javascript"))
+      assert_not Propshaft::Railtie.app_path?(bundle_path.join("gems/actiontext-8.1.0/app/assets/javascripts"))
+    end
+  end
 end
