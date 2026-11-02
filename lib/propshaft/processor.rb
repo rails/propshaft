@@ -18,7 +18,12 @@ class Propshaft::Processor
   end
 
   def clobber
-    FileUtils.rm_r(output_path) if File.exist?(output_path)
+    if File.symlink?(output_path)
+      symlink_contents = Dir.children(output_path).map { |f| File.join(output_path, f) }
+      File.exist?(output_path) ? FileUtils.rm_r(symlink_contents) : File.unlink(output_path)
+    elsif File.exist?(output_path)
+      FileUtils.rm_r(output_path)
+    end
   end
 
   def clean(count)
