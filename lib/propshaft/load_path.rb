@@ -73,9 +73,10 @@ class Propshaft::LoadPath
     def assets_by_path
       @cached_assets_by_path ||= Hash.new.tap do |mapped|
         paths.each do |path|
+          prefix = File.join(path, "")
           without_dotfiles(all_files_from_tree(path)).each do |file|
-            logical_path = file.relative_path_from(path)
-            mapped[logical_path.to_s] ||= Propshaft::Asset.new(file, logical_path: logical_path, load_path: self)
+            logical_path = file.to_s.delete_prefix(prefix)
+            mapped[logical_path] ||= Propshaft::Asset.new(file, logical_path: logical_path, load_path: self)
           end if path.exist?
         end
       end
