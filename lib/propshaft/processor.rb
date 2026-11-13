@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "active_support/core_ext/file/atomic"
 require "propshaft/output_path"
 
 class Propshaft::Processor
@@ -33,7 +34,11 @@ class Propshaft::Processor
 
     def write_manifest
       FileUtils.mkdir_p(File.dirname(manifest_path))
-      File.open(manifest_path, "wb+") do |manifest|
+
+      # Write to a temporary file and rename it into place, so a running
+      # application reading the manifest never sees it empty or truncated.
+      File.atomic_write(manifest_path) do |manifest|
+        manifest.binmode
         manifest.write load_path.manifest.to_json
       end
     end
